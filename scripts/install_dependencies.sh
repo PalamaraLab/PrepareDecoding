@@ -1,3 +1,6 @@
+# This file is part of https://github.com/PalamaraLab/PrepareDecoding which is released under the GPL-3.0 license.
+# See accompanying LICENSE and COPYING for copyright notice and full details.
+
 # List of dependencies to install:
 #  - catch2     unit testing framework
 #  - cxxopts    lightweight command line parser (alternative to boost::program_options
