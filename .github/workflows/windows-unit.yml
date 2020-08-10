@@ -39,7 +39,7 @@ jobs:
         run: mkdir build_dir
 
       - name: cmake configure
-        run: cmake .. -DCMAKE_TOOLCHAIN_FILE=..\vcpkg\scripts\buildsystems\vcpkg.cmake
+        run: cmake .. -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}\vcpkg\scripts\buildsystems\vcpkg.cmake
         working-directory: build_dir
 
       - name: cmake build
