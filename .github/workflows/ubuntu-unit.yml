@@ -47,3 +47,4 @@ jobs:
       - name: cmake test
         run: ctest -j2 --output-on-failure
         working-directory: build_dir
+
