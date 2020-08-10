@@ -1,0 +1,49 @@
+name: Ubuntu unit
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - '**'
+
+jobs:
+
+  build-and-test:
+    name: Unit tests on Ubuntu
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: checkout repo & vcpkg submodule
+        uses: actions/checkout@v2
+        id: cache
+        with:
+          submodules: true
+
+      - name: cache vcpkg installed packages
+        uses: actions/cache@v2
+        with:
+          path: vcpkg/installed
+          key: ${{ runner.os }}-${{ hashFiles('scripts/install_dependencies.sh') }}
+
+      - name: install dependencies
+        run: |
+          scripts/install_dependencies.sh
+        if: steps.cache.outputs.cache-hit != 'true'
+
+      - name: make build directory
+        run: mkdir build_dir
+
+      - name: cmake configure
+        run: cmake .. -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake
+        working-directory: build_dir
+
+      - name: cmake build
+        run: cmake --build . --parallel 2 --target unit_tests
+        working-directory: build_dir
+
+      - name: cmake test
+        run: ctest -j2 --output-on-failure
+        working-directory: build_dir
