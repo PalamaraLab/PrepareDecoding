@@ -10,7 +10,6 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-
 # Link this 'library' to set the C++ standard / compile-time options requested
 include(cmake/ProjectSettings.cmake)
 add_library(project_settings INTERFACE)
@@ -32,6 +31,7 @@ option(BUILD_SHARED_LIBS "Enable compilation of shared libraries" OFF)
 option(ENABLE_TESTING "Enable Test Builds" ON)
 
 add_subdirectory(src)
+add_subdirectory(exe)
 
 if(ENABLE_TESTING)
     enable_testing()
