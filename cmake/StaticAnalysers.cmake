@@ -1,3 +1,6 @@
+# This file is part of https://github.com/PalamaraLab/PrepareDecoding which is released under the GPL-3.0 license.
+# See accompanying LICENSE and COPYING for copyright notice and full details.
+
 # Based on https://github.com/lefticus/cpp_starter_project
 
 option(ENABLE_CPPCHECK "Enable static analysis with cppcheck" OFF)
