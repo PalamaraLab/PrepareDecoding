@@ -30,7 +30,7 @@ jobs:
 
       - name: install dependencies
         run: |
-          scripts/install_dependencies.sh
+          bash scripts/install_dependencies.sh
         if: steps.cache.outputs.cache-hit != 'true'
 
       - name: make build directory
