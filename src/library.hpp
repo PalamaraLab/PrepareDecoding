@@ -4,6 +4,8 @@
 #ifndef PREPAREDECODING_LIBRARY_H
 #define PREPAREDECODING_LIBRARY_H
 
-void hello();
+#include <string>
+
+std::string hello();
 
 #endif //PREPAREDECODING_LIBRARY_H

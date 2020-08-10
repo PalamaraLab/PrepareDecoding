@@ -3,8 +3,14 @@
 
 #include "library.hpp"
 
-#include <fmt/core.h>
+#include <catch2/catch.hpp>
 
-std::string hello() {
-  return fmt::format("Hello, world!\n");
+TEST_CASE("Require true", "[test_tag]") {
+  REQUIRE(true);
 }
+
+TEST_CASE("Hello", "[test_tag]") {
+  REQUIRE(hello() == "Hello, world!\n");
+}
+
+

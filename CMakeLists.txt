@@ -1,7 +1,7 @@
 # This file is part of https://github.com/PalamaraLab/PrepareDecoding which is released under the GPL-3.0 license.
 # See accompanying LICENSE and COPYING for copyright notice and full details.
 
-cmake_minimum_required(VERSION 3.17)
+cmake_minimum_required(VERSION 3.16)
 message(STATUS "CMake version: ${CMAKE_VERSION}")
 
 project(PrepareDecoding LANGUAGES CXX VERSION 0.0)
@@ -31,12 +31,12 @@ include(cmake/StaticAnalysers.cmake)
 option(BUILD_SHARED_LIBS "Enable compilation of shared libraries" OFF)
 option(ENABLE_TESTING "Enable Test Builds" ON)
 
+add_subdirectory(src)
+
 if(ENABLE_TESTING)
     enable_testing()
-#    add_subdirectory(test)
+    add_subdirectory(test)
 endif()
-
-#add_subdirectory(src)
 
 option(ENABLE_UNITY "Enable Unity builds of projects" OFF)
 if(ENABLE_UNITY)
