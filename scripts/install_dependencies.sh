@@ -5,25 +5,26 @@
 repo_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/../" >/dev/null 2>&1 && pwd)"
 
 # Read the list of dependencies from file
-dependencies=`cat ${repo_dir}/scripts/vcpkg_dependencies`
+# shellcheck disable=SC2006
+dependencies=`cat "${repo_dir}"/scripts/vcpkg_dependencies`
 
 # Location of the vcpkg bootstrap file:
 # if it's missing it's probably because the submodule has not been checked out
 bootstrap_file=${repo_dir}/vcpkg/bootstrap-vcpkg.sh
 
-if [ ! -f ${bootstrap_file} ]; then
+if [ ! -f "${bootstrap_file}" ]; then
     echo "Error: ${bootstrap_file} not found. Did you check out the vcpkg submodule?"
 fi
 
 # Location of the vcpkg executable:
 # if it's missing it's probably because the bootstrap script has not yet been called
 vcpkg_exe=${repo_dir}/vcpkg/vcpkg
-if [ ! -f ${vcpkg_exe} ]; then
-    bash ${bootstrap_file}
+if [ ! -f "${vcpkg_exe}" ]; then
+    bash "${bootstrap_file}"
 fi
 
 # Actually install the dependencies
-${vcpkg_exe} install ${dependencies}
+${vcpkg_exe} install "${dependencies}"
 
 # Tell the user how to make use of the toolchain file
 toolchain_file=${repo_dir}/vcpkg/scripts/buildsystems/vcpkg.cmake

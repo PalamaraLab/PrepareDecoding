@@ -27,7 +27,7 @@ if not exist %vcpkg_exe% (
 )
 
 :: Actually install the dependencies
-%vcpkg_exe% install %dependencies%
+%vcpkg_exe% install %dependencies% --triplet x64-windows
 
 :: Tell the user how to make use of the toolchain file
 set toolchain_file=%repo_dir%vcpkg\scripts\buildsystems\vcpkg.cmake
