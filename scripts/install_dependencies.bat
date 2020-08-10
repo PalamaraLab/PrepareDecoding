@@ -1,7 +1,7 @@
 :: This file is part of https://github.com/PalamaraLab/PrepareDecoding which is released under the GPL-3.0 license.
 :: See accompanying LICENSE and COPYING for copyright notice and full details.
 
-@ECHO OFF
+@echo off
 
 :: Path to the base directory of the repo, no matter where this script is invoked from
 for %%B in (%~dp0\.) do set repo_dir=%%~dpB
@@ -27,7 +27,6 @@ if not exist %vcpkg_exe% (
 )
 
 :: Actually install the dependencies
-set VCPKG_TARGET_ARCHITECTURE=x64
 %vcpkg_exe% install %dependencies%
 
 :: Tell the user how to make use of the toolchain file
