@@ -26,7 +26,7 @@ jobs:
         id: cache
         with:
           path: vcpkg/installed
-          key: ${{ runner.os }}-${{ hashFiles('scripts/install_dependencies.sh') }}
+          key: ${{ runner.os }}-${{ hashFiles('scripts/vcpkg_dependencies') }}
 
       - name: install dependencies
         run: |
