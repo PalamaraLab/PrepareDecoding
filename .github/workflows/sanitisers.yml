@@ -40,6 +40,9 @@ jobs:
         run: |
           mkdir address_san_dir
           mkdir leak_san_dir
+          mkdir ub_san_dir
+          mkdir thread_san_dir
+          mkdir memory_san_dir
 
       - name: address sanitiser
         run: |
@@ -56,5 +59,32 @@ jobs:
           cmake --build . --parallel 2 --target unit_tests
           ./test/unit_tests
         working-directory: leak_san_dir
+        env:
+          CXX: clang++-10
+
+      - name: undefined behaviour sanitiser
+        run: |
+          cmake .. -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Debug -DENABLE_SANITISER_UNDEFINED_BEHAVIOUR=ON
+          cmake --build . --parallel 2 --target unit_tests
+          ./test/unit_tests
+        working-directory: ub_san_dir
+        env:
+          CXX: clang++-10
+
+      - name: thread sanitiser
+        run: |
+          cmake .. -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Debug -DENABLE_SANITISER_THREAD=ON
+          cmake --build . --parallel 2 --target unit_tests
+          ./test/unit_tests
+        working-directory: thread_san_dir
+        env:
+          CXX: clang++-10
+
+      - name: memory sanitiser
+        run: |
+          cmake .. -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Debug -DENABLE_SANITISER_MEMORY=ON
+          cmake --build . --parallel 2 --target unit_tests
+          ./test/unit_tests
+        working-directory: memory_san_dir
         env:
           CXX: clang++-10

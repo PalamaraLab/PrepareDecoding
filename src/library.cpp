@@ -12,10 +12,6 @@ std::string hello() {
 
 double doSomethingWithEigen() {
 
-  int* a = new int;
-  *a = 50;
-  fmt::print("{}", *a);
-
   using mat_t = Eigen::MatrixXd;
 
   mat_t m(2, 2);
