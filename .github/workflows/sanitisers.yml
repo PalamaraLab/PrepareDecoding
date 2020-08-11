@@ -80,11 +80,11 @@ jobs:
         env:
           CXX: clang++-10
 
-      - name: memory sanitiser
-        run: |
-          cmake .. -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Debug -DENABLE_SANITISER_MEMORY=ON
-          cmake --build . --parallel 2 --target unit_tests
-          ./test/unit_tests
-        working-directory: memory_san_dir
-        env:
-          CXX: clang++-10
+#      - name: memory sanitiser
+#        run: |
+#          cmake .. -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Debug -DENABLE_SANITISER_MEMORY=ON
+#          cmake --build . --parallel 2 --target unit_tests
+#          ./test/unit_tests
+#        working-directory: memory_san_dir
+#        env:
+#          CXX: clang++-10
