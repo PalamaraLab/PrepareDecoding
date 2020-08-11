@@ -2,6 +2,7 @@
 # See accompanying LICENSE and COPYING for copyright notice and full details.
 
 find_package(cxxopts CONFIG REQUIRED)
+message(STATUS "Found cxxopts ${cxxopts_VERSION}")
 
 add_executable(prepare_decoding_exe prepare_decoding.cpp)
 target_link_libraries(prepare_decoding_exe PRIVATE cxxopts::cxxopts)

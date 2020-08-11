@@ -2,7 +2,10 @@
 # See accompanying LICENSE and COPYING for copyright notice and full details.
 
 find_package(Eigen3 CONFIG REQUIRED)
+message(STATUS "Found Eigen3 ${Eigen3_VERSION}")
+
 find_package(fmt CONFIG REQUIRED)
+message(STATUS "Found {fmt} ${fmt_VERSION}")
 
 set(prepare_decoding_src library.cpp)
 set(prepare_decoding_hdr library.hpp)

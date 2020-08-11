@@ -2,6 +2,7 @@
 # See accompanying LICENSE and COPYING for copyright notice and full details.
 
 find_package(Catch2 CONFIG REQUIRED)
+message(STATUS "Found Catch2 ${Catch2_VERSION}")
 
 add_library(catch_main STATIC catch_main.cpp)
 target_link_libraries(catch_main PUBLIC Catch2::Catch2)
