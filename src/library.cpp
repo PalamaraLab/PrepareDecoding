@@ -6,19 +6,11 @@
 #include <Eigen/Dense>
 #include <fmt/core.h>
 
-#include <array>
-
 std::string hello() {
   return fmt::format("Hello, world!\n");
 }
 
 double doSomethingWithEigen() {
-
-  std::array<int, 3> a{};
-
-  for (auto i = 0ul; i < a.size(); ++i) {
-    fmt::print("{}", a.at(i));
-  }
 
   using mat_t = Eigen::MatrixXd;
 
