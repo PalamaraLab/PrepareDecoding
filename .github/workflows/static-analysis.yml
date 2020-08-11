@@ -34,7 +34,7 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
 
       - name: install analysers
-        run: sudo apt install cppcheck
+        run: sudo apt install cppcheck clang-tidy-10
 
       - name: make build directories
         run: |
@@ -47,7 +47,7 @@ jobs:
           cmake --build . --parallel 2 --target prepare_decoding_lib prepare_decoding_exe
         working-directory: cppcheck_dir
         env:
-          CXX: clang++-9
+          CXX: clang++-10
 
       - name: compile with clang tidy
         run: |
@@ -55,4 +55,4 @@ jobs:
           cmake --build . --parallel 2 --target prepare_decoding_lib prepare_decoding_exe
         working-directory: cppcheck_dir
         env:
-          CXX: clang++-9
+          CXX: clang++-10
