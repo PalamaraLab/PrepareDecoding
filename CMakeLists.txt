@@ -2,7 +2,7 @@
 # See accompanying LICENSE and COPYING for copyright notice and full details.
 
 cmake_minimum_required(VERSION 3.16)
-message(STATUS "CMake version: ${CMAKE_VERSION}")
+message(STATUS "Using CMake version ${CMAKE_VERSION}")
 
 project(PrepareDecoding LANGUAGES CXX VERSION 0.0)
 
