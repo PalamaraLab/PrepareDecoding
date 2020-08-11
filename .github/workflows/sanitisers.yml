@@ -39,6 +39,7 @@ jobs:
       - name: make build directories
         run: |
           mkdir address_san_dir
+          mkdir leak_san_dir
 
       - name: address sanitiser
         run: |
@@ -46,5 +47,14 @@ jobs:
           cmake --build . --parallel 2 --target unit_tests
           ./test/unit_tests
         working-directory: address_san_dir
+        env:
+          CXX: clang++-10
+
+      - name: leak sanitiser
+        run: |
+          cmake .. -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Debug -DENABLE_SANITISER_LEAK=ON
+          cmake --build . --parallel 2 --target unit_tests
+          ./test/unit_tests
+        working-directory: leak_san_dir
         env:
           CXX: clang++-10
