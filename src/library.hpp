@@ -8,4 +8,6 @@
 
 std::string hello();
 
+double doSomethingWithEigen();
+
 #endif //PREPAREDECODING_LIBRARY_H

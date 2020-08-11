@@ -4,7 +4,18 @@
 #include "library.hpp"
 
 #include <fmt/core.h>
+#include <Eigen/Dense>
 
 std::string hello() {
   return fmt::format("Hello, world!\n");
+}
+
+double doSomethingWithEigen() {
+
+  using mat_t = Eigen::MatrixXd;
+
+  mat_t m(2,2);
+  m(0,0) = 3.0;
+
+  return m(0, 0);
 }
