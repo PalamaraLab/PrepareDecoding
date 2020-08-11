@@ -11,7 +11,7 @@ on:
 jobs:
 
   build-and-test:
-    name: Unit tests on Ubuntu
+    name: Static analysis checks
     runs-on: ubuntu-latest
 
     steps:
