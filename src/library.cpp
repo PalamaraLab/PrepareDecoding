@@ -3,8 +3,8 @@
 
 #include "library.hpp"
 
-#include <fmt/core.h>
 #include <Eigen/Dense>
+#include <fmt/core.h>
 
 #include <array>
 
@@ -22,8 +22,8 @@ double doSomethingWithEigen() {
 
   using mat_t = Eigen::MatrixXd;
 
-  mat_t m(2,2);
-  m(0,0) = 3.0;
+  mat_t m(2, 2);
+  m(0, 0) = 3.0;
 
   return m(0, 0);
 }

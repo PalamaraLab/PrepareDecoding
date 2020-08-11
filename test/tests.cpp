@@ -16,5 +16,3 @@ TEST_CASE("Hello", "[test_tag]") {
 TEST_CASE("Eigen", "[test_tag]") {
   REQUIRE(doSomethingWithEigen() == 3.0);
 }
-
-

@@ -8,10 +8,12 @@ int main(int argc, char* argv[]) {
 
   cxxopts::Options options("MyProgram", "One line description of MyProgram");
 
+  // clang-format off
   options.add_options()
           ("i,integer", "Int param", cxxopts::value<int>()->default_value("-1"))
           ("f,file", "File name", cxxopts::value<std::string>()->default_value("/some/file"))
           ("v,verbose", "Verbose output", cxxopts::value<bool>()->default_value("false"));
+  // clang-format on
 
   auto result = options.parse(argc, argv);
 
