@@ -25,6 +25,7 @@ function(enable_sanitisers project_name)
         option(ENABLE_SANITISER_LEAK "Enable leak sanitiser" FALSE)
         if (ENABLE_SANITISER_LEAK)
             list(APPEND SANITISERS "leak")
+            list(APPEND ADDITIONAL_COMPILE_OPTIONS "-O1" "-g" "-fno-omit-frame-pointer" "-fno-optimize-sibling-calls")
         endif ()
 
         option(ENABLE_SANITISER_UNDEFINED_BEHAVIOR "Enable undefined behavior sanitiser" FALSE)
