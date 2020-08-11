@@ -10,4 +10,4 @@ std::string hello();
 
 double doSomethingWithEigen();
 
-#endif //PREPAREDECODING_LIBRARY_H
+#endif // PREPAREDECODING_LIBRARY_H
