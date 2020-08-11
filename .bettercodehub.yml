@@ -1,0 +1,20 @@
+component_depth: 2
+languages:
+  - name: cpp
+    production:
+      include:
+        - /exe/.*\.cpp
+      exclude:
+        - /cmake/.*
+        - /docs/.*
+        - /scripts/.*
+        - /test/.*
+        - /vcpkg/.*
+    test:
+      include:
+        - /test/.*\.cpp
+      exclude:
+        - /cmake/.*
+        - /docs/.*
+        - /scripts/.*
+        - /vcpkg/.*
