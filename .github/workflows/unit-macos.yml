@@ -1,4 +1,4 @@
-name: macOS unit
+name: "Unit tests: macOS"
 
 on:
   push:

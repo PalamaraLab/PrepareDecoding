@@ -1,4 +1,4 @@
-name: Windows unit
+name: "Unit tests: Windows"
 
 on:
   push:
