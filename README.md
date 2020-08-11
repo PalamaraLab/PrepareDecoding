@@ -1,6 +1,8 @@
-![Windows unit](https://github.com/PalamaraLab/PrepareDecoding/workflows/Windows%20unit/badge.svg)
-![Ubuntu unit](https://github.com/PalamaraLab/PrepareDecoding/workflows/Ubuntu%20unit/badge.svg)
-![macOS unit](https://github.com/PalamaraLab/PrepareDecoding/workflows/macOS%20unit/badge.svg)
+![Unit tests: Windows](https://github.com/PalamaraLab/PrepareDecoding/workflows/Unit%20tests:%20Windows/badge.svg)
+![Unit tests: Ubuntu](https://github.com/PalamaraLab/PrepareDecoding/workflows/Unit%20tests:%20Ubuntu/badge.svg)
+![Unit tests: macOS](https://github.com/PalamaraLab/PrepareDecoding/workflows/Unit%20tests:%20macOS/badge.svg)
+
+![Static analysis checks](https://github.com/PalamaraLab/PrepareDecoding/workflows/Static%20analysis%20checks/badge.svg)
 
 # PrepareDecoding
 
