@@ -13,4 +13,8 @@ TEST_CASE("Hello", "[test_tag]") {
   REQUIRE(hello() == "Hello, world!\n");
 }
 
+TEST_CASE("Eigen", "[test_tag]") {
+  REQUIRE(doSomethingWithEigen() == 3.0);
+}
+
 
