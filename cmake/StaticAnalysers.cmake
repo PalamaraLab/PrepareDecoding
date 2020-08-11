@@ -13,30 +13,23 @@ if(ENABLE_CPPCHECK)
     set(CMAKE_CXX_CPPCHECK
         ${CPPCHECK}
         --suppress=missingInclude
+        --suppress=unusedFunction
+        --suppress=unmatchedSuppression
         --enable=all
-        --inline-suppr
-        --inconclusive
-        -i
-        ${CMAKE_SOURCE_DIR}/imgui/lib)
+        --inconclusive)
+    message(STATUS "Using cppcheck ${CPPCHECK}")
+    message(-i${CMAKE_SOURCE_DIR}/test/)
   else()
     message(SEND_ERROR "cppcheck requested but executable not found")
   endif()
 endif()
 
 if(ENABLE_CLANG_TIDY)
-  find_program(CLANGTIDY clang-tidy)
+  find_program(CLANGTIDY NAMES clang-tidy-11 clang-tidy-10 clang-tidy-9 clang-tidy-8 clang-tidy )
   if(CLANGTIDY)
     set(CMAKE_CXX_CLANG_TIDY ${CLANGTIDY} -extra-arg=-Wno-unknown-warning-option)
+    message(STATUS "Using clang-tidy ${CLANGTIDY}")
   else()
     message(SEND_ERROR "clang-tidy requested but executable not found")
-  endif()
-endif()
-
-if(ENABLE_INCLUDE_WHAT_YOU_USE)
-  find_program(INCLUDE_WHAT_YOU_USE include-what-you-use)
-  if(INCLUDE_WHAT_YOU_USE)
-    set(CMAKE_CXX_INCLUDE_WHAT_YOU_USE ${INCLUDE_WHAT_YOU_USE})
-  else()
-    message(SEND_ERROR "include-what-you-use requested but executable not found")
   endif()
 endif()
