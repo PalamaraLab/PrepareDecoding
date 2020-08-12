@@ -7,10 +7,13 @@ message(STATUS "Found Eigen3 ${Eigen3_VERSION}")
 find_package(fmt CONFIG REQUIRED)
 message(STATUS "Found {fmt} ${fmt_VERSION}")
 
+find_package(ZLIB REQUIRED)
+message(STATUS "Found zlib ${ZLIB_VERSION_STRING}")
+
 set(prepare_decoding_src library.cpp)
-set(prepare_decoding_hdr library.hpp)
+set(prepare_decoding_hdr library.hpp CsfsEntry.hpp)
 
 add_library(prepare_decoding_lib STATIC ${prepare_decoding_src} ${prepare_decoding_hdr})
 target_include_directories(prepare_decoding_lib INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
-target_link_libraries(prepare_decoding_lib PRIVATE fmt::fmt Eigen3::Eigen)
+target_link_libraries(prepare_decoding_lib PRIVATE Eigen3::Eigen fmt::fmt ZLIB::ZLIB)
 target_link_libraries(prepare_decoding_lib PRIVATE project_warnings project_settings)

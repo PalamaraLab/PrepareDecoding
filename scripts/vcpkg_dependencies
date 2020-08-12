@@ -1,1 +1,1 @@
-catch2 cxxopts eigen3 fmt
+catch2 cxxopts eigen3 fmt zlib
