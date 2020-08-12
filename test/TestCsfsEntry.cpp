@@ -5,6 +5,8 @@
 
 #include <catch2/catch.hpp>
 
+#include <fstream>
+
 using array_t = Eigen::ArrayXd;
 using mat_t = Eigen::MatrixXd;
 
@@ -63,4 +65,21 @@ TEST_CASE("Throws with to >= from", "[CsfsEntry]") {
 
   CHECK_THROWS_WITH(asmc::CsfsEntry(timeVector, sizeVector, mu, from, to, samples, csfs),
                     Catch::Contains("Time vector:\n"));
+}
+
+TEST_CASE("Print to string", "[CsfsEntry]") {
+
+  const array_t timeVector = array_t::Zero(3) + 1.2;
+  const array_t sizeVector = array_t::Zero(3) + 2.3;
+  const double mu = 3.4;
+  const double from = 4.5;
+  const double to = 5.6;
+  const int samples = 7;
+  const mat_t csfs = mat_t::Ones(3, samples - 1) * 8.9;
+
+  auto csfs_entry = asmc::CsfsEntry(timeVector, sizeVector, mu, from, to, samples, csfs);
+
+  REQUIRE(csfs_entry.toString() ==
+          "Time:\t1.2 1.2 1.2\nSize:\t2.3 2.3 2.3\nMu:\t3.4\nSamples:\t7\nInterval:\t4.5\t5.6\n8.9 8.9 8.9 8.9 8.9 "
+          "8.9\n8.9 8.9 8.9 8.9 8.9 8.9\n8.9 8.9 8.9 8.9 8.9 8.9\n");
 }

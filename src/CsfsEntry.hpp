@@ -44,7 +44,8 @@ public:
   }
 
   std::string toString() {
-    return fmt::format("{}", mMu);
+    return fmt::format("Time:\t{}\nSize:\t{}\nMu:\t{}\nSamples:\t{}\nInterval:\t{}\t{}\n{}\n", mTimeVector.transpose(),
+                       mSizeVector.transpose(), mMu, mSamples, mFrom, mTo, mCsfs);
   }
 };
 
