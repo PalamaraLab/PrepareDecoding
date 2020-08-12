@@ -45,6 +45,8 @@ jobs:
           cmake --build . --parallel 2 --target unit_tests
           ctest -j2 --output-on-failure
         working-directory: build_dir
+        env:
+          CXX: g++-9
 
       - name: upload coverage results
         run: |

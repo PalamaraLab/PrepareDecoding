@@ -39,6 +39,8 @@ jobs:
       - name: cmake configure
         run: cmake .. -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Debug
         working-directory: build_dir
+        env:
+          CXX: g++-9
 
       - name: cmake build
         run: cmake --build . --parallel 2 --target unit_tests
