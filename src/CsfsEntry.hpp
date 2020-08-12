@@ -42,6 +42,10 @@ public:
       throw std::runtime_error(errorMessage);
     }
   }
+
+  std::string toString() {
+    return fmt::format("{}", mMu);
+  }
 };
 
 } // namespace asmc
