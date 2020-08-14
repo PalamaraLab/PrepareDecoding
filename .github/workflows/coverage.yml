@@ -12,7 +12,7 @@ jobs:
 
   build-and-test:
     name: Unit test coverage
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     steps:
 
@@ -34,7 +34,7 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
 
       - name: install tools
-        run: sudo apt install lcov libcurl4-openssl-dev
+        run: sudo apt install gcc-10 lcov libcurl4-openssl-dev
 
       - name: make build directory
         run: mkdir build_dir
@@ -46,7 +46,7 @@ jobs:
           ctest -j2 --output-on-failure
         working-directory: build_dir
         env:
-          CXX: g++-9
+          CXX: g++-10
 
       - name: upload coverage results
         run: |
