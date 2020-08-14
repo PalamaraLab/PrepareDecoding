@@ -34,7 +34,7 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
 
       - name: install tools
-        run: sudo apt install gcc-10 lcov libcurl4-openssl-dev
+        run: sudo apt install g++-10 lcov libcurl4-openssl-dev
 
       - name: make build directory
         run: mkdir build_dir
