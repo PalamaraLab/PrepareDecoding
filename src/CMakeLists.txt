@@ -10,8 +10,8 @@ message(STATUS "Found {fmt} ${fmt_VERSION}")
 find_package(ZLIB REQUIRED)
 message(STATUS "Found zlib ${ZLIB_VERSION_STRING}")
 
-set(prepare_decoding_src library.cpp)
-set(prepare_decoding_hdr library.hpp CsfsEntry.hpp)
+set(prepare_decoding_src library.cpp CsfsEntry.cpp)
+set(prepare_decoding_hdr library.hpp CsfsEntry.hpp EigenTypes.hpp)
 
 add_library(prepare_decoding_lib STATIC ${prepare_decoding_src} ${prepare_decoding_hdr})
 target_include_directories(prepare_decoding_lib INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
