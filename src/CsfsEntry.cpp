@@ -3,16 +3,14 @@
 
 #include "CsfsEntry.hpp"
 
-#include <Eigen/Core>
+#include "EigenTypes.hpp"
+
 #include <fmt/core.h>
 #include <fmt/ostream.h>
 
 #include <stdexcept>
 
 namespace asmc {
-
-// using array_t = Eigen::ArrayXd;
-// using mat_t = Eigen::MatrixXd;
 
 CsfsEntry::CsfsEntry(array_t timeVector, array_t sizeVector, double mu, double from, double to, int samples, mat_t csfs)
     : mMu(mu), mFrom(from), mTo(to), mSamples(samples), mTimeVector(std::move(timeVector)),

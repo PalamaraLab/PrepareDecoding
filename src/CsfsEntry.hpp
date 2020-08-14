@@ -6,11 +6,6 @@
 
 #include "EigenTypes.hpp"
 
-#include <fmt/core.h>
-#include <fmt/ostream.h>
-
-#include <stdexcept>
-
 namespace asmc {
 
 class CsfsEntry {
