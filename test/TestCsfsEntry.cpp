@@ -2,15 +2,15 @@
 // See accompanying LICENSE and COPYING for copyright notice and full details.
 
 #include "CsfsEntry.hpp"
+#include "EigenTypes.hpp"
 
 #include <catch2/catch.hpp>
 
 #include <fstream>
 
-using array_t = Eigen::ArrayXd;
-using mat_t = Eigen::MatrixXd;
+namespace asmc {
 
-TEST_CASE("Can successfully construct object", "[CsfsEntry]") {
+TEST_CASE("CsfsEntry constructor", "[CsfsEntry]") {
 
   const array_t timeVector = array_t::Random(5);
   const array_t sizeVector = array_t::Random(5);
@@ -20,10 +20,10 @@ TEST_CASE("Can successfully construct object", "[CsfsEntry]") {
   const int samples = 7;
   const mat_t csfs = mat_t::Random(3, samples - 1);
 
-  CHECK_NOTHROW(asmc::CsfsEntry(timeVector, sizeVector, mu, from, to, samples, csfs));
+  CHECK_NOTHROW(CsfsEntry(timeVector, sizeVector, mu, from, to, samples, csfs));
 }
 
-TEST_CASE("Throws on array size mismatch", "[CsfsEntry]") {
+TEST_CASE("CsfsEntry constructor throws on array size mismatch", "[CsfsEntry]") {
 
   const array_t timeVector = array_t::Random(5);
   const array_t sizeVector = array_t::Random(6);
@@ -33,11 +33,11 @@ TEST_CASE("Throws on array size mismatch", "[CsfsEntry]") {
   const int samples = 7;
   const mat_t csfs = mat_t::Random(3, samples - 1);
 
-  CHECK_THROWS_WITH(asmc::CsfsEntry(timeVector, sizeVector, mu, from, to, samples, csfs),
+  CHECK_THROWS_WITH(CsfsEntry(timeVector, sizeVector, mu, from, to, samples, csfs),
                     Catch::Contains("Time vector:\n"));
 }
 
-TEST_CASE("Throws on wrong CSFS size", "[CsfsEntry]") {
+TEST_CASE("CsfsEntry constructor throws on wrong CSFS size", "[CsfsEntry]") {
 
   const array_t timeVector = array_t::Random(5);
   const array_t sizeVector = array_t::Random(5);
@@ -46,14 +46,14 @@ TEST_CASE("Throws on wrong CSFS size", "[CsfsEntry]") {
   const double to = 3.45;
   const int samples = 7;
 
-  CHECK_THROWS_WITH(asmc::CsfsEntry(timeVector, sizeVector, mu, from, to, samples, mat_t::Random(2, samples - 1)),
+  CHECK_THROWS_WITH(CsfsEntry(timeVector, sizeVector, mu, from, to, samples, mat_t::Random(2, samples - 1)),
                     Catch::Contains("Time vector:\n"));
 
-  CHECK_THROWS_WITH(asmc::CsfsEntry(timeVector, sizeVector, mu, from, to, samples, mat_t::Random(3, samples - 2)),
+  CHECK_THROWS_WITH(CsfsEntry(timeVector, sizeVector, mu, from, to, samples, mat_t::Random(3, samples - 2)),
                     Catch::Contains("Time vector:\n"));
 }
 
-TEST_CASE("Throws with to >= from", "[CsfsEntry]") {
+TEST_CASE("CsfsEntry constructor throws with to >= from", "[CsfsEntry]") {
 
   const array_t timeVector = array_t::Random(5);
   const array_t sizeVector = array_t::Random(5);
@@ -63,11 +63,11 @@ TEST_CASE("Throws with to >= from", "[CsfsEntry]") {
   const int samples = 7;
   const mat_t csfs = mat_t::Random(3, samples - 1);
 
-  CHECK_THROWS_WITH(asmc::CsfsEntry(timeVector, sizeVector, mu, from, to, samples, csfs),
+  CHECK_THROWS_WITH(CsfsEntry(timeVector, sizeVector, mu, from, to, samples, csfs),
                     Catch::Contains("Time vector:\n"));
 }
 
-TEST_CASE("Print to string", "[CsfsEntry]") {
+TEST_CASE("CsfsEntry toString method", "[CsfsEntry]") {
 
   const array_t timeVector = array_t::Zero(3) + 1.2;
   const array_t sizeVector = array_t::Zero(3) + 2.3;
@@ -77,9 +77,11 @@ TEST_CASE("Print to string", "[CsfsEntry]") {
   const int samples = 7;
   const mat_t csfs = mat_t::Ones(3, samples - 1) * 8.9;
 
-  auto csfs_entry = asmc::CsfsEntry(timeVector, sizeVector, mu, from, to, samples, csfs);
+  auto csfs_entry = CsfsEntry(timeVector, sizeVector, mu, from, to, samples, csfs);
 
   REQUIRE(csfs_entry.toString() ==
           "Time:\t1.2 1.2 1.2\nSize:\t2.3 2.3 2.3\nMu:\t3.4\nSamples:\t7\nInterval:\t4.5\t5.6\n8.9 8.9 8.9 8.9 8.9 "
           "8.9\n8.9 8.9 8.9 8.9 8.9 8.9\n8.9 8.9 8.9 8.9 8.9 8.9\n");
 }
+
+} // namespace asmc
