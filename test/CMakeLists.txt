@@ -13,6 +13,7 @@ set(
         tests.cpp
         TestCsfs.cpp
         TestCsfsEntry.cpp
+        TestUtils.cpp
 )
 
 add_executable(unit_tests ${test_src})
