@@ -8,7 +8,14 @@ add_library(catch_main STATIC catch_main.cpp)
 target_link_libraries(catch_main PUBLIC Catch2::Catch2)
 target_link_libraries(catch_main PRIVATE project_settings)
 
-add_executable(unit_tests tests.cpp TestCsfsEntry.cpp)
+set(
+        test_src
+        tests.cpp
+        TestCsfs.cpp
+        TestCsfsEntry.cpp
+)
+
+add_executable(unit_tests ${test_src})
 target_link_libraries(unit_tests PRIVATE prepare_decoding_lib project_warnings project_settings catch_main)
 
 # automatically discover tests related to the "tests"
