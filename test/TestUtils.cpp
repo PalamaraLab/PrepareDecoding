@@ -11,8 +11,8 @@ TEST_CASE("Util: hypergeometric PMF", "[Utils]") {
 
   Catch::StringMaker<double>::precision = 18;
 
-  CHECK(hypergeometricPmf(10'000, 4'270, 300, 87) == Approx(2.209102501827205049068452429E-7).epsilon(1e-12));
-  CHECK(hypergeometricPmf(10'000, 4'270, 300, 128) == Approx(0.047240111763330826329736938358).epsilon(1e-12));
+  CHECK(hypergeometricPmf(10'000, 4'270, 300, 87) == Approx(2.209102501827205049068452429E-7).epsilon(1e-9));
+  CHECK(hypergeometricPmf(10'000, 4'270, 300, 128) == Approx(0.047240111763330826329736938358).epsilon(1e-9));
 
 }
 
