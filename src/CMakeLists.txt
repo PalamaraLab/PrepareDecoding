@@ -15,6 +15,7 @@ set(
         library.cpp
         Csfs.cpp
         CsfsEntry.cpp
+        Utils.cpp
 )
 
 set(
@@ -23,6 +24,7 @@ set(
         Csfs.hpp
         CsfsEntry.hpp
         EigenTypes.hpp
+        Utils.hpp
 )
 
 add_library(prepare_decoding_lib STATIC ${prepare_decoding_src} ${prepare_decoding_hdr})
