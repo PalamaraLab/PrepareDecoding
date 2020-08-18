@@ -13,6 +13,7 @@ set(
         tests.cpp
         TestCsfs.cpp
         TestCsfsEntry.cpp
+        TestData.cpp
         TestUtils.cpp
 )
 
