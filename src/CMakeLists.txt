@@ -15,6 +15,7 @@ set(
         library.cpp
         Csfs.cpp
         CsfsEntry.cpp
+        Data.cpp
         Utils.cpp
 )
 
@@ -23,6 +24,7 @@ set(
         library.hpp
         Csfs.hpp
         CsfsEntry.hpp
+        Data.hpp
         EigenTypes.hpp
         Utils.hpp
 )
