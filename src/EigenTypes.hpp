@@ -8,8 +8,10 @@
 
 namespace asmc {
 
-using array_t = Eigen::ArrayXd;
-using mat_t = Eigen::MatrixXd;
+using array_dt = Eigen::ArrayXd;
+using array_it = Eigen::ArrayXi;
+
+using mat_dt = Eigen::MatrixXd;
 
 } // namespace asmc
 

@@ -17,13 +17,13 @@ private:
 
   int mSamples = {};
 
-  array_t mTimeVector = {};
-  array_t mSizeVector = {};
+  array_dt mTimeVector = {};
+  array_dt mSizeVector = {};
 
-  mat_t mCsfs = {};
+  mat_dt mCsfs = {};
 
 public:
-  CsfsEntry(array_t timeVector, array_t sizeVector, double mu, double from, double to, int samples, mat_t csfs);
+  CsfsEntry(array_dt timeVector, array_dt sizeVector, double mu, double from, double to, int samples, mat_dt csfs);
 
   std::string toString();
 };
