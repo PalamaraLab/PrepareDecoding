@@ -13,9 +13,9 @@ std::string hello() {
 
 double doSomethingWithEigen() {
 
-  using mat_t = Eigen::MatrixXd;
+  using mat_dt = Eigen::MatrixXd;
 
-  mat_t m(2, 2);
+  mat_dt m(2, 2);
   m(0, 0) = 3.0;
 
   return m(0, 0);

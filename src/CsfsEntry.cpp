@@ -12,7 +12,8 @@
 
 namespace asmc {
 
-CsfsEntry::CsfsEntry(array_t timeVector, array_t sizeVector, double mu, double from, double to, int samples, mat_t csfs)
+CsfsEntry::CsfsEntry(array_dt timeVector, array_dt sizeVector, double mu, double from, double to, int samples,
+                     mat_dt csfs)
     : mMu(mu), mFrom(from), mTo(to), mSamples(samples), mTimeVector(std::move(timeVector)),
       mSizeVector(std::move(sizeVector)), mCsfs(std::move(csfs)) {
 
