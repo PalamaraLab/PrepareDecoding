@@ -12,9 +12,10 @@ class Data {
 
 private:
 
-  array_dt mAllSnpsFreq = {};
-  array_it mAllSnpsMinorAlleles = {};
-  array_it mAllSnpsAlleleCounts = {};
+  array_dt mAllSNPsFreq = {};
+  array_it mAllSNPsMinorAlleles = {};
+  array_it mAllSNPsAlleleCounts = {};
+  int mHaploidSampleSize = 0;
 
   void readMinorAlleleFrequencies(std::string_view freqFile);
 
