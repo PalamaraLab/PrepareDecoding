@@ -17,6 +17,7 @@ set(
         CsfsEntry.cpp
         Data.cpp
         Utils.cpp
+        ArraySpectrum.cpp
 )
 
 set(
@@ -27,6 +28,7 @@ set(
         Data.hpp
         EigenTypes.hpp
         Utils.hpp
+        ArraySpectrum.hpp
 )
 
 add_library(prepare_decoding_lib STATIC ${prepare_decoding_src} ${prepare_decoding_hdr})
