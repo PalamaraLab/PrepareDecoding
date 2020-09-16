@@ -18,6 +18,7 @@ set(
         Data.cpp
         Utils.cpp
         ArraySpectrum.cpp
+        Transition.cpp
 )
 
 set(
@@ -29,6 +30,7 @@ set(
         EigenTypes.hpp
         Utils.hpp
         ArraySpectrum.hpp
+        Transition.hpp
 )
 
 add_library(prepare_decoding_lib STATIC ${prepare_decoding_src} ${prepare_decoding_hdr})
