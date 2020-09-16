@@ -18,6 +18,7 @@ private:
   int mHaploidSampleSize = 0;
 
   void readMinorAlleleFrequencies(std::string_view freqFile);
+  void readMinorAlleleFrequenciesGz();
 
   void computeMinorAlleleFrequenciesFromHaps(std::string_view hapsFileRoot);
 
@@ -38,6 +39,10 @@ public:
    * @param hapsFileRoot the root location of the .frq.gz, .frq, or haps file
    */
   explicit Data(std::string_view hapsFileRoot);
+
+  array_dt getAllSNPsFreq();
+  array_it getAllSNPsMinorAlleles();
+  array_it getAllSNPsAlleleCounts();
 
   void addFreq(std::string_view freqFile);
 

@@ -2,7 +2,9 @@
 // See accompanying LICENSE and COPYING for copyright notice and full details.
 
 #include "Data.hpp"
+#include "EigenTypes.hpp"
 
+#include <string.h>
 #include <fmt/core.h>
 #include <fmt/ranges.h>
 
@@ -12,6 +14,8 @@
 #include <filesystem>
 #include <fstream>
 
+#define GZ_CHUNK 80
+
 namespace asmc {
 
 namespace fs = std::filesystem;
@@ -19,7 +23,7 @@ namespace fs = std::filesystem;
 Data::Data(std::string_view hapsFileRoot) {
 
   if (auto frq_gz = fmt::format("{}.frq.gz", hapsFileRoot); fs::exists(frq_gz)) {
-    readMinorAlleleFrequencies(frq_gz);
+    readMinorAlleleFrequenciesGz();
   } else if (auto frq = fmt::format("{}.frq", hapsFileRoot); fs::exists(frq)) {
     readMinorAlleleFrequencies(frq);
   } else {
@@ -29,6 +33,15 @@ Data::Data(std::string_view hapsFileRoot) {
 
 void Data::addFreq(std::string_view freqFile) {
   readMinorAlleleFrequencies(freqFile);
+}
+
+array_dt Data::getAllSNPsFreq() { return mAllSNPsFreq; }
+array_it Data::getAllSNPsMinorAlleles() {
+  return mAllSNPsMinorAlleles;
+}
+array_it Data::getAllSNPsAlleleCounts() { return mAllSNPsAlleleCounts; }
+
+void Data::readMinorAlleleFrequenciesGz() {
 }
 
 void Data::readMinorAlleleFrequencies(std::string_view freqFile) {
