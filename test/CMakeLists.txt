@@ -8,6 +8,8 @@ add_library(catch_main STATIC catch_main.cpp)
 target_link_libraries(catch_main PUBLIC Catch2::Catch2)
 target_link_libraries(catch_main PRIVATE project_settings)
 
+add_definitions(-DPREPARE_DECODING_TEST_DIR=\"${CMAKE_CURRENT_LIST_DIR}\")
+
 set(
         test_src
         tests.cpp
