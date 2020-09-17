@@ -41,19 +41,17 @@ std::string readNextLineFromGzip(gzFile& gzFileHandle) {
   std::array<char, 512> buffer = {};
   std::string line;
 
-  {
-    char* successful_read = nullptr;
-    do {
-      successful_read = gzgets(gzFileHandle, buffer.data(), buffer.size());
+  char* successful_read = nullptr;
+  do {
+    successful_read = gzgets(gzFileHandle, buffer.data(), buffer.size());
 
-      if (successful_read != Z_NULL) {
-        line += buffer.data();
-      }
+    if (successful_read != Z_NULL) {
+      line += buffer.data();
+    }
 
-    } while (line.back() != '\n' && !gzeof(gzFileHandle));
-  }
+  } while (line.back() != '\n' && !gzeof(gzFileHandle));
 
-  if(line.back() == '\n') {
+  if (line.back() == '\n') {
     line.pop_back();
   }
 
