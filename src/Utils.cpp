@@ -49,9 +49,9 @@ std::string readNextLineFromGzip(gzFile& gzFileHandle) {
       line += buffer.data();
     }
 
-  } while (line.back() != '\n' && !gzeof(gzFileHandle));
+  } while (!line.empty() && line.back() != '\n' && !gzeof(gzFileHandle));
 
-  if (line.back() == '\n') {
+  if (!line.empty() && line.back() == '\n') {
     line.pop_back();
   }
 
