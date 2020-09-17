@@ -43,7 +43,7 @@ std::string readNextLineFromGzip(gzFile& gzFileHandle) {
 
   char* successful_read = nullptr;
   do {
-    successful_read = gzgets(gzFileHandle, buffer.data(), buffer.size());
+    successful_read = gzgets(gzFileHandle, buffer.data(), static_cast<int>(buffer.size()));
 
     if (successful_read != Z_NULL) {
       line += buffer.data();
