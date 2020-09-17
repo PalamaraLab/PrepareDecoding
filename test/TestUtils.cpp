@@ -48,6 +48,8 @@ std::vector<std::string> readLinesFromGzFile(const std::string& fileName) {
     lines.emplace_back(readNextLineFromGzip(gzFile));
   }
 
+  gzclose(gzFile);
+
   return lines;
 }
 
