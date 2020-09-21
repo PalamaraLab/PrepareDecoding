@@ -8,7 +8,7 @@
 
 namespace asmc {
 
-class CsfsEntry {
+class CSFSEntry {
 
 private:
   double mMu = {};
@@ -20,10 +20,12 @@ private:
   array_dt mTimeVector = {};
   array_dt mSizeVector = {};
 
-  mat_dt mCsfs = {};
+  mat_dt mCSFS = {};
 
 public:
-  CsfsEntry(array_dt timeVector, array_dt sizeVector, double mu, double from, double to, int samples, mat_dt csfs);
+  CSFSEntry(array_dt timeVector,
+      array_dt sizeVector,
+      double mu, double from, double to, int samples, mat_dt csfs);
 
   std::string toString();
 };
