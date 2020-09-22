@@ -5,7 +5,7 @@
 #define PREPAREDECODING_UTILS_HPP
 
 #include <zlib.h>
-
+#include <vector>
 #include <string>
 
 namespace asmc {
@@ -19,6 +19,8 @@ double hypergeometricPmf(int populationSize, int numberOfSuccesses, int sampleSi
  * @return a string contating the next line contained in the gzip file, without a trailing newline character
  */
 std::string readNextLineFromGzip(gzFile& gzFileHandle);
+
+void normalize(std::vector<double>& spectrum);
 
 } // namespace asmc
 

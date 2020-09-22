@@ -5,6 +5,7 @@
 
 #include "EigenTypes.hpp"
 
+#include <iostream>
 #include <fmt/core.h>
 #include <fmt/ostream.h>
 
@@ -127,18 +128,18 @@ bool CSFS::verify(std::vector<double> timeVectorOriginal, std::vector<double> si
   for (double from : discretization) {
     auto search = mCSFS.find(from);
     if (search == mCSFS.end()) {
-      std::cout << "Warning:\tCSFS does not contain interval " << from << "." << std::endl;
+      fmt::print("Warning:\tCSFS does not contain interval {}.\n", from);
       return false;
     }
     auto thisEntry = mCSFS[from];
     if (thisEntry.getMu() != mu) {
-      std::cout << "Warning:\tCSFS entry " << from << " has different mu: " << thisEntry.getMu() << "." << std::endl;
+      fmt::print("Warning:\tCSFS entry {} has different mu: {}.", from, thisEntry.getMu());
       return false;
     }
     if (thisEntry.getTime() != timeVector) {
-      std::cout << thisEntry.getTime() << std::endl;
-      std::cout << timeVector << std::endl;
-      std::cout << "Warning:\tCSFS entry " << from << " has different time vector." << std::endl;
+      fmt::print("{}\n", thisEntry.getTime());
+      fmt::print("{}\n", timeVector);
+      fmt::print("Warning:\tCSFS entry {} has different time vector.", from);
       return false;
     }
     if (thisEntry.getSize() != sizeVector) {
@@ -183,35 +184,25 @@ mat_dt CSFS::computeClassicEmission(std::vector<double> expectedTimes, double mu
 
 void CSFS::computeArraySamplingFactors(Data data, int samples, Transition transition) {
     mSamples = samples;
-    std::vector<double> coalDist = transition.getCoalDist();
-    std::vector<double> AFS;
+    auto coalDist = transition.getCoalDist();
+    array_dt AFS(samples);
     // double[] AFS = new double[samples];
     // the first entry of the CSFS may not be zero, since it's a shared doubleton
     int counter = 0;
-    for (auto const& [from, csfs] : mCSFS) {
-        double coalescentProbabilityThisTimeSlice = coalDist[counter];
-        CSFSEntry thisCsfsDM = CSFS.get(from);
-        for (int row = 0; row < 3; row++) {
-            for (int column = 0; column < samples - 1; column++) {
-                int pos = row + column;
-                if (pos > samples / 2) {
-                    pos = samples - pos;
-                }
-                AFS[pos] += coalescentProbabilityThisTimeSlice * thisCsfsDM.CSFS[row][column];
-            }
+    for (auto const& [from, csfsEntry] : mCSFS) {
+      auto mat_csfs = csfsEntry.getCSFS();
+      for (int row = 0; row < 3; row++) {
+        for (int column = 0; column < samples - 1; column++) {
+          int pos = row + column;
+          if (pos > samples / 2) pos = samples - pos;
+          AFS[pos] += coalDist[counter] * mat_csfs(row, column);
         }
-        counter++;
+      }
+      counter++;
     }
 
-    // normalize spectrum
     AFS[0] = 0.;
-    double norm = 0.;
-    for (int i = 0; i < samples; i++) {
-        norm += AFS[i];
-    }
-    for (int i = 0; i < samples; i++) {
-        AFS[i] /= norm;
-    }
+    AFS /= AFS.sum(); // normalize spectrum
 
     // fold AFS
     int halfTotal = samples / 2;
@@ -219,91 +210,68 @@ void CSFS::computeArraySamplingFactors(Data data, int samples, Transition transi
         AFS[samples - i] += AFS[i];
         AFS[i] = 0;
     }
-    // normalize spectrum
-    norm = 0.;
-    for (int i = 0; i < samples; i++) {
-        norm += AFS[i];
-    }
-    for (int i = 0; i < samples; i++) {
-        AFS[i] /= norm;
-    }
+    AFS /= AFS.sum(); // normalize spectrum
 
-    // foldedAFS contains probability a site has MAF i given the site is polymorphic in the sequence data
-    double[] foldedAFS = new double[halfTotal + 1];
-    for (int i = 0; i <= halfTotal; i++) {
-        foldedAFS[i] = AFS[i];
-    }
+    // foldedAFS contains probability a site has MAF i given the site is
+    // polymorphic in the sequence data
+    array_dt foldedAFS = AFS.head(halfTotal + 1);
 
     // now get foldedAFS_array, the probability a site has MAF i given it is polymorphic in the sample (array)
-    this.arraySpectrum = new ArraySpectrum(data, samples);
-    double[] foldedAFS_array = arraySpectrum.spectrum;
-    for (int i = 0; i < foldedAFS_array.length; i++) {
-    }
-    double[] samplingFactors = new double[halfTotal + 1];
-
-    for (int i = 1; i < foldedAFS_array.length; i++) {
-        samplingFactors[i] = foldedAFS_array[i] / foldedAFS[i];
-    }
-    arraySamplingFactors = samplingFactors;
-}
-
-private void applyFactors() {
-    // apply sampling factors and renormalize
-    // note that the first entry of the CSFS may not be zero, since it's a shared doubleton
-    for (double from : ascertainedCSFS.keySet()) {
-        double[][] thisCSFS = ascertainedCSFS.get(from).CSFS;
-        thisCSFS[0][0] = 0.;
-        double norm = 0.;
-        for (int row = 0; row < 3; row++) {
-            for (int column = 0; column < samples - 1; column++) {
-                // if the spectrum is folded, this emission is mapped to this position
-                int pos = row + column;
-                if (pos > samples / 2) {
-                    pos = samples - pos;
-                }
-                // and if we're looking at array data, this MAF is adjusted using this factor
-                double factor = arraySamplingFactors[pos];
-                // apply factor
-                thisCSFS[row][column] *= factor;
-                // sum value to renomralize to 1 later on
-                norm += thisCSFS[row][column];
-            }
-        }
-        norm /= 1 - arraySpectrum.monomorphic;
-        for (int row = 0; row < 3; row++) {
-            for (int column = 0; column < samples - 1; column++) {
-                thisCSFS[row][column] /= norm;
-            }
-        }
-        thisCSFS[0][0] = arraySpectrum.monomorphic;
-        ascertainedCSFS.get(from).CSFS = thisCSFS;
+    auto foldedAFS_array = ArraySpectrum(data, samples).getSpectrum();
+    mArraySamplingFactors.resize(halfTotal + 1);
+    mArraySamplingFactors[0] = 0.0;
+    for (int i = 1; i < foldedAFS_array.size(); i++) {
+        mArraySamplingFactors[i] = foldedAFS_array[i] / foldedAFS[i];
     }
 }
 
-public TreeMap<Double, CSFSEntry> foldCSFS(TreeMap<Double, CSFSEntry> CSFS) {
-    TreeMap<Double, CSFSEntry> foldedCSFS = new TreeMap<Double, CSFSEntry>();
-    int samples = CSFS.firstEntry().getValue().samples;
-    int undistinguished = samples - 2;
-    for (double from : CSFS.keySet()) {
-        CSFSEntry foldedEntry = new CSFSEntry(CSFS.get(from));
-        double[][] thisCsfs_double = foldedEntry.CSFS;
-        // code to fold the spectrum
-        if (samples % 2 != 0) {
-            Utils.exit("ConditionalSFS called with odd number of samples.");
-        }
-        int half = samples / 2;
-        double[][] thisCsfs_double_folded = new double[2][half + 1];
-        for (int row = 0; row < 3; row++) {
-            for (int column = 0; column < undistinguished + 1; column++) {
-                Integer[] coord = new Integer[]{row, column};
-                Integer[] foldedCoord = getFoldedObservationFromUnfolded(coord, samples);
-                thisCsfs_double_folded[foldedCoord[0]][foldedCoord[1]] += thisCsfs_double[row][column];
-            }
-        }
-        foldedEntry.CSFS = thisCsfs_double_folded;
-        foldedCSFS.put(from, foldedEntry);
+void applyFactors() {
+  // apply sampling factors and renormalize
+  // note that the first entry of the CSFS may not be zero, since it's a shared doubleton
+  double monomorphic = mArraySpectrum.getMonomorphic();
+  for (auto const& [from, csfsEntry] : mAscertainedCSFS) {
+    auto thisCSFS = csfsEntry.getCSFS();
+    thisCSFS(0, 0) = 0.;
+    double norm = 0.;
+    for (int row = 0; row < 3; row++) {
+      for (int column = 0; column < mSamples - 1; column++) {
+        // if the spectrum is folded, this emission is mapped to this position
+        int pos = row + column;
+        if (pos > samples / 2) pos = samples - pos;
+        // and if we're looking at array data, this MAF is adjusted using this factor
+        thisCSFS(row, column) *= mArraySamplingFactors[pos];
+        // sum value to renomralize to 1 later on
+        norm += thisCSFS(row, column);
+      }
     }
-    return foldedCSFS;
+    norm /= 1 - monomorphic;
+    thisCSFS /= norm;
+    thisCSFS(0, 0) = monomorphic;
+    // ascertainedCSFS.get(from).CSFS = thisCSFS; [notreq, using refs]
+    }
+}
+
+std::map<double, CSFSEntry> foldCSFS(std::map<double, CSFSEntry> csfsMap) {
+  std::map<double, CSFSEntry> foldedCSFS;
+  int samples = csfsMap.at(0).second.getSamples();
+  int undistinguished = samples - 2;
+  for (auto const& [from, foldedEntry] : csfsMap) {
+    auto thisCsfs_double = foldedEntry.getCSFS();
+    // code to fold the spectrum
+    if (samples % 2 != 0) throw std::runtime_error("ConditionalSFS called with odd number of samples.");
+    int half = samples / 2;
+    mat_dt thisCSFS_double_folded(2, half + 1);
+    thisCSFS_double_folded.setZero();
+    for (int row = 0; row < 3; row++) {
+      for (int column = 0; column < undistinguished + 1; column++) {
+        auto [dist, undist] = getFoldedObservationFromUnfolded(std::make_pair(row, column), samples);
+        thisCsfs_double_folded(dist, undist) += thisCsfs_double(row, column);
+      }
+    }
+    thisCSFS_double = thisCSFS_double_folded;  // should set in foldedEntry
+    foldedCSFS.emplace(std::make_pair(from, foldedEntry));
+    }
+  return foldedCSFS;
 }
 
 std::pair<int, int> CSFS::getFoldedObservationFromUnfolded(std::pair<int, int> unfolded, int totalSamples) {
@@ -316,18 +284,19 @@ std::pair<int, int> CSFS::getFoldedObservationFromUnfolded(std::pair<int, int> u
   return std::make_pair(dist, undist);
 }
 
-public double[][] compressCSFS(TreeMap<Double, CSFSEntry> CSFS) {
-    double[][] compressed = new double[2][CSFS.size()];
-    int timeInterval = 0;
-    for (double from : CSFS.keySet()) {
-        double[][] thisCSFS = CSFS.get(from).CSFS;
-        for (int k = 0; k < thisCSFS[0].length; k++) {
-            compressed[0][timeInterval] += thisCSFS[0][k];
-            compressed[1][timeInterval] += thisCSFS[1][k];
-        }
-        timeInterval++;
+mat_dt CSFS::compressCSFS(std::map<double, CSFSEntry> csfsMap) {
+  mat_dt compressed(2, csfsMap.size());
+  compressed.setZero();
+  int timeInterval = 0;
+  for (auto const& [from, csfsEntry] : csfsMap) {
+    auto thisCSFS = csfsEntry.getCSFS();
+    for (int k = 0; k < thisCSFS.cols(); k++) {
+      compressed(0, timeInterval) += thisCSFS(0, k);
+      compressed(1, timeInterval) += thisCSFS(1, k);
     }
-    return compressed;
+    timeInterval++;
+  }
+  return compressed;
 }
 
 } // namespace asmc

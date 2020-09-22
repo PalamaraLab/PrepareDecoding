@@ -66,10 +66,5 @@ ArraySpectrum::ArraySpectrum(Data data, unsigned samples) {
   mSpectrum = std::vector<double>(spectrum.begin(), spectrum.begin() + halfTotal + 1);
 }
 
-void normalize(std::vector<double>& spectrum) {
-  double tot = std::reduce(spectrum.begin(), spectrum.end());
-  std::for_each(spectrum.begin(), spectrum.end(), [tot](double& s) { s /= tot;});
-}
-
 } // namespace asmc
 

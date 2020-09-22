@@ -27,11 +27,12 @@ public:
       double mu, double from, double to, int samples, mat_dt csfs);
 
   std::vector<double>& getTime() { return mTimeVector; }
-  std::vector<double>& getSize() { return mSizeVector; }
+  astd::vector<double>& getSize() { return mSizeVector; }
   double getMu() { return mMu; }
   double getFrom() { return mFrom; }
   double getTo() { return mTo; }
   int getSamples() { return mSamples; }
+  mat_dt& getCSFS() { return mCSFS };
 
   std::string toString();
 };

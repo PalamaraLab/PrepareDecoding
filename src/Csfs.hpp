@@ -48,10 +48,10 @@ public:
   static mat_dt computeClassicEmission(std::vector<double> expectedTimes, double mu);
   void computeArraySamplingFactors(Data data, int samples, Transition transition);
   void applyFactors();
-  std::map<double, CSFSEntry> foldCSFS(std::map<double, CSFSEntry> CSFS);
+  std::map<double, CSFSEntry> foldCSFS(std::map<double, CSFSEntry> csfsMap);
   static std::pair<int, int> getFoldedObservationFromUnfolded(
       std::pair<int, int> unfolded, int totalSamples);
-  mat_dt compressCSFS(std::map<double, CSFSEntry> CSFS);
+  mat_dt compressCSFS(std::map<double, CSFSEntry> csfsMap);
 
 };
 

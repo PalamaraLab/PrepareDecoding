@@ -21,6 +21,7 @@ class ArraySpectrum {
 
   public:
     explicit ArraySpectrum(Data data, unsigned samples);
+    double getMonomorphic() const { return mMonomorphicProbability; }
 
 };
 
