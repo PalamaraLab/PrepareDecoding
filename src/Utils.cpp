@@ -3,6 +3,7 @@
 
 #include "Utils.hpp"
 
+#include <array>
 #include <cassert>
 #include <cmath>
 
@@ -33,6 +34,28 @@ double hypergeometricPmf(const int populationSize, const int numberOfSuccesses, 
   const long double den5 = std::lgamma(1.L + populationSize + observedSuccesses - numberOfSuccesses - sampleSize);
 
   return static_cast<double>(std::exp(num1 + num2 + num3 + num4 - den1 - den2 - den3 - den4 - den5));
+}
+
+std::string readNextLineFromGzip(gzFile& gzFileHandle) {
+
+  std::array<char, 512> buffer = {};
+  std::string line;
+
+  char* successful_read = nullptr;
+  do {
+    successful_read = gzgets(gzFileHandle, buffer.data(), static_cast<int>(buffer.size()));
+
+    if (successful_read != Z_NULL) {
+      line += buffer.data();
+    }
+
+  } while (!line.empty() && line.back() != '\n' && !gzeof(gzFileHandle));
+
+  if (!line.empty() && line.back() == '\n') {
+    line.pop_back();
+  }
+
+  return line;
 }
 
 } // namespace asmc

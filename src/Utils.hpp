@@ -4,9 +4,21 @@
 #ifndef PREPAREDECODING_UTILS_HPP
 #define PREPAREDECODING_UTILS_HPP
 
+#include <zlib.h>
+
+#include <string>
+
 namespace asmc {
 
 double hypergeometricPmf(int populationSize, int numberOfSuccesses, int sampleSize, int observedSuccesses);
+
+/**
+ * Read the next line from a gzip file.
+ *
+ * @param gzFileHandle handle to a file opened with zlib's gzopen
+ * @return a string contating the next line contained in the gzip file, without a trailing newline character
+ */
+std::string readNextLineFromGzip(gzFile& gzFileHandle);
 
 } // namespace asmc
 
