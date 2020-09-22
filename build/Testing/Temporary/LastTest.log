@@ -1,0 +1,271 @@
+Start testing: Sep 14 12:29 BST
+----------------------------------------------------------
+1/14 Testing: Require true
+1/14 Test: Require true
+Command: "/home/abhidg/src/PrepareDecoding/build/test/unit_tests" "Require true"
+Directory: /home/abhidg/src/PrepareDecoding/build/test
+"Require true" start time: Sep 14 12:29 BST
+Output:
+----------------------------------------------------------
+Filters: Require true
+===============================================================================
+All tests passed (1 assertion in 1 test case)
+
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"Require true" end time: Sep 14 12:29 BST
+"Require true" time elapsed: 00:00:00
+----------------------------------------------------------
+
+2/14 Testing: Hello
+2/14 Test: Hello
+Command: "/home/abhidg/src/PrepareDecoding/build/test/unit_tests" "Hello"
+Directory: /home/abhidg/src/PrepareDecoding/build/test
+"Hello" start time: Sep 14 12:29 BST
+Output:
+----------------------------------------------------------
+Filters: Hello
+===============================================================================
+All tests passed (1 assertion in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Hello" end time: Sep 14 12:29 BST
+"Hello" time elapsed: 00:00:00
+----------------------------------------------------------
+
+3/14 Testing: Eigen
+3/14 Test: Eigen
+Command: "/home/abhidg/src/PrepareDecoding/build/test/unit_tests" "Eigen"
+Directory: /home/abhidg/src/PrepareDecoding/build/test
+"Eigen" start time: Sep 14 12:29 BST
+Output:
+----------------------------------------------------------
+Filters: Eigen
+===============================================================================
+All tests passed (1 assertion in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Eigen" end time: Sep 14 12:29 BST
+"Eigen" time elapsed: 00:00:00
+----------------------------------------------------------
+
+4/14 Testing: Zlib
+4/14 Test: Zlib
+Command: "/home/abhidg/src/PrepareDecoding/build/test/unit_tests" "Zlib"
+Directory: /home/abhidg/src/PrepareDecoding/build/test
+"Zlib" start time: Sep 14 12:29 BST
+Output:
+----------------------------------------------------------
+Filters: Zlib
+===============================================================================
+All tests passed (1 assertion in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Zlib" end time: Sep 14 12:29 BST
+"Zlib" time elapsed: 00:00:00
+----------------------------------------------------------
+
+5/14 Testing: Csfs constructor
+5/14 Test: Csfs constructor
+Command: "/home/abhidg/src/PrepareDecoding/build/test/unit_tests" "Csfs constructor"
+Directory: /home/abhidg/src/PrepareDecoding/build/test
+"Csfs constructor" start time: Sep 14 12:29 BST
+Output:
+----------------------------------------------------------
+Filters: Csfs constructor
+===============================================================================
+test cases: 1 | 1 passed
+assertions: - none -
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Csfs constructor" end time: Sep 14 12:29 BST
+"Csfs constructor" time elapsed: 00:00:00
+----------------------------------------------------------
+
+6/14 Testing: CsfsEntry constructor
+6/14 Test: CsfsEntry constructor
+Command: "/home/abhidg/src/PrepareDecoding/build/test/unit_tests" "CsfsEntry constructor"
+Directory: /home/abhidg/src/PrepareDecoding/build/test
+"CsfsEntry constructor" start time: Sep 14 12:29 BST
+Output:
+----------------------------------------------------------
+Filters: CsfsEntry constructor
+===============================================================================
+All tests passed (1 assertion in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"CsfsEntry constructor" end time: Sep 14 12:29 BST
+"CsfsEntry constructor" time elapsed: 00:00:00
+----------------------------------------------------------
+
+7/14 Testing: CsfsEntry constructor throws on array size mismatch
+7/14 Test: CsfsEntry constructor throws on array size mismatch
+Command: "/home/abhidg/src/PrepareDecoding/build/test/unit_tests" "CsfsEntry constructor throws on array size mismatch"
+Directory: /home/abhidg/src/PrepareDecoding/build/test
+"CsfsEntry constructor throws on array size mismatch" start time: Sep 14 12:29 BST
+Output:
+----------------------------------------------------------
+Filters: CsfsEntry constructor throws on array size mismatch
+===============================================================================
+All tests passed (1 assertion in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"CsfsEntry constructor throws on array size mismatch" end time: Sep 14 12:29 BST
+"CsfsEntry constructor throws on array size mismatch" time elapsed: 00:00:00
+----------------------------------------------------------
+
+8/14 Testing: CsfsEntry constructor throws on wrong CSFS size
+8/14 Test: CsfsEntry constructor throws on wrong CSFS size
+Command: "/home/abhidg/src/PrepareDecoding/build/test/unit_tests" "CsfsEntry constructor throws on wrong CSFS size"
+Directory: /home/abhidg/src/PrepareDecoding/build/test
+"CsfsEntry constructor throws on wrong CSFS size" start time: Sep 14 12:29 BST
+Output:
+----------------------------------------------------------
+Filters: CsfsEntry constructor throws on wrong CSFS size
+===============================================================================
+All tests passed (2 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"CsfsEntry constructor throws on wrong CSFS size" end time: Sep 14 12:29 BST
+"CsfsEntry constructor throws on wrong CSFS size" time elapsed: 00:00:00
+----------------------------------------------------------
+
+9/14 Testing: CsfsEntry constructor throws with to >= from
+9/14 Test: CsfsEntry constructor throws with to >= from
+Command: "/home/abhidg/src/PrepareDecoding/build/test/unit_tests" "CsfsEntry constructor throws with to >= from"
+Directory: /home/abhidg/src/PrepareDecoding/build/test
+"CsfsEntry constructor throws with to >= from" start time: Sep 14 12:29 BST
+Output:
+----------------------------------------------------------
+Filters: CsfsEntry constructor throws with to >= from
+===============================================================================
+All tests passed (1 assertion in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"CsfsEntry constructor throws with to >= from" end time: Sep 14 12:29 BST
+"CsfsEntry constructor throws with to >= from" time elapsed: 00:00:00
+----------------------------------------------------------
+
+10/14 Testing: CsfsEntry toString method
+10/14 Test: CsfsEntry toString method
+Command: "/home/abhidg/src/PrepareDecoding/build/test/unit_tests" "CsfsEntry toString method"
+Directory: /home/abhidg/src/PrepareDecoding/build/test
+"CsfsEntry toString method" start time: Sep 14 12:29 BST
+Output:
+----------------------------------------------------------
+Filters: CsfsEntry toString method
+===============================================================================
+All tests passed (1 assertion in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"CsfsEntry toString method" end time: Sep 14 12:29 BST
+"CsfsEntry toString method" time elapsed: 00:00:00
+----------------------------------------------------------
+
+11/14 Testing: Data default constructor
+11/14 Test: Data default constructor
+Command: "/home/abhidg/src/PrepareDecoding/build/test/unit_tests" "Data default constructor"
+Directory: /home/abhidg/src/PrepareDecoding/build/test
+"Data default constructor" start time: Sep 14 12:29 BST
+Output:
+----------------------------------------------------------
+Filters: Data default constructor
+===============================================================================
+test cases: 1 | 1 passed
+assertions: - none -
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Data default constructor" end time: Sep 14 12:29 BST
+"Data default constructor" time elapsed: 00:00:00
+----------------------------------------------------------
+
+12/14 Testing: Data explicit constructor, no hap file found
+12/14 Test: Data explicit constructor, no hap file found
+Command: "/home/abhidg/src/PrepareDecoding/build/test/unit_tests" "Data explicit constructor\, no hap file found"
+Directory: /home/abhidg/src/PrepareDecoding/build/test
+"Data explicit constructor, no hap file found" start time: Sep 14 12:29 BST
+Output:
+----------------------------------------------------------
+Filters: Data explicit constructor\, no hap file found
+===============================================================================
+All tests passed (1 assertion in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Data explicit constructor, no hap file found" end time: Sep 14 12:29 BST
+"Data explicit constructor, no hap file found" time elapsed: 00:00:00
+----------------------------------------------------------
+
+13/14 Testing: Util: hypergeometric PMF specific values
+13/14 Test: Util: hypergeometric PMF specific values
+Command: "/home/abhidg/src/PrepareDecoding/build/test/unit_tests" "Util: hypergeometric PMF specific values"
+Directory: /home/abhidg/src/PrepareDecoding/build/test
+"Util: hypergeometric PMF specific values" start time: Sep 14 12:29 BST
+Output:
+----------------------------------------------------------
+Filters: Util: hypergeometric PMF specific values
+===============================================================================
+All tests passed (2 assertions in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Util: hypergeometric PMF specific values" end time: Sep 14 12:29 BST
+"Util: hypergeometric PMF specific values" time elapsed: 00:00:00
+----------------------------------------------------------
+
+14/14 Testing: Util: hypergeometric PMF sums to one
+14/14 Test: Util: hypergeometric PMF sums to one
+Command: "/home/abhidg/src/PrepareDecoding/build/test/unit_tests" "Util: hypergeometric PMF sums to one"
+Directory: /home/abhidg/src/PrepareDecoding/build/test
+"Util: hypergeometric PMF sums to one" start time: Sep 14 12:29 BST
+Output:
+----------------------------------------------------------
+Filters: Util: hypergeometric PMF sums to one
+===============================================================================
+All tests passed (1 assertion in 1 test case)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"Util: hypergeometric PMF sums to one" end time: Sep 14 12:29 BST
+"Util: hypergeometric PMF sums to one" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Sep 14 12:29 BST

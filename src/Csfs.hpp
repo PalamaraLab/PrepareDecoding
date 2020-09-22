@@ -9,6 +9,8 @@
 
 namespace asmc {
 
+enum class CSFSParserState { Null, Time, Size, Mu, Samples, Interval, CSFS };
+
 class CSFS {
 
 private:
@@ -24,16 +26,26 @@ private:
 
   array_dt mArraySamplingFactors;
   int mSamples;
+  int mCSFSLine = 0;
 
 public:
 
   explicit CSFS(std::map<double, CSFSEntry> CSFS_);
-  static loadFromFile(std::string_view filename);
-  bool verify(array_dt timeVectorOriginal, array_dt sizeVectorOriginal,
-      double mu, int samples, array_dt discretizationOriginal);
+  const static std::map<std::string, CSFSParserState> stateMap = {
+    {"Size:", CSFSParserState::Size},
+    {"Time:", CSFSParserState::Time},
+    {"Mu:", CSFSParserState::Mu},
+    {"Samples:", CSFSParserState::Samples},
+    {"Interval:", CSFSParserState::Interval}
+  };
+  static CSFSParserState currentState(std::string line);
+  static CSFSParserState nextState(CSFSParserState state);
+  static CSFS loadFromFile(std::string_view filename);
+  bool verify(std::vector<double> timeVectorOriginal, std::vector<double> sizeVectorOriginal,
+      double mu, int samples, std::vector<double> discretizationOriginal);
   std::string toString();
   void fixAscertainment(Data data, int samples, Transition transition);
-  mat_dt computeClassicEmission(array_dt expectedTimes, double mu);
+  static mat_dt computeClassicEmission(std::vector<double> expectedTimes, double mu);
   void computeArraySamplingFactors(Data data, int samples, Transition transition);
   void applyFactors();
   std::map<double, CSFSEntry> foldCSFS(std::map<double, CSFSEntry> CSFS);

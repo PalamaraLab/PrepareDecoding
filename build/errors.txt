@@ -1,0 +1,26 @@
+-- Using CMake version 3.16.3
+-- Found Eigen3 3.3.7
+-- Found {fmt} 7.0.3
+-- Found zlib 1.2.11
+-- Found cxxopts 2.2.0
+-- Found Catch2 2.12.1
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/abhidg/src/PrepareDecoding/build
+gmake[1]: Entering directory '/home/abhidg/src/PrepareDecoding/build'
+gmake[2]: Entering directory '/home/abhidg/src/PrepareDecoding/build'
+gmake[3]: Entering directory '/home/abhidg/src/PrepareDecoding/build'
+Scanning dependencies of target prepare_decoding_lib
+gmake[3]: Leaving directory '/home/abhidg/src/PrepareDecoding/build'
+gmake[3]: Entering directory '/home/abhidg/src/PrepareDecoding/build'
+[ 20%] Building CXX object src/CMakeFiles/prepare_decoding_lib.dir/CsfsEntry.cpp.o
+[ 20%] Building CXX object src/CMakeFiles/prepare_decoding_lib.dir/Csfs.cpp.o
+[ 30%] Building CXX object src/CMakeFiles/prepare_decoding_lib.dir/Data.cpp.o
+[ 40%] Building CXX object src/CMakeFiles/prepare_decoding_lib.dir/ArraySpectrum.cpp.o
+gmake[3]: *** [src/CMakeFiles/prepare_decoding_lib.dir/build.make:102: src/CMakeFiles/prepare_decoding_lib.dir/Data.cpp.o] Interrupt
+gmake[3]: *** [src/CMakeFiles/prepare_decoding_lib.dir/build.make:76: src/CMakeFiles/prepare_decoding_lib.dir/Csfs.cpp.o] Interrupt
+gmake[3]: *** [src/CMakeFiles/prepare_decoding_lib.dir/build.make:128: src/CMakeFiles/prepare_decoding_lib.dir/ArraySpectrum.cpp.o] Interrupt
+gmake[3]: *** [src/CMakeFiles/prepare_decoding_lib.dir/build.make:89: src/CMakeFiles/prepare_decoding_lib.dir/CsfsEntry.cpp.o] Interrupt
+gmake[2]: *** [CMakeFiles/Makefile2:138: src/CMakeFiles/prepare_decoding_lib.dir/all] Interrupt
+gmake[1]: *** [CMakeFiles/Makefile2:172: exe/CMakeFiles/prepare_decoding_exe.dir/rule] Interrupt
+gmake: *** [Makefile:142: prepare_decoding_exe] Interrupt

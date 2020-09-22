@@ -12,7 +12,7 @@
 
 namespace asmc {
 
-CSFSEntry::CSFSEntry(array_dt timeVector, array_dt sizeVector, double mu, double from, double to, int samples,
+CSFSEntry::CSFSEntry(std::vector<double> timeVector, std::vector<double> sizeVector, double mu, double from, double to, int samples,
                      mat_dt csfs)
     : mMu(mu), mFrom(from), mTo(to), mSamples(samples),
       mTimeVector(std::move(timeVector)),
@@ -23,14 +23,14 @@ CSFSEntry::CSFSEntry(array_dt timeVector, array_dt sizeVector, double mu, double
 
     const std::string errorMessage =
         fmt::format("Time vector:\n{}\nSize vector:\n{}\nCSFS:\n{}\nFrom: {} To: {}\nMalformed CSFS entry.",
-                    mTimeVector.transpose(), mSizeVector.transpose(), mCSFS, mFrom, mTo);
+                    mTimeVector, mSizeVector, mCSFS, mFrom, mTo);
     throw std::runtime_error(errorMessage);
   }
 }
 
 std::string CSFSEntry::toString() {
-  return fmt::format("Time:\t{}\nSize:\t{}\nMu:\t{}\nSamples:\t{}\nInterval:\t{}\t{}\n{}\n", mTimeVector.transpose(),
-                     mSizeVector.transpose(), mMu, mSamples, mFrom, mTo, mCSFS);
+  return fmt::format("Time:\t{}\nSize:\t{}\nMu:\t{}\nSamples:\t{}\nInterval:\t{}\t{}\n{}\n", mTimeVector,
+                     mSizeVector, mMu, mSamples, mFrom, mTo, mCSFS);
 }
 
 } // namespace asmc

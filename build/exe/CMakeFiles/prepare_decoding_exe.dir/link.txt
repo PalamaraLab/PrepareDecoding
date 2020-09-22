@@ -1,0 +1,1 @@
+/usr/bin/c++  -O2 -g -DNDEBUG   CMakeFiles/prepare_decoding_exe.dir/prepare_decoding.cpp.o  -o prepare_decoding_exe  ../src/libprepare_decoding_lib.a ../../vcpkg/installed/x64-linux/lib/libfmt.a ../../vcpkg/installed/x64-linux/debug/lib/libz.a 

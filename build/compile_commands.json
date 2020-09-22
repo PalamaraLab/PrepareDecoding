@@ -1,0 +1,72 @@
+[
+{
+  "directory": "/home/abhidg/src/PrepareDecoding/build/src",
+  "command": "/usr/bin/c++  -DFMT_LOCALE -isystem /home/abhidg/src/PrepareDecoding/vcpkg/installed/x64-linux/include/eigen3 -isystem /home/abhidg/src/PrepareDecoding/vcpkg/installed/x64-linux/include  -O2 -g -DNDEBUG   -Wall -Wextra -Wshadow -Wnon-virtual-dtor -Wold-style-cast -Wcast-align -Wunused -Woverloaded-virtual -Wpedantic -Wconversion -Wsign-conversion -Wnull-dereference -Wdouble-promotion -Wformat=2 -Werror -Wmisleading-indentation -Wduplicated-cond -Wlogical-op -Wuseless-cast -std=c++17 -o CMakeFiles/prepare_decoding_lib.dir/library.cpp.o -c /home/abhidg/src/PrepareDecoding/src/library.cpp",
+  "file": "/home/abhidg/src/PrepareDecoding/src/library.cpp"
+},
+{
+  "directory": "/home/abhidg/src/PrepareDecoding/build/src",
+  "command": "/usr/bin/c++  -DFMT_LOCALE -isystem /home/abhidg/src/PrepareDecoding/vcpkg/installed/x64-linux/include/eigen3 -isystem /home/abhidg/src/PrepareDecoding/vcpkg/installed/x64-linux/include  -O2 -g -DNDEBUG   -Wall -Wextra -Wshadow -Wnon-virtual-dtor -Wold-style-cast -Wcast-align -Wunused -Woverloaded-virtual -Wpedantic -Wconversion -Wsign-conversion -Wnull-dereference -Wdouble-promotion -Wformat=2 -Werror -Wmisleading-indentation -Wduplicated-cond -Wlogical-op -Wuseless-cast -std=c++17 -o CMakeFiles/prepare_decoding_lib.dir/Csfs.cpp.o -c /home/abhidg/src/PrepareDecoding/src/Csfs.cpp",
+  "file": "/home/abhidg/src/PrepareDecoding/src/Csfs.cpp"
+},
+{
+  "directory": "/home/abhidg/src/PrepareDecoding/build/src",
+  "command": "/usr/bin/c++  -DFMT_LOCALE -isystem /home/abhidg/src/PrepareDecoding/vcpkg/installed/x64-linux/include/eigen3 -isystem /home/abhidg/src/PrepareDecoding/vcpkg/installed/x64-linux/include  -O2 -g -DNDEBUG   -Wall -Wextra -Wshadow -Wnon-virtual-dtor -Wold-style-cast -Wcast-align -Wunused -Woverloaded-virtual -Wpedantic -Wconversion -Wsign-conversion -Wnull-dereference -Wdouble-promotion -Wformat=2 -Werror -Wmisleading-indentation -Wduplicated-cond -Wlogical-op -Wuseless-cast -std=c++17 -o CMakeFiles/prepare_decoding_lib.dir/CsfsEntry.cpp.o -c /home/abhidg/src/PrepareDecoding/src/CsfsEntry.cpp",
+  "file": "/home/abhidg/src/PrepareDecoding/src/CsfsEntry.cpp"
+},
+{
+  "directory": "/home/abhidg/src/PrepareDecoding/build/src",
+  "command": "/usr/bin/c++  -DFMT_LOCALE -isystem /home/abhidg/src/PrepareDecoding/vcpkg/installed/x64-linux/include/eigen3 -isystem /home/abhidg/src/PrepareDecoding/vcpkg/installed/x64-linux/include  -O2 -g -DNDEBUG   -Wall -Wextra -Wshadow -Wnon-virtual-dtor -Wold-style-cast -Wcast-align -Wunused -Woverloaded-virtual -Wpedantic -Wconversion -Wsign-conversion -Wnull-dereference -Wdouble-promotion -Wformat=2 -Werror -Wmisleading-indentation -Wduplicated-cond -Wlogical-op -Wuseless-cast -std=c++17 -o CMakeFiles/prepare_decoding_lib.dir/Data.cpp.o -c /home/abhidg/src/PrepareDecoding/src/Data.cpp",
+  "file": "/home/abhidg/src/PrepareDecoding/src/Data.cpp"
+},
+{
+  "directory": "/home/abhidg/src/PrepareDecoding/build/src",
+  "command": "/usr/bin/c++  -DFMT_LOCALE -isystem /home/abhidg/src/PrepareDecoding/vcpkg/installed/x64-linux/include/eigen3 -isystem /home/abhidg/src/PrepareDecoding/vcpkg/installed/x64-linux/include  -O2 -g -DNDEBUG   -Wall -Wextra -Wshadow -Wnon-virtual-dtor -Wold-style-cast -Wcast-align -Wunused -Woverloaded-virtual -Wpedantic -Wconversion -Wsign-conversion -Wnull-dereference -Wdouble-promotion -Wformat=2 -Werror -Wmisleading-indentation -Wduplicated-cond -Wlogical-op -Wuseless-cast -std=c++17 -o CMakeFiles/prepare_decoding_lib.dir/Utils.cpp.o -c /home/abhidg/src/PrepareDecoding/src/Utils.cpp",
+  "file": "/home/abhidg/src/PrepareDecoding/src/Utils.cpp"
+},
+{
+  "directory": "/home/abhidg/src/PrepareDecoding/build/src",
+  "command": "/usr/bin/c++  -DFMT_LOCALE -isystem /home/abhidg/src/PrepareDecoding/vcpkg/installed/x64-linux/include/eigen3 -isystem /home/abhidg/src/PrepareDecoding/vcpkg/installed/x64-linux/include  -O2 -g -DNDEBUG   -Wall -Wextra -Wshadow -Wnon-virtual-dtor -Wold-style-cast -Wcast-align -Wunused -Woverloaded-virtual -Wpedantic -Wconversion -Wsign-conversion -Wnull-dereference -Wdouble-promotion -Wformat=2 -Werror -Wmisleading-indentation -Wduplicated-cond -Wlogical-op -Wuseless-cast -std=c++17 -o CMakeFiles/prepare_decoding_lib.dir/ArraySpectrum.cpp.o -c /home/abhidg/src/PrepareDecoding/src/ArraySpectrum.cpp",
+  "file": "/home/abhidg/src/PrepareDecoding/src/ArraySpectrum.cpp"
+},
+{
+  "directory": "/home/abhidg/src/PrepareDecoding/build/src",
+  "command": "/usr/bin/c++  -DFMT_LOCALE -isystem /home/abhidg/src/PrepareDecoding/vcpkg/installed/x64-linux/include/eigen3 -isystem /home/abhidg/src/PrepareDecoding/vcpkg/installed/x64-linux/include  -O2 -g -DNDEBUG   -Wall -Wextra -Wshadow -Wnon-virtual-dtor -Wold-style-cast -Wcast-align -Wunused -Woverloaded-virtual -Wpedantic -Wconversion -Wsign-conversion -Wnull-dereference -Wdouble-promotion -Wformat=2 -Werror -Wmisleading-indentation -Wduplicated-cond -Wlogical-op -Wuseless-cast -std=c++17 -o CMakeFiles/prepare_decoding_lib.dir/Transition.cpp.o -c /home/abhidg/src/PrepareDecoding/src/Transition.cpp",
+  "file": "/home/abhidg/src/PrepareDecoding/src/Transition.cpp"
+},
+{
+  "directory": "/home/abhidg/src/PrepareDecoding/build/exe",
+  "command": "/usr/bin/c++   -I/home/abhidg/src/PrepareDecoding/src -isystem /home/abhidg/src/PrepareDecoding/vcpkg/installed/x64-linux/include  -O2 -g -DNDEBUG   -Wall -Wextra -Wshadow -Wnon-virtual-dtor -Wold-style-cast -Wcast-align -Wunused -Woverloaded-virtual -Wpedantic -Wconversion -Wsign-conversion -Wnull-dereference -Wdouble-promotion -Wformat=2 -Werror -Wmisleading-indentation -Wduplicated-cond -Wlogical-op -Wuseless-cast -std=c++17 -o CMakeFiles/prepare_decoding_exe.dir/prepare_decoding.cpp.o -c /home/abhidg/src/PrepareDecoding/exe/prepare_decoding.cpp",
+  "file": "/home/abhidg/src/PrepareDecoding/exe/prepare_decoding.cpp"
+},
+{
+  "directory": "/home/abhidg/src/PrepareDecoding/build/test",
+  "command": "/usr/bin/c++   -I/home/abhidg/src/PrepareDecoding/src -isystem /home/abhidg/src/PrepareDecoding/vcpkg/installed/x64-linux/include  -O2 -g -DNDEBUG   -Wall -Wextra -Wshadow -Wnon-virtual-dtor -Wold-style-cast -Wcast-align -Wunused -Woverloaded-virtual -Wpedantic -Wconversion -Wsign-conversion -Wnull-dereference -Wdouble-promotion -Wformat=2 -Werror -Wmisleading-indentation -Wduplicated-cond -Wlogical-op -Wuseless-cast -std=c++17 -o CMakeFiles/unit_tests.dir/tests.cpp.o -c /home/abhidg/src/PrepareDecoding/test/tests.cpp",
+  "file": "/home/abhidg/src/PrepareDecoding/test/tests.cpp"
+},
+{
+  "directory": "/home/abhidg/src/PrepareDecoding/build/test",
+  "command": "/usr/bin/c++   -I/home/abhidg/src/PrepareDecoding/src -isystem /home/abhidg/src/PrepareDecoding/vcpkg/installed/x64-linux/include  -O2 -g -DNDEBUG   -Wall -Wextra -Wshadow -Wnon-virtual-dtor -Wold-style-cast -Wcast-align -Wunused -Woverloaded-virtual -Wpedantic -Wconversion -Wsign-conversion -Wnull-dereference -Wdouble-promotion -Wformat=2 -Werror -Wmisleading-indentation -Wduplicated-cond -Wlogical-op -Wuseless-cast -std=c++17 -o CMakeFiles/unit_tests.dir/TestCsfs.cpp.o -c /home/abhidg/src/PrepareDecoding/test/TestCsfs.cpp",
+  "file": "/home/abhidg/src/PrepareDecoding/test/TestCsfs.cpp"
+},
+{
+  "directory": "/home/abhidg/src/PrepareDecoding/build/test",
+  "command": "/usr/bin/c++   -I/home/abhidg/src/PrepareDecoding/src -isystem /home/abhidg/src/PrepareDecoding/vcpkg/installed/x64-linux/include  -O2 -g -DNDEBUG   -Wall -Wextra -Wshadow -Wnon-virtual-dtor -Wold-style-cast -Wcast-align -Wunused -Woverloaded-virtual -Wpedantic -Wconversion -Wsign-conversion -Wnull-dereference -Wdouble-promotion -Wformat=2 -Werror -Wmisleading-indentation -Wduplicated-cond -Wlogical-op -Wuseless-cast -std=c++17 -o CMakeFiles/unit_tests.dir/TestCsfsEntry.cpp.o -c /home/abhidg/src/PrepareDecoding/test/TestCsfsEntry.cpp",
+  "file": "/home/abhidg/src/PrepareDecoding/test/TestCsfsEntry.cpp"
+},
+{
+  "directory": "/home/abhidg/src/PrepareDecoding/build/test",
+  "command": "/usr/bin/c++   -I/home/abhidg/src/PrepareDecoding/src -isystem /home/abhidg/src/PrepareDecoding/vcpkg/installed/x64-linux/include  -O2 -g -DNDEBUG   -Wall -Wextra -Wshadow -Wnon-virtual-dtor -Wold-style-cast -Wcast-align -Wunused -Woverloaded-virtual -Wpedantic -Wconversion -Wsign-conversion -Wnull-dereference -Wdouble-promotion -Wformat=2 -Werror -Wmisleading-indentation -Wduplicated-cond -Wlogical-op -Wuseless-cast -std=c++17 -o CMakeFiles/unit_tests.dir/TestData.cpp.o -c /home/abhidg/src/PrepareDecoding/test/TestData.cpp",
+  "file": "/home/abhidg/src/PrepareDecoding/test/TestData.cpp"
+},
+{
+  "directory": "/home/abhidg/src/PrepareDecoding/build/test",
+  "command": "/usr/bin/c++   -I/home/abhidg/src/PrepareDecoding/src -isystem /home/abhidg/src/PrepareDecoding/vcpkg/installed/x64-linux/include  -O2 -g -DNDEBUG   -Wall -Wextra -Wshadow -Wnon-virtual-dtor -Wold-style-cast -Wcast-align -Wunused -Woverloaded-virtual -Wpedantic -Wconversion -Wsign-conversion -Wnull-dereference -Wdouble-promotion -Wformat=2 -Werror -Wmisleading-indentation -Wduplicated-cond -Wlogical-op -Wuseless-cast -std=c++17 -o CMakeFiles/unit_tests.dir/TestUtils.cpp.o -c /home/abhidg/src/PrepareDecoding/test/TestUtils.cpp",
+  "file": "/home/abhidg/src/PrepareDecoding/test/TestUtils.cpp"
+},
+{
+  "directory": "/home/abhidg/src/PrepareDecoding/build/test",
+  "command": "/usr/bin/c++   -isystem /home/abhidg/src/PrepareDecoding/vcpkg/installed/x64-linux/include  -O2 -g -DNDEBUG   -std=c++17 -o CMakeFiles/catch_main.dir/catch_main.cpp.o -c /home/abhidg/src/PrepareDecoding/test/catch_main.cpp",
+  "file": "/home/abhidg/src/PrepareDecoding/test/catch_main.cpp"
+}
+]

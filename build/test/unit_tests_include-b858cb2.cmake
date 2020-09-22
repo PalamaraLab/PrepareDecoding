@@ -1,0 +1,5 @@
+if(EXISTS "/home/abhidg/src/PrepareDecoding/build/test/unit_tests_tests-b858cb2.cmake")
+  include("/home/abhidg/src/PrepareDecoding/build/test/unit_tests_tests-b858cb2.cmake")
+else()
+  add_test(unit_tests_NOT_BUILT-b858cb2 unit_tests_NOT_BUILT-b858cb2)
+endif()

@@ -1,0 +1,2 @@
+/usr/bin/ar qc libprepare_decoding_lib.a  CMakeFiles/prepare_decoding_lib.dir/library.cpp.o CMakeFiles/prepare_decoding_lib.dir/Csfs.cpp.o CMakeFiles/prepare_decoding_lib.dir/CsfsEntry.cpp.o CMakeFiles/prepare_decoding_lib.dir/Data.cpp.o CMakeFiles/prepare_decoding_lib.dir/Utils.cpp.o CMakeFiles/prepare_decoding_lib.dir/ArraySpectrum.cpp.o CMakeFiles/prepare_decoding_lib.dir/Transition.cpp.o
+/usr/bin/ranlib libprepare_decoding_lib.a

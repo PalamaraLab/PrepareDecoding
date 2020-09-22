@@ -20,125 +20,145 @@ CSFS::CSFS(std::map<double, CSFSEntry> CSFS_) : mCSFS(CSFS_),
   if (mCSFS.size() > 0) mFoldedCSFS = foldCSFS(mCSFS);
 }
 
-CSFS::loadFromFile(std::string_view filename) {
-    BufferedReader br = Utils.openFile(fileName);
-    String line;
-    TreeMap<Double, CSFSEntry> parsedCSFS = new TreeMap<Double, CSFSEntry>();
-    while ((line = br.readLine()) != null) {
-        String[] splitString = line.split("\\s+");
-        if (splitString[0].compareToIgnoreCase("Time:") == 0) {
-            // this is a new CSFS line entry. Expect to read time vector, size vector, Mu, Samples, Intervals, then 3 CSFS lines.
-            // parse time line
-            ArrayList<Double> timeVector = new ArrayList<Double>();
-            for (int i = 1; i < splitString.length; i++) {
-                double thisTime = Double.parseDouble(splitString[i]);
-                timeVector.add(thisTime);
-            }
-            // parse size line
-            line = br.readLine();
-            splitString = line.split("\\s+");
-            if (splitString[0].compareToIgnoreCase("Size:") != 0) {
-                Utils.exit("Parsed line \"" + line + "\" after Time line in " + fileName + ".");
-            }
-            ArrayList<Double> sizeVector = new ArrayList<Double>();
-            for (int i = 1; i < splitString.length; i++) {
-                double thisSize = Double.parseDouble(splitString[i]);
-                sizeVector.add(thisSize);
-            }
-            // parse mu
-            line = br.readLine();
-            splitString = line.split("\\s+");
-            if (splitString[0].compareToIgnoreCase("Mu:") != 0) {
-                Utils.exit("Parsed line \"" + line + "\" after Size line in " + fileName + ".");
-            }
-            double mu = Double.parseDouble(splitString[1]);
-            // parse samples
-            line = br.readLine();
-            splitString = line.split("\\s+");
-            if (splitString[0].compareToIgnoreCase("Samples:") != 0) {
-                Utils.exit("Parsed line \"" + line + "\" after Mu line in " + fileName + ".");
-            }
-            int samples = Integer.parseInt(splitString[1]);
-            // parse samples
-            line = br.readLine();
-            splitString = line.split("\\s+");
-            if (splitString[0].compareToIgnoreCase("Interval:") != 0) {
-                Utils.exit("Parsed line \"" + line + "\" after Samples line in " + fileName + ".");
-            }
-            double from = Double.parseDouble(splitString[1]);
-            double to = Double.parseDouble(splitString[2]);
-            // parse CSFS
-            double[][] CSFS = new double[3][samples - 1];
-            for (int dist = 0; dist < 3; dist++) {
-                line = br.readLine();
-                splitString = line.split("\\s+");
-                for (int undist = 0; undist < splitString.length; undist++) {
-                    double thisEntry = Double.parseDouble(splitString[undist]);
-                    CSFS[dist][undist] = thisEntry;
-                }
-            }
-            CSFSEntry thisEntry = new CSFSEntry(timeVector, sizeVector, mu, from, to, samples, CSFS);
-            parsedCSFS.put(from, thisEntry);
-        } else {
-            Utils.exit("Badly formatted CSFS file. Parsed line \"" + line + "\", which does not contain a Time definition. ");
-        }
-    }
-    Utils.print("Read " + parsedCSFS.size() + " CSFS entries.");
-    return new CSFS(parsedCSFS);
+CSFSParserState CSFS::currentState(const std::string& line) {
+  std::stringstream lineStream(line);
+  std::string token;
+  lineStream >> token;
+  auto search = stateMap.find(token);
+  return ((search != stateMap.end()) ? search->second : CSFSParserState::CSFS);
 }
 
-public boolean verify(ArrayList<Double> timeVectorOriginal, ArrayList<Double> sizeVectorOriginal, double mu, int samples, ArrayList<Double> discretizationOriginal) {
-    try {
-        ArrayList<Double> timeVector = (ArrayList<Double>) timeVectorOriginal.clone();
-        timeVector.remove(timeVector.size() - 1);
-        ArrayList<Double> sizeVector = (ArrayList<Double>) sizeVectorOriginal.clone();
-        sizeVector.remove(sizeVector.size() - 1);
-        ArrayList<Double> discretization = (ArrayList<Double>) discretizationOriginal.clone();
-        discretization.remove(discretization.size() - 1);
-        for (double from : discretization) {
-            if (!CSFS.containsKey(from)) {
-                Utils.warning("CSFS does not contain interval " + from + ".");
-                return false;
-            }
-            CSFSEntry thisEntry = CSFS.get(from);
-            if (thisEntry.mu != mu) {
-                Utils.warning("CSFS entry " + from + " has different mu: " + thisEntry.mu + ".");
-                return false;
-            }
-            if (!compareArrays(thisEntry.timeVector, timeVector)) {
-                Utils.print(thisEntry.timeVector);
-                Utils.print(timeVector);
-                Utils.warning("CSFS entry " + from + " has different time vector.");
-                return false;
-            }
-            if (!compareArrays(thisEntry.sizeVector, sizeVector)) {
-                Utils.warning("CSFS entry " + from + " has different size vector.");
-                return false;
-            }
-            if (thisEntry.samples != samples) {
-                if (samples == Integer.MAX_VALUE) {
-                    samples = thisEntry.samples;
-                } else {
-                    Utils.warning("CSFS entry " + from + " has different samples (want: " + samples + ", found: " + thisEntry.samples + ")");
-                    return false;
-                }
-            }
-        }
-        return true;
-    } catch (Exception e) {
-        Utils.warning("Something went wrong.");
-        return false;
-    }
+CSFSParserState CSFS::nextState(CSFSParserState state) {
+  switch (state) {
+    case CSFSParserState::Null:
+      return CSFSParserState::Time;
 
+    case CSFSParserState::Time;
+      return CSFSParserState::Size;
+
+    case CSFSParserState::Size;
+      return CSFSParserState::Mu;
+
+    case CSFSParserState::Mu;
+      return CSFSParserState::Samples;
+
+    case CSFSParserState::Samples;
+      return CSFSParserState::Interval;
+
+    case CSFSParserState::Interval;
+      return CSFSParserState::CSFS;
+
+    case CSFSParserState::CSFS;
+      if (mCSFSLines == 3) return CSFSParserState::Time;
+      mCSFSLines++;
+      return CSFSParserState::CSFS;
+  }
 }
 
-@Override
-public String toString() {
-    StringBuilder sb = new StringBuilder();
-    for (double from : CSFS.keySet()) {
-        sb.append(CSFS.get(from));
+CSFS CSFS::loadFromFile(std::string_view filename) {
+  std::ifstream file(filename);
+  std::string line;
+  std::map<double, CSFSEntry> parsed;
+  std::vector<double> timeVector = {};
+  std::vector<double> sizeVector = {},
+  mat_dt csfs;
+  std::string token;
+  double t_dt = {};
+  CSFSParserState state = CSFSParserState::Null;
+  while(std::getline(file, line)) {
+    auto expectedCurrentState = nextState(state);
+    if (state == CSFSParserState::CSFS && expectedCurrentState == CSFSParserState::Time) {
+      // moved to new time block, save CSFSentry
+      assert(mu > 0);
+      assert(from > 0);
+      assert(to > from);
+      assert(samples > 0);
+      parsed.emplace(from, CSFSEntry(timeVector, sizeVector, mu, from, to, samples, CSFS));
+      mu = from = to = -1.0;
+      samples = -1;
     }
-    return sb.toString();
+
+    auto currentState = getCurrentState(line);
+    if (expectedCurrentState != currentState) {
+      throw std::runtime_error(fmt::format("Expected state {}, got {}", expectedCurrentState, currentState));
+    }
+    std::stringstream tokens(line);
+    switch (currentState) {
+      case CSFSParserState::Time:
+        tokens >> token;
+        while(tokens >> t_dt) timeVector.push_back(t_dt);
+        continue;
+      case CSFSParserState::Size:
+        tokens >> token;
+        while(tokens >> t_dt) sizeVector.push_back(t_dt);
+        continue;
+      case CSFSParserState::Mu:
+        tokens >> token;
+        double mu; tokens >> mu;
+        continue;
+      case CSFSParserState::Samples:
+        tokens >> token;
+        int samples; tokens >> samples;
+        continue;
+      case CSFSParserState::Interval:
+        tokens >> token;
+        double from, to; tokens >> from >> to;
+        continue;
+      case CSFSParserState::CSFS:
+        if (csfs.size() == 0) csfs.resize(3, samples - 1);
+        unsigned col = 0;
+        while(tokens >> t_dt) csfs(mCSFSLine, col++) = t_dt;
+        continue;
+    }
+    state = currentState;
+  }
+  mCSFSLine = 0;
+  return CSFS(parsed);
+}
+
+bool CSFS::verify(std::vector<double> timeVectorOriginal, std::vector<double> sizeVectorOriginal,
+    double mu, int samples, std::vector<double> discretizationOriginal) {
+  std::vector<double> timeVector(timeVectorOriginal);
+  std::vector<double> sizeVector(sizeVectorOriginal);
+  std::vector<double> discretization(discretizationOriginal);
+  timeVector.pop_back();
+  sizeVector.pop_back();
+  discretization.pop_back();
+  for (double from : discretization) {
+    auto search = mCSFS.find(from);
+    if (search == mCSFS.end()) {
+      std::cout << "Warning:\tCSFS does not contain interval " << from << "." << std::endl;
+      return false;
+    }
+    auto thisEntry = mCSFS[from];
+    if (thisEntry.getMu() != mu) {
+      std::cout << "Warning:\tCSFS entry " << from << " has different mu: " << thisEntry.getMu() << "." << std::endl;
+      return false;
+    }
+    if (thisEntry.getTime() != timeVector) {
+      std::cout << thisEntry.getTime() << std::endl;
+      std::cout << timeVector << std::endl;
+      std::cout << "Warning:\tCSFS entry " << from << " has different time vector." << std::endl;
+      return false;
+    }
+    if (thisEntry.getSize() != sizeVector) {
+      std::cout << "Warning:\tCSFS entry " << from << " has different size vector." << std::endl;
+      return false;
+    }
+    if (thisEntry.getSamples() != samples) {
+      // if (samples == Integer.MAX_VALUE)  samples = thisEntry.samples;
+      std::cout << "Warning:\tCSFS entry " << from << " has different samples (want: " <<
+        samples << ", found: " << thisEntry.samples << ")" << std::endl;
+      return false;
+    }
+  }
+  return true;
+}
+
+std::string CSFS::toString() {
+  std::string repr;
+  for (auto const& x: mCSFS) repr += x.second.toString();
+  return repr;
 }
 
 void CSFS::fixAscertainment(Data data, int samples, Transition transition) {
@@ -150,11 +170,12 @@ void CSFS::fixAscertainment(Data data, int samples, Transition transition) {
     mCompressedAscertainedEmissionTable = compressCSFS(mFoldedAscertainedCSFS);
 }
 
-mat_dt CSFS::computeClassicEmission(array_dt expectedTimes, double mu) {
-  vec_dt emissionRow;
-  mat_dt emission;
-  for(double interval : mExpectedTimes) emissionRow << std::exp(-2 * interval * mu);
-  emission.resize(2, emissionRow.size());
+mat_dt CSFS::computeClassicEmission(std::vector<double> expectedTimes, double mu) {
+  array_dt emissionRow(expectedTimes.size());
+  for(unsigned i = 0; i < expectedTimes.size(); i++) {
+    emissionRow(i) = std::exp(-2 * expectedTimes[i] * mu);
+  }
+  mat_dt emission(2, emissionRow.size());
   emission.row(0) = emissionRow;
   emission.row(1) = 1 - emissionRow;
   return emission;
@@ -167,7 +188,7 @@ void CSFS::computeArraySamplingFactors(Data data, int samples, Transition transi
     // double[] AFS = new double[samples];
     // the first entry of the CSFS may not be zero, since it's a shared doubleton
     int counter = 0;
-    for (double from : CSFS.keySet()) {
+    for (auto const& [from, csfs] : mCSFS) {
         double coalescentProbabilityThisTimeSlice = coalDist[counter];
         CSFSEntry thisCsfsDM = CSFS.get(from);
         for (int row = 0; row < 3; row++) {
