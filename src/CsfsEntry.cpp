@@ -6,6 +6,7 @@
 #include "EigenTypes.hpp"
 
 #include <fmt/core.h>
+#include <fmt/ranges.h>
 #include <fmt/ostream.h>
 
 #include <stdexcept>
@@ -22,13 +23,13 @@ CSFSEntry::CSFSEntry(std::vector<double> timeVector, std::vector<double> sizeVec
       || mCSFS.cols() != mSamples - 1 || mFrom >= mTo) {
 
     const std::string errorMessage =
-        fmt::format("Time vector:\n{}\nSize vector:\n{}\nCSFS:\n{}\nFrom: {} To: {}\nMalformed CSFS entry.",
+        fmt::format("Time vector:\n{}\nSize vector:\n{}\n{}\nFrom: {} To: {}\nMalformed CSFS entry.",
                     mTimeVector, mSizeVector, mCSFS, mFrom, mTo);
     throw std::runtime_error(errorMessage);
   }
 }
 
-std::string CSFSEntry::toString() {
+std::string CSFSEntry::toString() const {
   return fmt::format("Time:\t{}\nSize:\t{}\nMu:\t{}\nSamples:\t{}\nInterval:\t{}\t{}\n{}\n", mTimeVector,
                      mSizeVector, mMu, mSamples, mFrom, mTo, mCSFS);
 }

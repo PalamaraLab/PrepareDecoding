@@ -2,7 +2,6 @@
 // See accompanying LICENSE and COPYING for copyright notice and full details.
 
 #include <vector>
-#include <numeric>
 #include <iostream>
 #include "Data.hpp"
 #include "Utils.hpp"

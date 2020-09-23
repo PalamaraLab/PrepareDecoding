@@ -14,13 +14,15 @@ class ArraySpectrum {
   private:
     // spectrum does not include probability of monomorphic alleles due
     // to no variation or subsampling
-    std::vector<double> mSpectrum;
+    std::vector<double> mSpectrum = {};
     // probability of monomorphic is stored separately
-    double mMonomorphicProbability;
+    double mMonomorphicProbability = 0.0;
     void normalize(std::vector<double>& spectrum);
 
   public:
+    ArraySpectrum() = default;
     explicit ArraySpectrum(Data data, unsigned samples);
+    std::vector<double> getSpectrum() { return mSpectrum; }
     double getMonomorphic() const { return mMonomorphicProbability; }
 
 };

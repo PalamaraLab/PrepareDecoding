@@ -27,14 +27,15 @@ public:
       double mu, double from, double to, int samples, mat_dt csfs);
 
   std::vector<double>& getTime() { return mTimeVector; }
-  astd::vector<double>& getSize() { return mSizeVector; }
+  std::vector<double>& getSize() { return mSizeVector; }
   double getMu() { return mMu; }
   double getFrom() { return mFrom; }
   double getTo() { return mTo; }
   int getSamples() { return mSamples; }
-  mat_dt& getCSFS() { return mCSFS };
+  mat_dt& getCSFS() { return mCSFS; }
+  void setCSFS(const mat_dt& csfs) { mCSFS = csfs; }
 
-  std::string toString();
+  std::string toString() const;
 };
 
 } // namespace asmc

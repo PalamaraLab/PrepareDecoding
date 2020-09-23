@@ -6,19 +6,24 @@
 #include "EigenTypes.hpp"
 
 #include <iostream>
+#include <fstream>
 #include <fmt/core.h>
 #include <fmt/ostream.h>
+#include <fmt/ranges.h>
 
 #include <stdexcept>
 
 namespace asmc {
 
 
-CSFS::CSFS(std::map<double, CSFSEntry> CSFS_) : mCSFS(CSFS_),
-  mArraySpectrum({}), mCSFS({}), mAscertainedCSFS({}),
-  mFoldedAscertainedCSFS({}), mCompressedAscertainedEmissionTable({}),
-  mArraySamplingFactors({}), mSamples(0) {
-  if (mCSFS.size() > 0) mFoldedCSFS = foldCSFS(mCSFS);
+CSFS::CSFS(std::map<double, CSFSEntry> CSFS_) : mCSFS(std::move(CSFS_)),
+  mAscertainedCSFS({}), mFoldedAscertainedCSFS({}) {
+  if (!mCSFS.empty()) mFoldedCSFS = foldCSFS(mCSFS);
+  stateMap.emplace(std::make_pair("Size:", CSFSParserState::Size));
+  stateMap.emplace(std::make_pair("Time:", CSFSParserState::Time));
+  stateMap.emplace(std::make_pair("Mu:", CSFSParserState::Mu));
+  stateMap.emplace(std::make_pair("Samples:", CSFSParserState::Samples));
+  stateMap.emplace(std::make_pair("Interval:", CSFSParserState::Interval));
 }
 
 CSFSParserState CSFS::currentState(const std::string& line) {
@@ -29,62 +34,66 @@ CSFSParserState CSFS::currentState(const std::string& line) {
   return ((search != stateMap.end()) ? search->second : CSFSParserState::CSFS);
 }
 
-CSFSParserState CSFS::nextState(CSFSParserState state) {
+std::pair<CSFSParserState, int> CSFS::nextState(CSFSParserState state, int line = 0) {
   switch (state) {
     case CSFSParserState::Null:
-      return CSFSParserState::Time;
+      return std::make_pair(CSFSParserState::Time, 0);
 
-    case CSFSParserState::Time;
-      return CSFSParserState::Size;
+    case CSFSParserState::Time:
+      return std::make_pair(CSFSParserState::Size, 0);
 
-    case CSFSParserState::Size;
-      return CSFSParserState::Mu;
+    case CSFSParserState::Size:
+      return std::make_pair(CSFSParserState::Mu, 0);
 
-    case CSFSParserState::Mu;
-      return CSFSParserState::Samples;
+    case CSFSParserState::Mu:
+      return std::make_pair(CSFSParserState::Samples, 0);
 
-    case CSFSParserState::Samples;
-      return CSFSParserState::Interval;
+    case CSFSParserState::Samples:
+      return std::make_pair(CSFSParserState::Interval, 0);
 
-    case CSFSParserState::Interval;
-      return CSFSParserState::CSFS;
+    case CSFSParserState::Interval:
+      return std::make_pair(CSFSParserState::CSFS, 0);
 
-    case CSFSParserState::CSFS;
-      if (mCSFSLines == 3) return CSFSParserState::Time;
-      mCSFSLines++;
-      return CSFSParserState::CSFS;
+    case CSFSParserState::CSFS:
+      if (line == 3) return std::make_pair(CSFSParserState::Time, 0);
+      return std::make_pair(CSFSParserState::CSFS, line + 1);
   }
+  return std::make_pair(CSFSParserState::Null, 0);
 }
 
 CSFS CSFS::loadFromFile(std::string_view filename) {
-  std::ifstream file(filename);
+  std::ifstream file;
+  file.open(filename.data());
   std::string line;
   std::map<double, CSFSEntry> parsed;
   std::vector<double> timeVector = {};
-  std::vector<double> sizeVector = {},
+  std::vector<double> sizeVector = {};
   mat_dt csfs;
   std::string token;
-  double t_dt = {};
-  CSFSParserState state = CSFSParserState::Null;
+  double t_dt = {}, from = {}, to = {}, mu = {};
+  int samples = {};
+  auto [state, subline] = nextState(CSFSParserState::Null);
   while(std::getline(file, line)) {
-    auto expectedCurrentState = nextState(state);
+    auto [expectedCurrentState, expectedSubline] = nextState(state, subline);
     if (state == CSFSParserState::CSFS && expectedCurrentState == CSFSParserState::Time) {
       // moved to new time block, save CSFSentry
       assert(mu > 0);
       assert(from > 0);
       assert(to > from);
       assert(samples > 0);
-      parsed.emplace(from, CSFSEntry(timeVector, sizeVector, mu, from, to, samples, CSFS));
+      parsed.emplace(from, CSFSEntry(timeVector, sizeVector, mu, from, to, samples, csfs));
       mu = from = to = -1.0;
       samples = -1;
     }
 
-    auto currentState = getCurrentState(line);
-    if (expectedCurrentState != currentState) {
+    auto nowState = currentState(line);
+    if (expectedCurrentState != nowState) {
       throw std::runtime_error(fmt::format("Expected state {}, got {}", expectedCurrentState, currentState));
     }
     std::stringstream tokens(line);
-    switch (currentState) {
+    switch (nowState) {
+      case CSFSParserState::Null:
+        continue;
       case CSFSParserState::Time:
         tokens >> token;
         while(tokens >> t_dt) timeVector.push_back(t_dt);
@@ -94,26 +103,24 @@ CSFS CSFS::loadFromFile(std::string_view filename) {
         while(tokens >> t_dt) sizeVector.push_back(t_dt);
         continue;
       case CSFSParserState::Mu:
-        tokens >> token;
-        double mu; tokens >> mu;
+        tokens >> token; tokens >> mu;
         continue;
       case CSFSParserState::Samples:
-        tokens >> token;
-        int samples; tokens >> samples;
+        tokens >> token; tokens >> samples;
         continue;
       case CSFSParserState::Interval:
         tokens >> token;
-        double from, to; tokens >> from >> to;
+        tokens >> from >> to;
         continue;
       case CSFSParserState::CSFS:
         if (csfs.size() == 0) csfs.resize(3, samples - 1);
         unsigned col = 0;
-        while(tokens >> t_dt) csfs(mCSFSLine, col++) = t_dt;
+        while(tokens >> t_dt) csfs(subline, col++) = t_dt;
         continue;
     }
-    state = currentState;
+    state = nowState;
+    subline = expectedSubline;
   }
-  mCSFSLine = 0;
   return CSFS(parsed);
 }
 
@@ -131,7 +138,7 @@ bool CSFS::verify(std::vector<double> timeVectorOriginal, std::vector<double> si
       fmt::print("Warning:\tCSFS does not contain interval {}.\n", from);
       return false;
     }
-    auto thisEntry = mCSFS[from];
+    auto thisEntry = mCSFS.at(from);
     if (thisEntry.getMu() != mu) {
       fmt::print("Warning:\tCSFS entry {} has different mu: {}.", from, thisEntry.getMu());
       return false;
@@ -149,14 +156,14 @@ bool CSFS::verify(std::vector<double> timeVectorOriginal, std::vector<double> si
     if (thisEntry.getSamples() != samples) {
       // if (samples == Integer.MAX_VALUE)  samples = thisEntry.samples;
       std::cout << "Warning:\tCSFS entry " << from << " has different samples (want: " <<
-        samples << ", found: " << thisEntry.samples << ")" << std::endl;
+        samples << ", found: " << thisEntry.getSamples() << ")" << std::endl;
       return false;
     }
   }
   return true;
 }
 
-std::string CSFS::toString() {
+std::string CSFS::toString() const {
   std::string repr;
   for (auto const& x: mCSFS) repr += x.second.toString();
   return repr;
@@ -165,7 +172,7 @@ std::string CSFS::toString() {
 void CSFS::fixAscertainment(Data data, int samples, Transition transition) {
     computeArraySamplingFactors(data, samples, transition);
     // CSFS is loaded here, but fixed later.
-    for (std::pair<double, CSFSEntry> entry: mCSFS) mAscertainedCSFS.emplace(entry);
+    for (auto const& entry: mCSFS) mAscertainedCSFS.emplace(entry);
     applyFactors();
     mFoldedAscertainedCSFS = foldCSFS(mAscertainedCSFS);
     mCompressedAscertainedEmissionTable = compressCSFS(mFoldedAscertainedCSFS);
@@ -188,8 +195,8 @@ void CSFS::computeArraySamplingFactors(Data data, int samples, Transition transi
     array_dt AFS(samples);
     // double[] AFS = new double[samples];
     // the first entry of the CSFS may not be zero, since it's a shared doubleton
-    int counter = 0;
-    for (auto const& [from, csfsEntry] : mCSFS) {
+    unsigned counter = 0;
+    for (auto &[from, csfsEntry] : mCSFS) {
       auto mat_csfs = csfsEntry.getCSFS();
       for (int row = 0; row < 3; row++) {
         for (int column = 0; column < samples - 1; column++) {
@@ -217,27 +224,28 @@ void CSFS::computeArraySamplingFactors(Data data, int samples, Transition transi
     array_dt foldedAFS = AFS.head(halfTotal + 1);
 
     // now get foldedAFS_array, the probability a site has MAF i given it is polymorphic in the sample (array)
-    auto foldedAFS_array = ArraySpectrum(data, samples).getSpectrum();
+    mArraySpectrum = ArraySpectrum(data, static_cast<unsigned int>(samples));
+    auto foldedAFS_array = mArraySpectrum.getSpectrum();
     mArraySamplingFactors.resize(halfTotal + 1);
     mArraySamplingFactors[0] = 0.0;
-    for (int i = 1; i < foldedAFS_array.size(); i++) {
+    for (unsigned i = 1; i < foldedAFS_array.size(); i++) {
         mArraySamplingFactors[i] = foldedAFS_array[i] / foldedAFS[i];
     }
 }
 
-void applyFactors() {
+void CSFS::applyFactors() {
   // apply sampling factors and renormalize
   // note that the first entry of the CSFS may not be zero, since it's a shared doubleton
   double monomorphic = mArraySpectrum.getMonomorphic();
-  for (auto const& [from, csfsEntry] : mAscertainedCSFS) {
+  for (auto &[from, csfsEntry] : mAscertainedCSFS) {
     auto thisCSFS = csfsEntry.getCSFS();
-    thisCSFS(0, 0) = 0.;
+    if (thisCSFS.size() > 0) thisCSFS(0, 0) = 0.; else throw std::runtime_error("CSFS is empty!");
     double norm = 0.;
     for (int row = 0; row < 3; row++) {
       for (int column = 0; column < mSamples - 1; column++) {
         // if the spectrum is folded, this emission is mapped to this position
         int pos = row + column;
-        if (pos > samples / 2) pos = samples - pos;
+        if (pos > mSamples / 2) pos = mSamples - pos;
         // and if we're looking at array data, this MAF is adjusted using this factor
         thisCSFS(row, column) *= mArraySamplingFactors[pos];
         // sum value to renomralize to 1 later on
@@ -251,24 +259,24 @@ void applyFactors() {
     }
 }
 
-std::map<double, CSFSEntry> foldCSFS(std::map<double, CSFSEntry> csfsMap) {
+std::map<double, CSFSEntry> CSFS::foldCSFS(std::map<double, CSFSEntry> csfsMap) {
   std::map<double, CSFSEntry> foldedCSFS;
-  int samples = csfsMap.at(0).second.getSamples();
+  int samples = csfsMap.at(0).getSamples();
   int undistinguished = samples - 2;
-  for (auto const& [from, foldedEntry] : csfsMap) {
+  for (auto &[from, foldedEntry] : csfsMap) {
     auto thisCsfs_double = foldedEntry.getCSFS();
     // code to fold the spectrum
     if (samples % 2 != 0) throw std::runtime_error("ConditionalSFS called with odd number of samples.");
     int half = samples / 2;
-    mat_dt thisCSFS_double_folded(2, half + 1);
-    thisCSFS_double_folded.setZero();
+    mat_dt thisCsfs_double_folded(2, half + 1);
+    thisCsfs_double_folded.setZero();
     for (int row = 0; row < 3; row++) {
       for (int column = 0; column < undistinguished + 1; column++) {
         auto [dist, undist] = getFoldedObservationFromUnfolded(std::make_pair(row, column), samples);
         thisCsfs_double_folded(dist, undist) += thisCsfs_double(row, column);
       }
     }
-    thisCSFS_double = thisCSFS_double_folded;  // should set in foldedEntry
+    foldedEntry.setCSFS(thisCsfs_double_folded);
     foldedCSFS.emplace(std::make_pair(from, foldedEntry));
     }
   return foldedCSFS;
@@ -288,7 +296,7 @@ mat_dt CSFS::compressCSFS(std::map<double, CSFSEntry> csfsMap) {
   mat_dt compressed(2, csfsMap.size());
   compressed.setZero();
   int timeInterval = 0;
-  for (auto const& [from, csfsEntry] : csfsMap) {
+  for (auto &[from, csfsEntry] : csfsMap) {
     auto thisCSFS = csfsEntry.getCSFS();
     for (int k = 0; k < thisCSFS.cols(); k++) {
       compressed(0, timeInterval) += thisCSFS(0, k);

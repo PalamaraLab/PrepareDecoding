@@ -4,7 +4,10 @@
 #ifndef PREPAREDECODING_CSFS_HPP
 #define PREPAREDECODING_CSFS_HPP
 
+#include <map>
 #include "EigenTypes.hpp"
+#include "Transition.hpp"
+#include "CsfsEntry.hpp"
 #include "ArraySpectrum.hpp"
 
 namespace asmc {
@@ -24,34 +27,27 @@ private:
   std::map<double, CSFSEntry> mFoldedAscertainedCSFS;
   mat_dt mCompressedAscertainedEmissionTable;
 
+  static std::map<std::string, CSFSParserState> stateMap;
   array_dt mArraySamplingFactors;
-  int mSamples;
-  int mCSFSLine = 0;
+  int mSamples = 0;
 
 public:
 
   explicit CSFS(std::map<double, CSFSEntry> CSFS_);
-  const static std::map<std::string, CSFSParserState> stateMap = {
-    {"Size:", CSFSParserState::Size},
-    {"Time:", CSFSParserState::Time},
-    {"Mu:", CSFSParserState::Mu},
-    {"Samples:", CSFSParserState::Samples},
-    {"Interval:", CSFSParserState::Interval}
-  };
-  static CSFSParserState currentState(std::string line);
-  static CSFSParserState nextState(CSFSParserState state);
+  static CSFSParserState currentState(const std::string& line);
+  static std::pair<CSFSParserState, int> nextState(CSFSParserState state, int line);
   static CSFS loadFromFile(std::string_view filename);
   bool verify(std::vector<double> timeVectorOriginal, std::vector<double> sizeVectorOriginal,
       double mu, int samples, std::vector<double> discretizationOriginal);
-  std::string toString();
+  std::string toString() const;
   void fixAscertainment(Data data, int samples, Transition transition);
   static mat_dt computeClassicEmission(std::vector<double> expectedTimes, double mu);
   void computeArraySamplingFactors(Data data, int samples, Transition transition);
   void applyFactors();
-  std::map<double, CSFSEntry> foldCSFS(std::map<double, CSFSEntry> csfsMap);
+  static std::map<double, CSFSEntry> foldCSFS(std::map<double, CSFSEntry> csfsMap);
   static std::pair<int, int> getFoldedObservationFromUnfolded(
       std::pair<int, int> unfolded, int totalSamples);
-  mat_dt compressCSFS(std::map<double, CSFSEntry> csfsMap);
+  static mat_dt compressCSFS(std::map<double, CSFSEntry> csfsMap);
 
 };
 

@@ -57,13 +57,12 @@ class Transition {
     double cumulativeCoalesceFromStoTsmart(double timeS, double timeT);
     std::pair<mat_dt, mat_dt> getOmegas(double r, TransitionType type);
     void computeCoalescentVectors();
-    std::vector<double> getCoalDist();
 
   public:
 
     Transition(std::vector<double> timeVector, std::vector<double> sizeVector, std::vector<double> discretization,
                TransitionType type);
-
+    std::vector<double> getCoalDist();
     const std::vector<double> EUsize {
       145041., 129827., 116209., 104020., 93109., 83342., 74600., 66775., 59771., 53501., 47892., 44915., 43684.,
       42486.,  41321.,  40188.,  39086.,  38014., 36972., 35958., 34972., 34013., 33080., 32173., 31291., 30433.,

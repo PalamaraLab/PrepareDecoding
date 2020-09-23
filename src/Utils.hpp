@@ -7,6 +7,8 @@
 #include <zlib.h>
 #include <vector>
 #include <string>
+#include <numeric>
+#include <algorithm>
 
 namespace asmc {
 
