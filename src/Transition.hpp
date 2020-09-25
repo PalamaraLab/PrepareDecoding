@@ -38,8 +38,6 @@ class Transition {
                                                std::vector<double> sizeFromVector);
     static std::tuple<vec_dt, vec_dt, vec_dt, vec_dt> getLinearTimeDecodingQuantitiesGivenTransition(mat_dt T);
 
-    std::vector<double> getExpectedTimes();
-    std::tuple<vec_dt, vec_dt, vec_dt, vec_dt> getLinearTimeDecodingQuantitiesAndMatrixGivenDistance(double rho);
     mat_dt transitionMatrix(double r);
     static mat_dt getExponentiatedTransitionMatrix(double N, double r, double time, TransitionType type);
     double getTransitionFromStoInterval(double r, double timeS, double fromTime, double toTime, TransitionType type);
@@ -47,7 +45,6 @@ class Transition {
     double getCumulativeTransitionPobability(double r, double timeS, double timeT, TransitionType type);
 
     double expectedTimeFromStoT(double timeS, double timeT);
-    double cumulativeCoalesceFromStoT(double timeS, double timeT);
     double coalesceFromStoT(double timeS, double timeT);
     double notCoalesceFromStoT(double timeS, double timeT);
     double getSizeInPiecewiseAtTimeT(double timeT);
@@ -62,6 +59,15 @@ class Transition {
 
     Transition(std::vector<double> timeVector, std::vector<double> sizeVector, std::vector<double> discretization,
                TransitionType type);
+    double cumulativeCoalesceFromStoT(double timeS, double timeT);
+    std::tuple<vec_dt, vec_dt, vec_dt, vec_dt> getLinearTimeDecodingQuantitiesAndMatrixGivenDistance(double rho);
+    std::vector<double>& getTime() { return mTime; }
+    std::vector<double>& getSize() { return mSize; }
+    std::vector<double>& getDiscretization() { return mDiscretization; }
+    std::vector<double>& getExpectedTimes() { return mExpectedTimes; }
+    TransitionType getType() { return mType; }
+    vec_dt& getColumnRatios() { return mColumnRatios; }
+
     std::vector<double> getCoalDist();
     const std::vector<double> EUsize {
       145041., 129827., 116209., 104020., 93109., 83342., 74600., 66775., 59771., 53501., 47892., 44915., 43684.,

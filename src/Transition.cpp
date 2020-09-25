@@ -99,8 +99,6 @@ mat_dt Transition::identity(TransitionType type) {
   }
 }
     
-std::vector<double> Transition::getExpectedTimes() { return mExpectedTimes; }
-
 std::tuple<vec_dt, vec_dt, vec_dt, vec_dt> Transition::getLinearTimeDecodingQuantitiesAndMatrixGivenDistance(double rho) {
   auto [omegasAtBoundaries, omegasAtExpectedTimes] = getOmegas(rho, mType);
   vec_dt D, B, U, RR;

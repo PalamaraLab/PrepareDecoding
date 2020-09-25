@@ -29,7 +29,7 @@ private:
 
   static std::map<std::string, CSFSParserState> stateMap;
   array_dt mArraySamplingFactors;
-  int mSamples = 0;
+  unsigned int mSamples = 0;
 
 public:
 
@@ -48,6 +48,13 @@ public:
   static std::pair<int, int> getFoldedObservationFromUnfolded(
       std::pair<int, int> unfolded, int totalSamples);
   static mat_dt compressCSFS(std::map<double, CSFSEntry> csfsMap);
+
+  std::map<double, CSFSEntry>& getCSFS() { return mCSFS; }
+  std::map<double, CSFSEntry>& getFoldedCSFS() { return mFoldedCSFS; }
+  std::map<double, CSFSEntry>& getAscertainedCSFS() { return mAscertainedCSFS; }
+  std::map<double, CSFSEntry>& getFoldedAscertainedCSFS() { return mFoldedAscertainedCSFS; }
+  mat_dt& getCompressedAscertainedEmissionTable() { return mCompressedAscertainedEmissionTable; }
+  unsigned  int getSamples() const { return mSamples; }
 
 };
 

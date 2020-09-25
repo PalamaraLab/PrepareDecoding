@@ -15,7 +15,7 @@ private:
   double mFrom = {};
   double mTo = {};
 
-  int mSamples = {};
+  unsigned int mSamples = {};
 
   std::vector<double> mTimeVector = {};
   std::vector<double> mSizeVector = {};
@@ -24,14 +24,14 @@ private:
 
 public:
   CSFSEntry(std::vector<double> timeVector, std::vector<double> sizeVector,
-      double mu, double from, double to, int samples, mat_dt csfs);
+      double mu, double from, double to, unsigned int samples, mat_dt csfs);
 
   std::vector<double>& getTime() { return mTimeVector; }
   std::vector<double>& getSize() { return mSizeVector; }
   double getMu() { return mMu; }
   double getFrom() { return mFrom; }
   double getTo() { return mTo; }
-  int getSamples() { return mSamples; }
+  unsigned int getSamples() { return mSamples; }
   mat_dt& getCSFS() { return mCSFS; }
   void setCSFS(const mat_dt& csfs) { mCSFS = csfs; }
 

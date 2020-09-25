@@ -71,7 +71,7 @@ CSFS CSFS::loadFromFile(std::string_view filename) {
   mat_dt csfs;
   std::string token;
   double t_dt = {}, from = {}, to = {}, mu = {};
-  int samples = {};
+  unsigned int samples = {};
   auto [state, subline] = nextState(CSFSParserState::Null);
   while(std::getline(file, line)) {
     auto [expectedCurrentState, expectedSubline] = nextState(state, subline);
@@ -83,7 +83,7 @@ CSFS CSFS::loadFromFile(std::string_view filename) {
       assert(samples > 0);
       parsed.emplace(from, CSFSEntry(timeVector, sizeVector, mu, from, to, samples, csfs));
       mu = from = to = -1.0;
-      samples = -1;
+      samples = 0;
     }
 
     auto nowState = currentState(line);
