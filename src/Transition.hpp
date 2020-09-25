@@ -1,11 +1,11 @@
 // This file is part of https://github.com/PalamaraLab/PrepareDecoding which is released under the GPL-3.0 license.
 // See accompanying LICENSE and COPYING for copyright notice and full details.
 
-#include <vector>
-#include "EigenTypes.hpp"
-
 #ifndef PREPAREDECODING_TRANSITION_HPP
 #define PREPAREDECODING_TRANSITION_HPP
+
+#include <vector>
+#include "EigenTypes.hpp"
 
 using asmc::vec_dt;
 using asmc::mat_dt;
@@ -88,6 +88,6 @@ class Transition {
       std::numeric_limits<double>::infinity()};
 };
 
-#endif // PREPAREDECODING_TRANSITION_HPP
-
 } // namespace asmc
+
+#endif // PREPAREDECODING_TRANSITION_HPP
