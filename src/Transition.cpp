@@ -101,7 +101,10 @@ mat_dt Transition::identity(TransitionType type) {
     
 std::tuple<vec_dt, vec_dt, vec_dt, vec_dt> Transition::getLinearTimeDecodingQuantitiesAndMatrixGivenDistance(double rho) {
   auto [omegasAtBoundaries, omegasAtExpectedTimes] = getOmegas(rho, mType);
-  vec_dt D, B, U, RR;
+  vec_dt D(mStates);
+  vec_dt B(mStates - 1);
+  vec_dt U(mStates - 1);
+  vec_dt RR(mStates - 1);
   double diagonal;
   vec_dt omegaAtBoundaries, omegaAtExpectedTimes;
     /* DoubleMatrix D = new DoubleMatrix(states); */
@@ -117,7 +120,7 @@ std::tuple<vec_dt, vec_dt, vec_dt, vec_dt> Transition::getLinearTimeDecodingQuan
       (omegaAtExpectedTimes(0, 1) + omegaAtExpectedTimes(0, 2)) + omegaAtExpectedTimes(0, 3) - omegaAtBoundaries(0, 3)
     : omegaAtExpectedTimes(0, 0) + mProbCoalesceBetweenExpectedTimesAndUpperLimit[0] *
       omegaAtExpectedTimes(0, 1) + omegaAtExpectedTimes(0, 2) - omegaAtBoundaries(0, 2);
-  D << diagonal;
+  D[0] = diagonal;
 
   // now compute all for each i
   for (unsigned i = 1; i < mStates; i++) {
@@ -128,8 +131,8 @@ std::tuple<vec_dt, vec_dt, vec_dt, vec_dt> Transition::getLinearTimeDecodingQuan
         (omegaAtExpectedTimes(0, 1) + omegaAtExpectedTimes(0, 2)) + omegaAtExpectedTimes(0, 3) - omegaAtBoundaries(0, 3)
       : omegaAtExpectedTimes(0, 0) + mProbCoalesceBetweenExpectedTimesAndUpperLimit[i] *
         omegaAtExpectedTimes(0, 1) + omegaAtExpectedTimes(0, 2) - omegaAtBoundaries(0, 2);
-    D << diagonal;
-    B << ((mType == CSC)
+    D[i] = diagonal;
+    B[i - 1] = ((mType == CSC)
       ? omegaAtBoundaries(0, 3) - omegasAtBoundaries.row(i - 1)(0, 3)
       : omegaAtBoundaries(0, 2) - omegasAtBoundaries.row(i - 1)(0, 2));
   }
@@ -141,17 +144,17 @@ std::tuple<vec_dt, vec_dt, vec_dt, vec_dt> Transition::getLinearTimeDecodingQuan
     double omegaSiplus1 = (mType == CSC)
       ? omegasAtExpectedTimes.row(i + 1)(0, 1) + omegasAtExpectedTimes.row(i + 1)(0, 2)
       : omegasAtExpectedTimes.row(i + 1)(0, 1);
-    U << omegaSi * (1 - mProbCoalesceBetweenExpectedTimesAndUpperLimit[i]) *
-        (1 - mProbNotCoalesceBetweenTimeIntervals[i + 1]);
+    U[i] = omegaSi * (1 - mProbCoalesceBetweenExpectedTimesAndUpperLimit[i]) *
+      (1 - mProbNotCoalesceBetweenTimeIntervals[i + 1]);
     // rho == 0 --> transition is identity, ratios are 0/0. Avoid NaN by setting to 1.
-    RR << ((rho == 0) ? 1. : omegaSi * mProbNotCoalesceBetweenExpectedTimes[i] / omegaSiplus1);
+    RR[i] = ((rho == 0) ? 1. : omegaSi * mProbNotCoalesceBetweenExpectedTimes[i] / omegaSiplus1);
   }
   // do last for U
   double omegaSi = (mType == CSC)
     ? omegasAtExpectedTimes.row(mStates - 2)(0, 1) + omegasAtExpectedTimes.row(mStates - 2)(0, 2)
     : omegasAtExpectedTimes.row(mStates - 2)(0, 1);
-  U << omegaSi * (1 - mProbCoalesceBetweenExpectedTimesAndUpperLimit[mStates - 2]) *
-      (1 - mProbNotCoalesceBetweenTimeIntervals[mStates - 1]);
+  U[mStates - 2] = omegaSi * (1 - mProbCoalesceBetweenExpectedTimesAndUpperLimit[mStates - 2]) *
+    (1 - mProbNotCoalesceBetweenTimeIntervals[mStates - 1]);
 
   // TODO: What goes in last element of RR
   return std::make_tuple(D, B, U, RR);
@@ -159,17 +162,20 @@ std::tuple<vec_dt, vec_dt, vec_dt, vec_dt> Transition::getLinearTimeDecodingQuan
 
 // note: can compute these in linear time instead of building transition matrix (quadratic)
 std::tuple<vec_dt, vec_dt, vec_dt, vec_dt> Transition::getLinearTimeDecodingQuantitiesGivenTransition(mat_dt T) {
-  vec_dt D, B, U, RR;
+  vec_dt D;
   auto N = static_cast<unsigned int>(T.cols());
+  vec_dt B(N - 1);
+  vec_dt U(N - 1);
+  vec_dt RR(N - 1);
   D = T.diagonal();
-  for (unsigned i = 0; i < N - 1; i++) B << T(i + 1, i); // below
-  for (unsigned i = 0; i < N - 1; i++) U << T(i, i + 1); // above
+  for (unsigned i = 0; i < N - 1; i++) B[i] = T(i + 1, i); // below
+  for (unsigned i = 0; i < N - 1; i++) U[i] = T(i, i + 1); // above
   for (unsigned i = 0; i < N - 2; i++) {
     // ratio of columns
     if (T(i, N - 1) == T(i + 1, N - 1))
-      RR << 1.; // avoids 0/0 for totally linked sites in which T = identity
+      RR[i] = 1.; // avoids 0/0 for totally linked sites in which T = identity
     else
-      RR << T(i, N - 1) / T(i + 1, N - 1);
+      RR[i] = T(i, N - 1) / T(i + 1, N - 1);
   }
   return std::make_tuple(D, B, U, RR);
 }
