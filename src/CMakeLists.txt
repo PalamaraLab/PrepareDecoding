@@ -19,6 +19,7 @@ set(
         Utils.cpp
         ArraySpectrum.cpp
         Transition.cpp
+        DecodingQuantities.cpp
 )
 
 set(
@@ -31,6 +32,7 @@ set(
         Utils.hpp
         ArraySpectrum.hpp
         Transition.hpp
+        DecodingQuantities.hpp
 )
 
 add_library(prepare_decoding_lib STATIC ${prepare_decoding_src} ${prepare_decoding_hdr})
