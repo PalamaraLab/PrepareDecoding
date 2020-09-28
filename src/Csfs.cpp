@@ -125,7 +125,7 @@ CSFS CSFS::loadFromFile(std::string_view filename) {
 }
 
 bool CSFS::verify(std::vector<double> timeVectorOriginal, std::vector<double> sizeVectorOriginal,
-    double mu, int samples, std::vector<double> discretizationOriginal) {
+    double mu, unsigned int samples, std::vector<double> discretizationOriginal) {
   std::vector<double> timeVector(timeVectorOriginal);
   std::vector<double> sizeVector(sizeVectorOriginal);
   std::vector<double> discretization(discretizationOriginal);
@@ -169,7 +169,7 @@ std::string CSFS::toString() const {
   return repr;
 }
 
-void CSFS::fixAscertainment(Data data, int samples, Transition transition) {
+void CSFS::fixAscertainment(Data data, unsigned int samples, Transition transition) {
     computeArraySamplingFactors(data, samples, transition);
     // CSFS is loaded here, but fixed later.
     for (auto const& entry: mCSFS) mAscertainedCSFS.emplace(entry);
@@ -189,7 +189,7 @@ mat_dt CSFS::computeClassicEmission(std::vector<double> expectedTimes, double mu
   return emission;
 }
 
-void CSFS::computeArraySamplingFactors(Data data, int samples, Transition transition) {
+void CSFS::computeArraySamplingFactors(Data data, unsigned int samples, Transition transition) {
     mSamples = samples;
     auto coalDist = transition.getCoalDist();
     array_dt AFS(samples);
@@ -198,9 +198,9 @@ void CSFS::computeArraySamplingFactors(Data data, int samples, Transition transi
     unsigned counter = 0;
     for (auto &[from, csfsEntry] : mCSFS) {
       auto mat_csfs = csfsEntry.getCSFS();
-      for (int row = 0; row < 3; row++) {
-        for (int column = 0; column < samples - 1; column++) {
-          int pos = row + column;
+      for (unsigned row = 0; row < 3; row++) {
+        for (unsigned column = 0; column < samples - 1; column++) {
+          auto pos = row + column;
           if (pos > samples / 2) pos = samples - pos;
           AFS[pos] += coalDist[counter] * mat_csfs(row, column);
         }
@@ -212,8 +212,8 @@ void CSFS::computeArraySamplingFactors(Data data, int samples, Transition transi
     AFS /= AFS.sum(); // normalize spectrum
 
     // fold AFS
-    int halfTotal = samples / 2;
-    for (int i = halfTotal + 1; i < samples; i++) {
+    auto halfTotal = samples / 2;
+    for (auto i = halfTotal + 1; i < samples; i++) {
         AFS[samples - i] += AFS[i];
         AFS[i] = 0;
     }
@@ -224,7 +224,7 @@ void CSFS::computeArraySamplingFactors(Data data, int samples, Transition transi
     array_dt foldedAFS = AFS.head(halfTotal + 1);
 
     // now get foldedAFS_array, the probability a site has MAF i given it is polymorphic in the sample (array)
-    mArraySpectrum = ArraySpectrum(data, static_cast<unsigned int>(samples));
+    mArraySpectrum = ArraySpectrum(data, samples);
     auto foldedAFS_array = mArraySpectrum.getSpectrum();
     mArraySamplingFactors.resize(halfTotal + 1);
     mArraySamplingFactors[0] = 0.0;
@@ -241,10 +241,10 @@ void CSFS::applyFactors() {
     auto thisCSFS = csfsEntry.getCSFS();
     if (thisCSFS.size() > 0) thisCSFS(0, 0) = 0.; else throw std::runtime_error("CSFS is empty!");
     double norm = 0.;
-    for (int row = 0; row < 3; row++) {
-      for (int column = 0; column < mSamples - 1; column++) {
+    for (unsigned row = 0; row < 3; row++) {
+      for (unsigned column = 0; column < mSamples - 1; column++) {
         // if the spectrum is folded, this emission is mapped to this position
-        int pos = row + column;
+        auto pos = row + column;
         if (pos > mSamples / 2) pos = mSamples - pos;
         // and if we're looking at array data, this MAF is adjusted using this factor
         thisCSFS(row, column) *= mArraySamplingFactors[pos];
@@ -261,17 +261,18 @@ void CSFS::applyFactors() {
 
 std::map<double, CSFSEntry> CSFS::foldCSFS(std::map<double, CSFSEntry> csfsMap) {
   std::map<double, CSFSEntry> foldedCSFS;
-  int samples = csfsMap.at(0).getSamples();
-  int undistinguished = samples - 2;
+  auto samples = csfsMap.at(0).getSamples();
+  assert(samples >= 2);
+  auto undistinguished = samples - 2;
   for (auto &[from, foldedEntry] : csfsMap) {
     auto thisCsfs_double = foldedEntry.getCSFS();
     // code to fold the spectrum
     if (samples % 2 != 0) throw std::runtime_error("ConditionalSFS called with odd number of samples.");
-    int half = samples / 2;
+    auto half = samples / 2;
     mat_dt thisCsfs_double_folded(2, half + 1);
     thisCsfs_double_folded.setZero();
-    for (int row = 0; row < 3; row++) {
-      for (int column = 0; column < undistinguished + 1; column++) {
+    for (unsigned row = 0; row < 3; row++) {
+      for (unsigned column = 0; column < undistinguished + 1; column++) {
         auto [dist, undist] = getFoldedObservationFromUnfolded(std::make_pair(row, column), samples);
         thisCsfs_double_folded(dist, undist) += thisCsfs_double(row, column);
       }
@@ -282,7 +283,7 @@ std::map<double, CSFSEntry> CSFS::foldCSFS(std::map<double, CSFSEntry> csfsMap) 
   return foldedCSFS;
 }
 
-std::pair<int, int> CSFS::getFoldedObservationFromUnfolded(std::pair<int, int> unfolded, int totalSamples) {
+std::pair<unsigned int, unsigned int> CSFS::getFoldedObservationFromUnfolded(std::pair<unsigned int, unsigned int> unfolded, unsigned int totalSamples) {
   auto [dist, undist] = unfolded;
   if (totalSamples % 2 != 0) throw std::runtime_error(
       "Function getFoldedObservationFromUnfolded was called with odd total sample size. "

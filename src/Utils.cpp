@@ -63,4 +63,8 @@ void normalize(std::vector<double>& spectrum) {
   std::for_each(spectrum.begin(), spectrum.end(), [tot](double& s) { s /= tot;});
 }
 
+int writegz(gzFile& file, const std::string& s) {
+  return gzwrite(file, s.c_str(), static_cast<unsigned int>(s.size()));
+}
+
 } // namespace asmc

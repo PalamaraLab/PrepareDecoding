@@ -32,7 +32,7 @@ public:
   double getFrom() { return mFrom; }
   double getTo() { return mTo; }
   unsigned int getSamples() { return mSamples; }
-  mat_dt& getCSFS() { return mCSFS; }
+  const mat_dt& getCSFS() const { return mCSFS; }
   void setCSFS(const mat_dt& csfs) { mCSFS = csfs; }
 
   std::string toString() const;

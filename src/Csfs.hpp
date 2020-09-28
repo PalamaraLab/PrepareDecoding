@@ -38,15 +38,15 @@ public:
   static std::pair<CSFSParserState, int> nextState(CSFSParserState state, int line);
   static CSFS loadFromFile(std::string_view filename);
   bool verify(std::vector<double> timeVectorOriginal, std::vector<double> sizeVectorOriginal,
-      double mu, int samples, std::vector<double> discretizationOriginal);
+      double mu, unsigned int samples, std::vector<double> discretizationOriginal);
   std::string toString() const;
-  void fixAscertainment(Data data, int samples, Transition transition);
+  void fixAscertainment(Data data, unsigned int samples, Transition transition);
   static mat_dt computeClassicEmission(std::vector<double> expectedTimes, double mu);
-  void computeArraySamplingFactors(Data data, int samples, Transition transition);
+  void computeArraySamplingFactors(Data data, unsigned int samples, Transition transition);
   void applyFactors();
   static std::map<double, CSFSEntry> foldCSFS(std::map<double, CSFSEntry> csfsMap);
-  static std::pair<int, int> getFoldedObservationFromUnfolded(
-      std::pair<int, int> unfolded, int totalSamples);
+  static std::pair<unsigned int, unsigned int> getFoldedObservationFromUnfolded(
+      std::pair<unsigned int, unsigned int> unfolded, unsigned int totalSamples);
   static mat_dt compressCSFS(std::map<double, CSFSEntry> csfsMap);
 
   std::map<double, CSFSEntry>& getCSFS() { return mCSFS; }
@@ -54,7 +54,7 @@ public:
   std::map<double, CSFSEntry>& getAscertainedCSFS() { return mAscertainedCSFS; }
   std::map<double, CSFSEntry>& getFoldedAscertainedCSFS() { return mFoldedAscertainedCSFS; }
   mat_dt& getCompressedAscertainedEmissionTable() { return mCompressedAscertainedEmissionTable; }
-  unsigned  int getSamples() const { return mSamples; }
+  unsigned int getSamples() const { return mSamples; }
 
 };
 

@@ -23,7 +23,7 @@ double hypergeometricPmf(int populationSize, int numberOfSuccesses, int sampleSi
 std::string readNextLineFromGzip(gzFile& gzFileHandle);
 
 void normalize(std::vector<double>& spectrum);
-
+int writegz(gzFile& file, const std::string& s);
 } // namespace asmc
 
 #endif // PREPAREDECODING_UTILS_HPP

@@ -47,16 +47,18 @@ class DecodingQuantities {
     mat_dt mCompressedEmissionTable;
 
     // for a number between 10^(n) and 10^(n+1), proceed in steps of size max(1, 10^(n-precision))
-    const static int precision = 2;
-    const static double minGenetic = 1e-10;
+    constexpr static int precision = 2;
+    constexpr static double minGenetic = 1e-10;
 
     // start/end for physical and genetic distances (in Morgans)
-    const static double startGen = 1e-10;
-    const static double maxGen = 0.3; // 30 centiMorgans
-    const static int startPhys = 1;
-    const static int maxPhys = 100000000; // 100 Mb
+    constexpr static double startGen = 1e-10;
+    constexpr static double maxGen = 0.3; // 30 centiMorgans
+    constexpr static int startPhys = 1;
+    constexpr static int maxPhys = 100000000; // 100 Mb
 
     void computeTransitionQuantitiesForOnePosition(double genDist, Transition& transition);
+    static std::string csfsToString(const std::string& header, const std::map<double, CSFSEntry>& csfs_map);
+    std::string vectorsToString(const std::string& header, const std::vector<vec_dt>& vector_list);
 
   public:
 
@@ -66,7 +68,7 @@ class DecodingQuantities {
     static double nextGen(double gen);
     void saveDecodingQuantities(std::string_view outputFileRoot);
 
-}
+};
 
 } // namespace asmc
 
