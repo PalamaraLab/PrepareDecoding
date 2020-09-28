@@ -42,7 +42,7 @@ class Transition {
     static mat_dt getExponentiatedTransitionMatrix(double N, double r, double time, TransitionType type);
     double getTransitionFromStoInterval(double r, double timeS, double fromTime, double toTime, TransitionType type);
     std::vector<double> expectedIntervalTimesPiecewise();
-    double getCumulativeTransitionPobability(double r, double timeS, double timeT, TransitionType type);
+    double getCumulativeTransitionProbability(double r, double timeS, double timeT, TransitionType type);
 
     double expectedTimeFromStoT(double timeS, double timeT);
     double coalesceFromStoT(double timeS, double timeT);

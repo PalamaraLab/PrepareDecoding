@@ -229,8 +229,8 @@ mat_dt Transition::getExponentiatedTransitionMatrix(double N, double r, double t
 
 double Transition::getTransitionFromStoInterval(double r, double timeS, double fromTime, double toTime,
                                                 TransitionType type) {
-  return getCumulativeTransitionPobability(r, timeS, toTime, type) // toCum
-         - getCumulativeTransitionPobability(r, timeS, fromTime, type); // fromCum
+  return getCumulativeTransitionProbability(r, timeS, toTime, type) // toCum
+         - getCumulativeTransitionProbability(r, timeS, fromTime, type); // fromCum
 }
 
 std::vector<double> Transition::expectedIntervalTimesPiecewise() {
@@ -266,7 +266,7 @@ double Transition::expectedTimeFromStoT(double timeS, double timeT) {
   return expected / (1 - std::exp(rate)) + timeS;
 }
 
-double Transition::getCumulativeTransitionPobability(double r, double timeS, double timeT, TransitionType type) {
+double Transition::getCumulativeTransitionProbability(double r, double timeS, double timeT, TransitionType type) {
   mat_dt Omega;
   if (timeT < timeS) {
     Omega = computeTransitionPiecewiseUpToTimeT(r, timeT, type);
