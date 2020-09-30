@@ -67,6 +67,7 @@ class DecodingQuantities {
     static int nextPhys(int phys);
     static double nextGen(double gen);
     void saveDecodingQuantities(std::string_view outputFileRoot);
+    void saveIntervals(std::string_view outputFileRoot);
 
 };
 

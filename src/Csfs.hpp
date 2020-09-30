@@ -33,6 +33,7 @@ private:
 
 public:
 
+  CSFS() = default;
   explicit CSFS(std::map<double, CSFSEntry> CSFS_);
   static CSFSParserState currentState(const std::string& line);
   static std::pair<CSFSParserState, int> nextState(CSFSParserState state, int line);

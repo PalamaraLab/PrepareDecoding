@@ -2,6 +2,7 @@
 // See accompanying LICENSE and COPYING for copyright notice and full details.
 
 #include <algorithm>
+#include <fstream>
 #include <fmt/core.h>
 #include <fmt/ranges.h>
 #include <fmt/ostream.h>
@@ -151,6 +152,14 @@ void DecodingQuantities::saveDecodingQuantities(std::string_view outputFileRoot)
     writegz(file, fmt::format("{}\t{}\n", phys, mHomozygousEmissions.at(i).row(0)));
    }
    gzclose(file);
+}
+
+void DecodingQuantities::saveIntervals(std::string_view outputFileRoot) {
+  std::ofstream file(fmt::format("{}.intervalsInfo", outputFileRoot));
+  for (unsigned i = 0; i < mExpectedTimes.size(); i++)
+    file << mDiscretization.at(i) << "\t" << mExpectedTimes.at(i) <<
+    "\t" << mDiscretization.at(i + 1) << std::endl;
+  file.close();
 }
 
 } // namespace asmc

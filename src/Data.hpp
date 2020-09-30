@@ -15,7 +15,7 @@ private:
   array_dt mAllSNPsFreq = {};
   array_it mAllSNPsMinorAlleles = {};
   array_it mAllSNPsAlleleCounts = {};
-  int mHaploidSampleSize = 0;
+  unsigned int mHaploidSampleSize = 0;
 
   void readMinorAlleleFrequencies(std::string_view freqFile);
   void readMinorAlleleFrequenciesGz();
@@ -40,6 +40,7 @@ public:
    */
   explicit Data(std::string_view hapsFileRoot);
 
+  unsigned int getHaploidSampleSize() const { return mHaploidSampleSize; }
   array_dt getAllSNPsFreq();
   array_it getAllSNPsMinorAlleles();
   array_it getAllSNPsAlleleCounts();
