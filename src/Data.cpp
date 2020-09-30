@@ -4,7 +4,7 @@
 #include "Data.hpp"
 #include "EigenTypes.hpp"
 
-#include <string.h>
+#include <cstring>
 #include <fmt/core.h>
 #include <fmt/ranges.h>
 
@@ -14,7 +14,7 @@
 #include <filesystem>
 #include <fstream>
 
-#define GZ_CHUNK 80
+const int GZ_CHUNK = 80;
 
 namespace asmc {
 
@@ -35,11 +35,9 @@ void Data::addFreq(std::string_view freqFile) {
   readMinorAlleleFrequencies(freqFile);
 }
 
-array_dt Data::getAllSNPsFreq() { return mAllSNPsFreq; }
-array_it Data::getAllSNPsMinorAlleles() {
-  return mAllSNPsMinorAlleles;
-}
-array_it Data::getAllSNPsAlleleCounts() { return mAllSNPsAlleleCounts; }
+std::vector<double> Data::getAllSNPsFreq() { return mAllSNPsFreq; }
+std::vector<unsigned int> Data::getAllSNPsMinorAlleles() { return mAllSNPsMinorAlleles; }
+std::vector<unsigned int> Data::getAllSNPsAlleleCounts() { return mAllSNPsAlleleCounts; }
 
 void Data::readMinorAlleleFrequenciesGz() {
 }
@@ -49,10 +47,11 @@ void Data::readMinorAlleleFrequencies(std::string_view freqFile) {
   std::stringstream tokens;
 
   // Fields in frequency file
-  int chr, popSize;
+  int chr = {};
+  unsigned int popSize = {};
   std::string SNP;
-  char A1, A2;
-  double freq;
+  char A1 = {}, A2 = {};
+  double freq = {};
 
   std::ifstream file;
   file.open(freqFile.data());
@@ -63,9 +62,9 @@ void Data::readMinorAlleleFrequencies(std::string_view freqFile) {
       tokens >> chr >> SNP >> A1 >> A2 >> freq >> popSize;
       if (popSize > mHaploidSampleSize)
         mHaploidSampleSize = popSize;
-      mAllSNPsFreq << freq;
-      mAllSNPsMinorAlleles << int(popSize * freq);
-      mAllSNPsAlleleCounts << popSize;
+      mAllSNPsFreq.emplace_back(freq);
+      mAllSNPsMinorAlleles.emplace_back(popSize * freq);
+      mAllSNPsAlleleCounts.emplace_back(popSize);
     }
     file.close();
   } else {
@@ -80,9 +79,9 @@ void Data::computeMinorAlleleFrequenciesFromHaps(std::string_view hapsFileRoot) 
   std::string line, token;
 
   // TODO: Support .gz type
-  int DAcount = 0;
-  int samples = 0;
-  double DAFreq;
+  unsigned int DAcount = 0;
+  unsigned int samples = 0;
+  double DAFreq = {};
   int pos = 0;
   int monomorphic = 0;
 
@@ -103,10 +102,10 @@ void Data::computeMinorAlleleFrequenciesFromHaps(std::string_view hapsFileRoot) 
         throw std::runtime_error("Haps file contains a line with odd haploid sample size.");
       if (DAcount > samples / 2)
         DAcount = samples - DAcount;
-      DAFreq = DAcount / double(samples);
-      mAllSNPsFreq << std::min(DAFreq, 1 - DAFreq);
-      mAllSNPsMinorAlleles << DAcount;
-      mAllSNPsAlleleCounts << samples;
+      DAFreq = DAcount / static_cast<double>(samples);
+      mAllSNPsFreq.emplace_back(std::min(DAFreq, 1 - DAFreq));
+      mAllSNPsMinorAlleles.emplace_back(DAcount);
+      mAllSNPsAlleleCounts.emplace_back(samples);
       if (DAcount == 0)
         monomorphic++;
       pos++;

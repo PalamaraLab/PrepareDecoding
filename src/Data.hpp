@@ -12,9 +12,9 @@ class Data {
 
 private:
 
-  array_dt mAllSNPsFreq = {};
-  array_it mAllSNPsMinorAlleles = {};
-  array_it mAllSNPsAlleleCounts = {};
+  std::vector<double> mAllSNPsFreq;
+  std::vector<unsigned int> mAllSNPsMinorAlleles;
+  std::vector<unsigned int> mAllSNPsAlleleCounts = {};
   unsigned int mHaploidSampleSize = 0;
 
   void readMinorAlleleFrequencies(std::string_view freqFile);
@@ -41,9 +41,9 @@ public:
   explicit Data(std::string_view hapsFileRoot);
 
   unsigned int getHaploidSampleSize() const { return mHaploidSampleSize; }
-  array_dt getAllSNPsFreq();
-  array_it getAllSNPsMinorAlleles();
-  array_it getAllSNPsAlleleCounts();
+  std::vector<double> getAllSNPsFreq();
+  std::vector<unsigned int> getAllSNPsMinorAlleles();
+  std::vector<unsigned int> getAllSNPsAlleleCounts();
 
   void addFreq(std::string_view freqFile);
 

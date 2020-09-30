@@ -16,14 +16,17 @@
 namespace asmc {
 
 
+const std::map<std::string, CSFSParserState> CSFS::stateMap{
+  {"Size:", CSFSParserState::Size},
+  {"Time:", CSFSParserState::Time},
+  {"Mu:", CSFSParserState::Mu},
+  {"Samples:", CSFSParserState::Samples},
+  {"Interval:", CSFSParserState::Interval}
+};
+
 CSFS::CSFS(std::map<double, CSFSEntry> CSFS_) : mCSFS(std::move(CSFS_)),
   mAscertainedCSFS({}), mFoldedAscertainedCSFS({}) {
   if (!mCSFS.empty()) mFoldedCSFS = foldCSFS(mCSFS);
-  stateMap.emplace(std::make_pair("Size:", CSFSParserState::Size));
-  stateMap.emplace(std::make_pair("Time:", CSFSParserState::Time));
-  stateMap.emplace(std::make_pair("Mu:", CSFSParserState::Mu));
-  stateMap.emplace(std::make_pair("Samples:", CSFSParserState::Samples));
-  stateMap.emplace(std::make_pair("Interval:", CSFSParserState::Interval));
 }
 
 CSFSParserState CSFS::currentState(const std::string& line) {

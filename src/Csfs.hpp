@@ -27,7 +27,7 @@ private:
   std::map<double, CSFSEntry> mFoldedAscertainedCSFS;
   mat_dt mCompressedAscertainedEmissionTable;
 
-  static std::map<std::string, CSFSParserState> stateMap;
+  const static std::map<std::string, CSFSParserState> stateMap;
   array_dt mArraySamplingFactors;
   unsigned int mSamples = 0;
 

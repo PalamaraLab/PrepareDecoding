@@ -17,7 +17,6 @@ class ArraySpectrum {
     std::vector<double> mSpectrum = {};
     // probability of monomorphic is stored separately
     double mMonomorphicProbability = 0.0;
-    void normalize(std::vector<double>& spectrum);
 
   public:
     ArraySpectrum() = default;

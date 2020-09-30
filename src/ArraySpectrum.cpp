@@ -19,7 +19,7 @@ ArraySpectrum::ArraySpectrum(Data data, unsigned samples) {
   auto alleleCounts = data.getAllSNPsAlleleCounts();
   auto minorAlleles = data.getAllSNPsMinorAlleles();
   auto freqs = data.getAllSNPsFreq();
-  for (int i = 0; i < alleleCounts.size(); i++) {
+  for (unsigned i = 0; i < alleleCounts.size(); i++) {
       double freq = freqs[i];
       if (minorAlleles[i] == 0) {
           monoMorphic++;

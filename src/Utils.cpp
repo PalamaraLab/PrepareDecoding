@@ -72,7 +72,7 @@ int writegz(gzFile& file, const std::string& s) {
 
 std::pair<std::vector<double>, std::vector<double>> readDemographic(std::string_view demographicFile) {
   std::vector<double> times, sizes;
-  std::ifstream file(demographicFile);
+  std::ifstream file(demographicFile.data());
   std::string line;
   double size = {}, t = {};
   while(std::getline(file, line)) {
@@ -86,7 +86,7 @@ std::pair<std::vector<double>, std::vector<double>> readDemographic(std::string_
 
 std::vector<double> readDiscretization(std::string_view discretizationFile) {
   std::vector<double> discs;
-  std::ifstream file(discretizationFile);
+  std::ifstream file(discretizationFile.data());
   std::string line;
   while(std::getline(file, line)) discs.emplace_back(std::stod(line));
   return discs;
