@@ -14,6 +14,8 @@
 //    along with ASMC.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <vector>
+#include <fmt/core.h>
+#include <fmt/ranges.h>
 #include <unsupported/Eigen/MatrixFunctions>
 #include "EigenTypes.hpp"
 #include "Transition.hpp"
@@ -45,7 +47,7 @@ const std::vector<double> Transition::EUtime{0., 10., 20., 30., 40., 50.,
   1275., 1402., 1541., 1694., 1862., 2047., 2250., 2474., 2720., 2990.,
   3287., 3614., 3973., 4368., 4802., 5280., 5805., 6382., 7017., 7715.,
   8482., 9325., 10252., 11271., 12391., 13623., 14977., 16466., 18102.,
-  19901., 21879., 24053., 26443., std::numeric_limits<double>::infinity()};
+  19901., 21879., 24053., 26443.};
 
 std::vector<double> Transition::getTimeExponentialQuantiles(
   int numQuantiles, std::vector<double> timeVector,
@@ -111,7 +113,7 @@ Transition::Transition(std::vector<double> timeVector, std::vector<double> sizeV
   mTime(std::move(timeVector)), mSize(std::move(sizeVector)), mDiscretization(std::move(discretization)),
   mType(type) {
   // Logger.getLogger().setLevel(LOGLEVEL)i;
-  mTimeVectorPlusInfinity = timeVector;
+  mTimeVectorPlusInfinity = mTime;
   mTimeVectorPlusInfinity.push_back(std::numeric_limits<double>::infinity());
   mExpectedTimes = expectedIntervalTimesPiecewise();
   mStates = static_cast<unsigned int>(mDiscretization.size()) - 1;
@@ -410,8 +412,8 @@ std::pair<mat_dt, mat_dt> Transition::getOmegas(double r, TransitionType type) {
 
 void Transition::computeCoalescentVectors() {
   for (unsigned i = 0; i < mExpectedTimes.size(); i++) {
-    double timeFrom = mDiscretization[i];
-    double timeTo = mDiscretization[i + 1];
+    double timeFrom = mDiscretization.at(i);
+    double timeTo = mDiscretization.at(i + 1);
     double expTimeFrom = mExpectedTimes[i];
     if (i < mExpectedTimes.size() - 1) {
       mProbNotCoalesceBetweenExpectedTimes.push_back(notCoalesceFromStoT(expTimeFrom, mExpectedTimes[i + 1]));
