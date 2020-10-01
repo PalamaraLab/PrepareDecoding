@@ -4,6 +4,7 @@
 #include <cxxopts.hpp>
 #include <fmt/core.h>
 #include <filesystem>
+#include <cstdlib>
 #include "Transition.hpp"
 #include "Utils.hpp"
 #include "Data.hpp"
@@ -115,21 +116,23 @@ int main(int argc, char* argv[]) {
 
   // Parse CSFS
   std::string CSFSFile;
-  bool csfsOK = false;
   if(result.count("CSFS")) CSFSFile = result["CSFS"].as<std::string>();
   CSFS csfs;
   if(!CSFSFile.empty() & fs::exists(CSFSFile)) {
     fmt::print("Will load precomputed CSFS from {} ...\n", CSFSFile);
     csfs = CSFS::loadFromFile(CSFSFile);
     fmt::print("Verifying CSFS loaded from {} ...", CSFSFile);
-    csfsOK = csfs.verify(times, sizes, mutRate, samples, discs);
-    fmt::print(csfsOK ?
-        "Verified " + std::to_string(csfs.getCSFS().size()) + " CSFS entries.\n" :
-        "Will compute new CSFS.\n");
-  }
-  if(!csfsOK) {
-    // use getCSFS to fetch CSFS
-    throw std::runtime_error("not implemented yet");
+    if(csfs.verify(times, sizes, mutRate, samples, discs)) {
+      fmt::print("Verified " + std::to_string(csfs.getCSFS().size()) + " CSFS entries.\n");
+    } else {
+      fmt::print(
+          "CSFS could not be verified, aborting.\n"
+          "You can use the Python version of PrepareDecoding to fetch CSFS\n"
+          "and prepare decoding quantities.\n");
+      return EXIT_FAILURE;
+    }
+  } else {
+    throw std::runtime_error("Valid CSFS file needs to be specified\n");
   }
   csfs.fixAscertainment(data, samples, transition);
 
