@@ -3,6 +3,7 @@
 
 #include "Data.hpp"
 #include "EigenTypes.hpp"
+#include "Utils.hpp"
 
 #include <cstring>
 #include <fmt/core.h>
@@ -23,7 +24,7 @@ namespace fs = std::filesystem;
 Data::Data(std::string_view hapsFileRoot) {
 
   if (auto frq_gz = fmt::format("{}.frq.gz", hapsFileRoot); fs::exists(frq_gz)) {
-    readMinorAlleleFrequenciesGz();
+    readMinorAlleleFrequenciesGz(frq_gz);
   } else if (auto frq = fmt::format("{}.frq", hapsFileRoot); fs::exists(frq)) {
     readMinorAlleleFrequencies(frq);
   } else {
@@ -39,33 +40,40 @@ std::vector<double> Data::getAllSNPsFreq() { return mAllSNPsFreq; }
 std::vector<unsigned int> Data::getAllSNPsMinorAlleles() { return mAllSNPsMinorAlleles; }
 std::vector<unsigned int> Data::getAllSNPsAlleleCounts() { return mAllSNPsAlleleCounts; }
 
-void Data::readMinorAlleleFrequenciesGz() {
+void Data::readMinorAlleleFrequenciesLine(const std::string& line) {
+  // only call from one of the readMinorAlleleFrequencies* functions
+  std::stringstream tokens(line);
+  char A1 = {}, A2 = {};
+  int chr = {};
+  std::string SNP;
+  double freq = {};
+  unsigned int popSize = {};
+  tokens >> chr >> SNP >> A1 >> A2 >> freq >> popSize;
+  if (popSize > mHaploidSampleSize) mHaploidSampleSize = popSize;
+  mAllSNPsFreq.emplace_back(freq);
+  mAllSNPsMinorAlleles.emplace_back(popSize * freq);
+  mAllSNPsAlleleCounts.emplace_back(popSize);
+}
+
+void Data::readMinorAlleleFrequenciesGz(std::string_view freqFile) {
+  std::string line;
+  auto gzFile = gzopen(freqFile.data(), "r");
+  if(gzFile) {
+    readNextLineFromGzip(gzFile);  // ignore header
+    while(!gzeof(gzFile)) readMinorAlleleFrequenciesLine(line);
+    gzclose(gzFile);
+  } else {
+    throw std::runtime_error(fmt::format("Could not read freq file: {}", freqFile));
+  }
+  fmt::print("{}", freqFile);
 }
 
 void Data::readMinorAlleleFrequencies(std::string_view freqFile) {
   std::string line;
-  std::stringstream tokens;
-
-  // Fields in frequency file
-  int chr = {};
-  unsigned int popSize = {};
-  std::string SNP;
-  char A1 = {}, A2 = {};
-  double freq = {};
-
-  std::ifstream file;
-  file.open(freqFile.data());
+  std::ifstream file(freqFile.data());
   if (file.is_open()) {
-    getline(file, line);  // Ignore header
-    while(getline(file, line)) {
-      tokens = std::stringstream(line);
-      tokens >> chr >> SNP >> A1 >> A2 >> freq >> popSize;
-      if (popSize > mHaploidSampleSize)
-        mHaploidSampleSize = popSize;
-      mAllSNPsFreq.emplace_back(freq);
-      mAllSNPsMinorAlleles.emplace_back(popSize * freq);
-      mAllSNPsAlleleCounts.emplace_back(popSize);
-    }
+    std::getline(file, line);  // Ignore header
+    while(std::getline(file, line)) readMinorAlleleFrequenciesLine(line);
     file.close();
   } else {
     throw std::runtime_error(fmt::format("Could not read freq file: {}", freqFile));

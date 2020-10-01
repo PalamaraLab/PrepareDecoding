@@ -18,7 +18,8 @@ private:
   unsigned int mHaploidSampleSize = 0;
 
   void readMinorAlleleFrequencies(std::string_view freqFile);
-  void readMinorAlleleFrequenciesGz();
+  void readMinorAlleleFrequenciesGz(std::string_view freqFile);
+  void readMinorAlleleFrequenciesLine(const std::string& line);
 
   void computeMinorAlleleFrequenciesFromHaps(std::string_view hapsFileRoot);
 
