@@ -40,7 +40,7 @@ int main(int argc, char* argv[]) {
       ("q,coalescentQuantiles", "Desired number of discretization intervals "
        " (quantiles from the pairwise coalescent distribution)",
        cxxopts::value<int>())
-      ("o,OutputFileRoot", "Output file root.",
+      ("o,outputFileRoot", "Output file root.",
        cxxopts::value<std::string>())
       ("f,fileRoot", "Root for name of hap/samples files from which allele "
                      " frequencies for array data should be read.",
@@ -106,7 +106,7 @@ int main(int argc, char* argv[]) {
     data = Data(fileRoot);
   }
   auto mutRate = result["mut"].as<double>();
-  fmt::print("Will use mutation rate mu = {}.", mutRate);
+  fmt::print("Will use mutation rate mu = {}.\n", mutRate);
   auto samples = result["samples"].as<unsigned int>();
   samples = std::min(samples, data.getHaploidSampleSize());
   fmt::print("Number of samples in CSFS calculations: {}.\n", samples);
