@@ -65,7 +65,6 @@ void Data::readMinorAlleleFrequenciesGz(std::string_view freqFile) {
   } else {
     throw std::runtime_error(fmt::format("Could not read freq file: {}", freqFile));
   }
-  fmt::print("{}", freqFile);
 }
 
 void Data::readMinorAlleleFrequencies(std::string_view freqFile) {
@@ -78,7 +77,6 @@ void Data::readMinorAlleleFrequencies(std::string_view freqFile) {
   } else {
     throw std::runtime_error(fmt::format("Could not read freq file: {}", freqFile));
   }
-  fmt::print("{}", freqFile);
 }
 
 void Data::computeMinorAlleleFrequenciesFromHaps(std::string_view hapsFileRoot) {
