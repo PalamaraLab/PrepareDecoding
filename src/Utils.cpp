@@ -79,7 +79,7 @@ std::pair<std::vector<double>, std::vector<double>> readDemographic(std::string_
     std::stringstream ss(line);
     ss >> t >> size;
     times.emplace_back(t);
-    sizes.emplace_back(t);
+    sizes.emplace_back(size);
   }
   return std::make_pair(times, sizes);
 }
