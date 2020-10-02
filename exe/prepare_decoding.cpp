@@ -121,7 +121,7 @@ int main(int argc, char* argv[]) {
   if(!CSFSFile.empty() & fs::exists(CSFSFile)) {
     fmt::print("Will load precomputed CSFS from {} ...\n", CSFSFile);
     csfs = CSFS::loadFromFile(CSFSFile);
-    fmt::print("Verifying CSFS loaded from {} ...", CSFSFile);
+    fmt::print("Verifying CSFS loaded from {} ...\n", CSFSFile);
     if(csfs.verify(times, sizes, mutRate, samples, discs)) {
       fmt::print("Verified " + std::to_string(csfs.getCSFS().size()) + " CSFS entries.\n");
     } else {
