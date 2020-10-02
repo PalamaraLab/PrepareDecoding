@@ -58,7 +58,7 @@ std::pair<CSFSParserState, int> CSFS::nextState(CSFSParserState state, int line 
       return std::make_pair(CSFSParserState::CSFS, 0);
 
     case CSFSParserState::CSFS:
-      if (line == 3) return std::make_pair(CSFSParserState::Time, 0);
+      if (line == 2) return std::make_pair(CSFSParserState::Time, 0);
       return std::make_pair(CSFSParserState::CSFS, line + 1);
   }
   return std::make_pair(CSFSParserState::Null, 0);
@@ -75,7 +75,8 @@ CSFS CSFS::loadFromFile(std::string_view filename) {
   std::string token;
   double t_dt = {}, from = {}, to = {}, mu = {};
   unsigned int samples = {};
-  auto [state, subline] = nextState(CSFSParserState::Null);
+  auto state = CSFSParserState::Null;
+  int subline = 0;
   while(std::getline(file, line)) {
     auto [expectedCurrentState, expectedSubline] = nextState(state, subline);
     if (state == CSFSParserState::CSFS && expectedCurrentState == CSFSParserState::Time) {
@@ -91,35 +92,35 @@ CSFS CSFS::loadFromFile(std::string_view filename) {
 
     auto nowState = currentState(line);
     if (expectedCurrentState != nowState) {
-      throw std::runtime_error(fmt::format("Expected state {}, got {}", expectedCurrentState, currentState));
+      throw std::runtime_error(fmt::format("Expected state {}, got {}", expectedCurrentState, nowState));
     }
     std::stringstream tokens(line);
     switch (nowState) {
       case CSFSParserState::Null:
-        continue;
+        break;
       case CSFSParserState::Time:
         tokens >> token;
         while(tokens >> t_dt) timeVector.push_back(t_dt);
-        continue;
+        break;
       case CSFSParserState::Size:
         tokens >> token;
         while(tokens >> t_dt) sizeVector.push_back(t_dt);
-        continue;
+        break;
       case CSFSParserState::Mu:
         tokens >> token; tokens >> mu;
-        continue;
+        break;
       case CSFSParserState::Samples:
         tokens >> token; tokens >> samples;
-        continue;
+        break;
       case CSFSParserState::Interval:
         tokens >> token;
         tokens >> from >> to;
-        continue;
+        break;
       case CSFSParserState::CSFS:
         if (csfs.size() == 0) csfs.resize(3, samples - 1);
         unsigned col = 0;
         while(tokens >> t_dt) csfs(subline, col++) = t_dt;
-        continue;
+        break;
     }
     state = nowState;
     subline = expectedSubline;
@@ -143,23 +144,23 @@ bool CSFS::verify(std::vector<double> timeVectorOriginal, std::vector<double> si
     }
     auto thisEntry = mCSFS.at(from);
     if (thisEntry.getMu() != mu) {
-      fmt::print("Warning:\tCSFS entry {} has different mu: {}.", from, thisEntry.getMu());
+      fmt::print("Warning: CSFS entry {} has different mu: {}.\n", from, thisEntry.getMu());
       return false;
     }
     if (thisEntry.getTime() != timeVector) {
       fmt::print("{}\n", thisEntry.getTime());
       fmt::print("{}\n", timeVector);
-      fmt::print("Warning:\tCSFS entry {} has different time vector.", from);
+      fmt::print("Warning: CSFS entry {} has different time vector.\n", from);
       return false;
     }
     if (thisEntry.getSize() != sizeVector) {
-      std::cout << "Warning:\tCSFS entry " << from << " has different size vector." << std::endl;
+      fmt::print("Warning: CSFS entry {} has different size vector.\n", from);
       return false;
     }
     if (thisEntry.getSamples() != samples) {
       // if (samples == Integer.MAX_VALUE)  samples = thisEntry.samples;
-      std::cout << "Warning:\tCSFS entry " << from << " has different samples (want: " <<
-        samples << ", found: " << thisEntry.getSamples() << ")" << std::endl;
+      fmt::print("Warning: CSFS entry {} has different samples, expected {} got {}.\n",
+        from, samples, thisEntry.getSamples());
       return false;
     }
   }
