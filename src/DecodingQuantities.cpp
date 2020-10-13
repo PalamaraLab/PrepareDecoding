@@ -54,15 +54,13 @@ DecodingQuantities::DecodingQuantities(CSFS& csfs, Transition& transition, doubl
 
   // compute homozygous emissions
   int phys = startPhys;
-  while (phys < maxPhys) {
-    mPhysDistances.push_back(phys);
-    phys = nextPhys(phys);
-  }
+  while (phys < maxPhys) mPhysDistances.push_back(phys = nextPhys(phys));
   for (unsigned i = 0; i < mPhysDistances.size(); i++) {
     mHomozygousEmissions.push_back(CSFS::computeClassicEmission(
           mExpectedTimes, mPhysDistances[i] * mMu));
     int percentage = static_cast<int>(std::round(100 * i / static_cast<double>(mPhysDistances.size())));
-    if (percentage != lastPercentage) fmt::print("\rPhysical distances progress: {}%", percentage);
+    if (percentage != lastPercentage)
+      std::cout << "Physical distances progress: " << percentage << "%\t\r" << std::flush;
     lastPercentage = percentage;
   }
   fmt::print("\n");
@@ -83,7 +81,7 @@ int DecodingQuantities::nextPhys(int phys) {
   if (phys < 0) throw std::runtime_error("Int overflow: " + std::to_string(phys));
   int log10 = static_cast<int>(std::max(0.0, std::floor(std::log10(phys)) - precision));
   int factor = static_cast<int>(std::pow(10, log10));
-  return static_cast<int>(std::round(phys / static_cast<double>(factor + 1)) * factor);
+  return static_cast<int>(std::round(phys / static_cast<double>(factor) + 1) * factor);
 }
 
 double DecodingQuantities::nextGen(double gen) {
