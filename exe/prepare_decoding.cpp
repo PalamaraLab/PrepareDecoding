@@ -14,7 +14,28 @@
 namespace fs = std::filesystem;
 using namespace asmc;
 
+
+static const std::string VERSION("1.0");
+static const std::string VERSION_DATE("July 1, 2018");
+static const std::string YEAR("2018");
+static const std::string LICENSE("GPL v3");
+static const std::string WEBSITE("www.palamaralab.org/software/ASMC");
+static const std::string PROGRAM("ASMC");
+
 int main(int argc, char* argv[]) {
+
+  fmt::print(R"header(
+ █████╗   ███████╗  ███╗   ███╗   ██████╗
+██╔══██╗  ██╔════╝  ████╗ ████║  ██╔════╝
+███████║  ███████╗  ██╔████╔██║  ██║
+██╔══██║  ╚════██║  ██║╚██╔╝██║  ██║
+██║  ██║  ███████║  ██║ ╚═╝ ██║  ╚██████╗
+╚═╝  ╚═╝  ╚══════╝  ╚═╝     ╚═╝   ╚═════╝
+)header");
+
+  fmt::print("\nAscertained Sequentially Markovian Coalescent (ASMC) - Precompute decoding quantities v.{}\n", VERSION);
+  fmt::print("GNU GPL v3, Copyright (C) {} Pier Palamara\n", YEAR);
+  fmt::print("Manual: {}\n\n", WEBSITE);
 
   cxxopts::Options options("ASMCprepareDecoding",
           "Precompute decoding quantities for ASMC");
