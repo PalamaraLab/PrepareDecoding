@@ -10,8 +10,8 @@
 namespace asmc {
 
 TEST_CASE("Csfs constructor", "[Csfs]") {
-  Csfs csfs;
-  csfs = Csfs();
+  CSFS csfs;
+  csfs = CSFS();
 }
 
 } // namespace asmc

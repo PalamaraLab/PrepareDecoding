@@ -10,74 +10,84 @@
 
 namespace asmc {
 
-TEST_CASE("CsfsEntry constructor", "[CsfsEntry]") {
+TEST_CASE("CSFSEntry constructor", "[CSFSEntry]") {
 
-  const array_dt timeVector = array_dt::Random(5);
-  const array_dt sizeVector = array_dt::Random(5);
+  std::vector<double> timeVector(5);
+  std::vector<double> sizeVector(5);
+  std::generate(timeVector.begin(), timeVector.end(), std::rand);
+  std::generate(sizeVector.begin(), sizeVector.end(), std::rand);
   const double mu = 1.23;
   const double from = 2.34;
   const double to = 3.45;
   const int samples = 7;
   const mat_dt csfs = mat_dt::Random(3, samples - 1);
 
-  CHECK_NOTHROW(CsfsEntry(timeVector, sizeVector, mu, from, to, samples, csfs));
+  CHECK_NOTHROW(CSFSEntry(timeVector, sizeVector, mu, from, to, samples, csfs));
 }
 
-TEST_CASE("CsfsEntry constructor throws on array size mismatch", "[CsfsEntry]") {
+TEST_CASE("CSFSEntry constructor throws on array size mismatch", "[CSFSEntry]") {
 
-  const array_dt timeVector = array_dt::Random(5);
-  const array_dt sizeVector = array_dt::Random(6);
+  std::vector<double> timeVector(5);
+  std::vector<double> sizeVector(6);
+  std::generate(timeVector.begin(), timeVector.end(), std::rand);
+  std::generate(sizeVector.begin(), sizeVector.end(), std::rand);
   const double mu = 1.23;
   const double from = 2.34;
   const double to = 3.45;
   const int samples = 7;
   const mat_dt csfs = mat_dt::Random(3, samples - 1);
 
-  CHECK_THROWS_WITH(CsfsEntry(timeVector, sizeVector, mu, from, to, samples, csfs),
+  CHECK_THROWS_WITH(CSFSEntry(timeVector, sizeVector, mu, from, to, samples, csfs),
                     Catch::Contains("Time vector:\n"));
 }
 
-TEST_CASE("CsfsEntry constructor throws on wrong CSFS size", "[CsfsEntry]") {
+TEST_CASE("CSFSEntry constructor throws on wrong CSFS size", "[CSFSEntry]") {
 
-  const array_dt timeVector = array_dt::Random(5);
-  const array_dt sizeVector = array_dt::Random(5);
+  std::vector<double> timeVector(5);
+  std::vector<double> sizeVector(5);
+  std::generate(timeVector.begin(), timeVector.end(), std::rand);
+  std::generate(sizeVector.begin(), sizeVector.end(), std::rand);
   const double mu = 1.23;
   const double from = 2.34;
   const double to = 3.45;
   const int samples = 7;
 
-  CHECK_THROWS_WITH(CsfsEntry(timeVector, sizeVector, mu, from, to, samples, mat_dt::Random(2, samples - 1)),
+  CHECK_THROWS_WITH(CSFSEntry(timeVector, sizeVector, mu, from, to, samples, mat_dt::Random(2, samples - 1)),
                     Catch::Contains("Time vector:\n"));
 
-  CHECK_THROWS_WITH(CsfsEntry(timeVector, sizeVector, mu, from, to, samples, mat_dt::Random(3, samples - 2)),
+  CHECK_THROWS_WITH(CSFSEntry(timeVector, sizeVector, mu, from, to, samples, mat_dt::Random(3, samples - 2)),
                     Catch::Contains("Time vector:\n"));
 }
 
-TEST_CASE("CsfsEntry constructor throws with to >= from", "[CsfsEntry]") {
+TEST_CASE("CSFSEntry constructor throws with from >= to", "[CSFSEntry]") {
 
-  const array_dt timeVector = array_dt::Random(5);
-  const array_dt sizeVector = array_dt::Random(5);
+  std::vector<double> timeVector(5);
+  std::vector<double> sizeVector(5);
+  std::generate(timeVector.begin(), timeVector.end(), std::rand);
+  std::generate(sizeVector.begin(), sizeVector.end(), std::rand);
   const double mu = 1.23;
   const double from = 4.56;
   const double to = 3.45;
   const int samples = 7;
   const mat_dt csfs = mat_dt::Random(3, samples - 1);
 
-  CHECK_THROWS_WITH(CsfsEntry(timeVector, sizeVector, mu, from, to, samples, csfs),
+  CHECK_THROWS_WITH(CSFSEntry(timeVector, sizeVector, mu, from, to, samples, csfs),
                     Catch::Contains("Time vector:\n"));
 }
 
-TEST_CASE("CsfsEntry toString method", "[CsfsEntry]") {
+TEST_CASE("CSFSEntry toString method", "[CSFSEntry]") {
 
-  const array_dt timeVector = array_dt::Zero(3) + 1.2;
-  const array_dt sizeVector = array_dt::Zero(3) + 2.3;
+  std::vector<double> timeVector(3);
+  std::vector<double> sizeVector(3);
+  std::fill(timeVector.begin(), timeVector.end(), 1.2);
+  std::fill(sizeVector.begin(), sizeVector.end(), 2.3);
   const double mu = 3.4;
   const double from = 4.5;
   const double to = 5.6;
   const int samples = 7;
   const mat_dt csfs = mat_dt::Ones(3, samples - 1) * 8.9;
 
-  auto csfs_entry = CsfsEntry(timeVector, sizeVector, mu, from, to, samples, csfs);
+  auto csfs_entry = CSFSEntry(timeVector, sizeVector, mu, from, to, samples, csfs);
 
   REQUIRE(csfs_entry.toString() ==
           "Time:\t1.2 1.2 1.2\nSize:\t2.3 2.3 2.3\nMu:\t3.4\nSamples:\t7\nInterval:\t4.5\t5.6\n8.9 8.9 8.9 8.9 8.9 "
