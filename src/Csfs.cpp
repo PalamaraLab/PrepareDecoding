@@ -74,6 +74,7 @@ CSFS CSFS::loadFromFile(std::string_view filename) {
   mat_dt csfs;
   std::string token;
   double t_dt = {}, from = {}, to = {}, mu = {};
+  std::string toS;
   unsigned int samples = {};
   auto state = CSFSParserState::Null;
   int subline = 0;
@@ -86,6 +87,8 @@ CSFS CSFS::loadFromFile(std::string_view filename) {
       assert(to > from);
       assert(samples > 0);
       parsed.emplace(from, CSFSEntry(timeVector, sizeVector, mu, from, to, samples, csfs));
+      timeVector.clear();
+      sizeVector.clear();
       mu = from = to = -1.0;
       samples = 0;
     }
@@ -114,7 +117,8 @@ CSFS CSFS::loadFromFile(std::string_view filename) {
         break;
       case CSFSParserState::Interval:
         tokens >> token;
-        tokens >> from >> to;
+        tokens >> from >> toS;
+        to = (toS == "Infinity") ? std::numeric_limits<double>::infinity() : std::stod(toS);
         break;
       case CSFSParserState::CSFS:
         if (csfs.size() == 0) csfs.resize(3, samples - 1);
@@ -125,6 +129,17 @@ CSFS CSFS::loadFromFile(std::string_view filename) {
     state = nowState;
     subline = expectedSubline;
   }
+  // fix last entry
+  auto [expectedCurrentState, expectedSubline] = nextState(state, subline);
+  if (state == CSFSParserState::CSFS && expectedCurrentState == CSFSParserState::Time) {
+      // moved to new time block, save CSFSentry
+      assert(mu > 0);
+      assert(from > 0);
+      assert(to > from);
+      assert(samples > 0);
+      parsed.emplace(from, CSFSEntry(timeVector, sizeVector, mu, from, to, samples, csfs));
+  }
+
   return CSFS(parsed);
 }
 
