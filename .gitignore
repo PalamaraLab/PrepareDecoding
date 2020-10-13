@@ -31,6 +31,12 @@
 *.out
 *.app
 
+# ctags
+tags
+tags.*
+
+build
+
 # IDE generated directories
 .idea/*
 cmake-build*

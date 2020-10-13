@@ -6,6 +6,9 @@
 #include <array>
 #include <cassert>
 #include <cmath>
+#include <string_view>
+#include <sstream>
+#include <fstream>
 
 namespace asmc {
 
@@ -56,6 +59,37 @@ std::string readNextLineFromGzip(gzFile& gzFileHandle) {
   }
 
   return line;
+}
+
+void normalize(std::vector<double>& spectrum) {
+  double tot = std::reduce(spectrum.begin(), spectrum.end());
+  std::for_each(spectrum.begin(), spectrum.end(), [tot](double& s) { s /= tot;});
+}
+
+int writegz(gzFile& file, const std::string& s) {
+  return gzwrite(file, s.c_str(), static_cast<unsigned int>(s.size()));
+}
+
+std::pair<std::vector<double>, std::vector<double>> readDemographic(std::string_view demographicFile) {
+  std::vector<double> times, sizes;
+  std::ifstream file(demographicFile.data());
+  std::string line;
+  double size = {}, t = {};
+  while(std::getline(file, line)) {
+    std::stringstream ss(line);
+    ss >> t >> size;
+    times.emplace_back(t);
+    sizes.emplace_back(size);
+  }
+  return std::make_pair(times, sizes);
+}
+
+std::vector<double> readDiscretization(std::string_view discretizationFile) {
+  std::vector<double> discs;
+  std::ifstream file(discretizationFile.data());
+  std::string line;
+  while(std::getline(file, line)) discs.emplace_back(std::stod(line));
+  return discs;
 }
 
 } // namespace asmc

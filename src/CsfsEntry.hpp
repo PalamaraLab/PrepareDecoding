@@ -8,24 +8,34 @@
 
 namespace asmc {
 
-class CsfsEntry {
+class CSFSEntry {
 
 private:
   double mMu = {};
   double mFrom = {};
   double mTo = {};
 
-  int mSamples = {};
+  unsigned int mSamples = {};
 
-  array_dt mTimeVector = {};
-  array_dt mSizeVector = {};
+  std::vector<double> mTimeVector = {};
+  std::vector<double> mSizeVector = {};
 
-  mat_dt mCsfs = {};
+  mat_dt mCSFS = {};
 
 public:
-  CsfsEntry(array_dt timeVector, array_dt sizeVector, double mu, double from, double to, int samples, mat_dt csfs);
+  CSFSEntry(std::vector<double> timeVector, std::vector<double> sizeVector,
+      double mu, double from, double to, unsigned int samples, mat_dt csfs);
 
-  std::string toString();
+  std::vector<double>& getTime() { return mTimeVector; }
+  std::vector<double>& getSize() { return mSizeVector; }
+  double getMu() { return mMu; }
+  double getFrom() { return mFrom; }
+  double getTo() { return mTo; }
+  unsigned int getSamples() { return mSamples; }
+  const mat_dt& getCSFS() const { return mCSFS; }
+  void setCSFS(const mat_dt& csfs) { mCSFS = csfs; }
+
+  std::string toString() const;
 };
 
 } // namespace asmc

@@ -5,8 +5,11 @@
 #define PREPAREDECODING_UTILS_HPP
 
 #include <zlib.h>
-
+#include <vector>
 #include <string>
+#include <numeric>
+#include <algorithm>
+#include <string_view>
 
 namespace asmc {
 
@@ -20,6 +23,11 @@ double hypergeometricPmf(int populationSize, int numberOfSuccesses, int sampleSi
  */
 std::string readNextLineFromGzip(gzFile& gzFileHandle);
 
+std::pair<std::vector<double>, std::vector<double>> readDemographic(std::string_view demographicFile);
+std::vector<double> readDiscretization(std::string_view discretizationFile);
+
+void normalize(std::vector<double>& spectrum);
+int writegz(gzFile& file, const std::string& s);
 } // namespace asmc
 
 #endif // PREPAREDECODING_UTILS_HPP

@@ -12,11 +12,14 @@ class Data {
 
 private:
 
-  array_dt mAllSnpsFreq = {};
-  array_it mAllSnpsMinorAlleles = {};
-  array_it mAllSnpsAlleleCounts = {};
+  std::vector<double> mAllSNPsFreq;
+  std::vector<unsigned int> mAllSNPsMinorAlleles;
+  std::vector<unsigned int> mAllSNPsAlleleCounts = {};
+  unsigned int mHaploidSampleSize = 0;
 
   void readMinorAlleleFrequencies(std::string_view freqFile);
+  void readMinorAlleleFrequenciesGz(std::string_view freqFile);
+  void readMinorAlleleFrequenciesLine(const std::string& line);
 
   void computeMinorAlleleFrequenciesFromHaps(std::string_view hapsFileRoot);
 
@@ -37,6 +40,11 @@ public:
    * @param hapsFileRoot the root location of the .frq.gz, .frq, or haps file
    */
   explicit Data(std::string_view hapsFileRoot);
+
+  unsigned int getHaploidSampleSize() const { return mHaploidSampleSize; }
+  std::vector<double> getAllSNPsFreq();
+  std::vector<unsigned int> getAllSNPsMinorAlleles();
+  std::vector<unsigned int> getAllSNPsAlleleCounts();
 
   void addFreq(std::string_view freqFile);
 
