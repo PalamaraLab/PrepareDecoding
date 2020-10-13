@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <fstream>
+#include <iostream>
 #include <fmt/core.h>
 #include <fmt/ranges.h>
 #include <fmt/ostream.h>
@@ -45,7 +46,8 @@ DecodingQuantities::DecodingQuantities(CSFS& csfs, Transition& transition, doubl
     computeTransitionQuantitiesForOnePosition(genDist, transition);
     int percentage = static_cast<int>(
         std::round(100 * i / static_cast<double>(mGeneticDistances.size())));
-    if (percentage != lastPercentage) fmt::print("\nGenetic distances progress: {}%", percentage);
+    if (percentage != lastPercentage)
+      std::cout << "Genetic distances progress: " << percentage << "%\t\r" << std::flush;
     lastPercentage = percentage;
   }
   fmt::print("\n");
