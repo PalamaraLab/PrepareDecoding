@@ -15,8 +15,6 @@
 #include <filesystem>
 #include <fstream>
 
-const int GZ_CHUNK = 80;
-
 namespace asmc {
 
 namespace fs = std::filesystem;
