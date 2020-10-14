@@ -54,7 +54,7 @@ DecodingQuantities::DecodingQuantities(CSFS& csfs, Transition& transition, doubl
 
   // compute homozygous emissions
   int phys = startPhys;
-  while (phys < maxPhys) mPhysDistances.push_back(phys = nextPhys(phys));
+  do mPhysDistances.push_back(phys); while ((phys = nextPhys(phys)) < maxPhys);
   for (unsigned i = 0; i < mPhysDistances.size(); i++) {
     mHomozygousEmissions.push_back(CSFS::computeClassicEmission(
           mExpectedTimes, mPhysDistances[i] * mMu));
