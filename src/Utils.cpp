@@ -2,7 +2,7 @@
 // See accompanying LICENSE and COPYING for copyright notice and full details.
 
 #include "Utils.hpp"
-
+#include "EigenTypes.hpp"
 #include <array>
 #include <cassert>
 #include <cmath>
@@ -90,6 +90,14 @@ std::vector<double> readDiscretization(std::string_view discretizationFile) {
   std::string line;
   while(std::getline(file, line)) discs.emplace_back(std::stod(line));
   return discs;
+}
+
+std::string vecToString(const vec_dt& v) {
+  std::stringstream ss;
+  if (!v.size()) return "";
+  for(unsigned i = 0; i < v.size() - 1; i++) ss << v[i] << "\t";
+  ss << v[v.size() - 1];
+  return ss.str();
 }
 
 } // namespace asmc

@@ -4,6 +4,7 @@
 #ifndef PREPAREDECODING_UTILS_HPP
 #define PREPAREDECODING_UTILS_HPP
 
+#include "EigenTypes.hpp"
 #include <zlib.h>
 #include <vector>
 #include <string>
@@ -25,6 +26,8 @@ std::string readNextLineFromGzip(gzFile& gzFileHandle);
 
 std::pair<std::vector<double>, std::vector<double>> readDemographic(std::string_view demographicFile);
 std::vector<double> readDiscretization(std::string_view discretizationFile);
+
+std::string vecToString(const vec_dt& v);
 
 void normalize(std::vector<double>& spectrum);
 int writegz(gzFile& file, const std::string& s);
