@@ -77,9 +77,10 @@ CSFS CSFS::loadFromFile(std::string_view filename) {
   std::string toS;
   unsigned int samples = {};
   auto state = CSFSParserState::Null;
+  auto expectedCurrentState = state;
   int subline = 0;
   while(std::getline(file, line)) {
-    auto [expectedCurrentState, expectedSubline] = nextState(state, subline);
+    std::tie(expectedCurrentState, subline) = nextState(state, subline);
     if (state == CSFSParserState::CSFS && expectedCurrentState == CSFSParserState::Time) {
       // moved to new time block, save CSFSentry
       assert(mu > 0);
@@ -127,10 +128,9 @@ CSFS CSFS::loadFromFile(std::string_view filename) {
         break;
     }
     state = nowState;
-    subline = expectedSubline;
   }
   // fix last entry
-  auto [expectedCurrentState, expectedSubline] = nextState(state, subline);
+  std::tie(expectedCurrentState, subline) = nextState(state, subline);
   if (state == CSFSParserState::CSFS && expectedCurrentState == CSFSParserState::Time) {
       // moved to new time block, save CSFSentry
       assert(mu > 0);
