@@ -117,7 +117,7 @@ std::string DecodingQuantities::csfsToString(const std::string& header, const st
 std::string DecodingQuantities::vectorsToString(const std::string& header, const std::vector<vec_dt>& vector_list) {
   std::string out(header + "\n");
   for (unsigned i = 0; i < vector_list.size(); i++) {
-    out += fmt::format("{}\t{}\n", mGeneticDistances.at(i), vector_list.at(i));
+    out += fmt::format("{}\t{}\n", mGeneticDistances.at(i), vecToString(vector_list.at(i)));
   }
   return out + "\n";
 }
@@ -129,18 +129,19 @@ void DecodingQuantities::saveDecodingQuantities(std::string_view outputFileRoot)
   writegz(file, fmt::format("TransitionType\n{}\n\n", mTransitionType));
   writegz(file, fmt::format("States\n{}\n\n", mStates));
   writegz(file, fmt::format("CSFSSamples\n{}\n\n", mCSFSSamples));
-  writegz(file, fmt::format("TimeVector\n{}\nSizeVector\n{}\nDiscretization\n{}\nExpectedTimes\n{}\n",
-        mTime, mSize, mDiscretization, mExpectedTimes));
+  writegz(file, fmt::format("TimeVector\n{}\n\nSizeVector\n{}\n\nDiscretization\n{}\n\nExpectedTimes\n{}\n\n",
+                            fmt::join(mTime, "\t"), fmt::join(mSize, "\t"), fmt::join(mDiscretization, "\t"),
+                            fmt::join(mExpectedTimes, "\t")));
   // write sequence Emissions
   writegz(file, csfsToString("CSFS", mCSFS));
   writegz(file, csfsToString("FoldedCSFS", mFoldedCSFS));
-  writegz(file, fmt::format("ClassicEmission\n{}\n", mClassicEmissionTable));
+  writegz(file, fmt::format("ClassicEmission\n{}\n\n", mClassicEmissionTable));
   writegz(file, csfsToString("AscertainedCSFS", mAscertainedCSFS));
   writegz(file, csfsToString("FoldedAscertainedCSFS", mFoldedAscertainedCSFS));
-  writegz(file, fmt::format("CompressedAscertainedEmission\n{}\n", mCompressedEmissionTable));
+  writegz(file, fmt::format("CompressedAscertainedEmission\n{}\n\n", mCompressedEmissionTable));
    // write initial state distribution
-  writegz(file, fmt::format("initialStateProb\n{}\n", mInitialStateProb));
-  writegz(file, fmt::format("ColumnRatios\n{}\n", mColumnRatios));
+  writegz(file, fmt::format("initialStateProb\n{}\n\n", vecToString(mInitialStateProb)));
+  writegz(file, fmt::format("ColumnRatios\n{}\n\n", vecToString(mColumnRatios)));
   writegz(file, vectorsToString("RowRatios", mRowRatioVectors));
   writegz(file, vectorsToString("Uvectors", mUvectors));
   writegz(file, vectorsToString("Bvectors", mBvectors));
@@ -149,7 +150,7 @@ void DecodingQuantities::saveDecodingQuantities(std::string_view outputFileRoot)
   writegz(file, "HomozygousEmissions\n");
   for (unsigned i = 0; i < mPhysDistances.size(); i++) {
     auto phys = mPhysDistances.at(i);
-    writegz(file, fmt::format("{}\t{}\n", phys, mHomozygousEmissions.at(i).row(0)));
+    writegz(file, fmt::format("{}\t{}\n", phys, vecToString(mHomozygousEmissions.at(i).row(0))));
    }
    gzclose(file);
 }
