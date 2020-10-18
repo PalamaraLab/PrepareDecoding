@@ -212,6 +212,7 @@ void CSFS::computeArraySamplingFactors(Data data, unsigned int samples, Transiti
     mSamples = samples;
     auto coalDist = transition.getCoalDist();
     array_dt AFS(samples);
+    AFS.setZero();
     // double[] AFS = new double[samples];
     // the first entry of the CSFS may not be zero, since it's a shared doubleton
     unsigned counter = 0;
