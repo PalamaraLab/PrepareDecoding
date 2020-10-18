@@ -256,7 +256,6 @@ void CSFS::applyFactors() {
   // apply sampling factors and renormalize
   // note that the first entry of the CSFS may not be zero, since it's a shared doubleton
   double monomorphic = mArraySpectrum.getMonomorphic();
-  fmt::print("monomorphic {}\n", monomorphic);
   for (auto &[from, csfsEntry] : mAscertainedCSFS) {
     auto thisCSFS = csfsEntry.getCSFSMatrix();
     if (thisCSFS.size() > 0) thisCSFS(0, 0) = 0.; else throw std::runtime_error("CSFS is empty!");

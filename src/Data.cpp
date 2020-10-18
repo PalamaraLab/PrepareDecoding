@@ -49,7 +49,8 @@ void Data::readMinorAlleleFrequenciesLine(const std::string& line) {
   tokens >> chr >> SNP >> A1 >> A2 >> freq >> popSize;
   if (popSize > mHaploidSampleSize) mHaploidSampleSize = popSize;
   mAllSNPsFreq.emplace_back(freq);
-  mAllSNPsMinorAlleles.emplace_back(popSize * freq);
+  mAllSNPsMinorAlleles.emplace_back(
+      static_cast<unsigned int>(static_cast<double>(popSize) * freq));
   mAllSNPsAlleleCounts.emplace_back(popSize);
 }
 
