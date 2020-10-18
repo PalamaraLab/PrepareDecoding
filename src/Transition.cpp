@@ -436,8 +436,8 @@ void Transition::computeCoalescentVectors() {
 std::vector<double> Transition::getCoalDist() {
   std::vector<double> coalDist;
   double lastCoal = 0.;
-  for (double discretization : mDiscretization) {
-    double coal = cumulativeCoalesceFromStoT(0., discretization);
+  for(unsigned i = 1; i < mDiscretization.size(); i++) {
+    double coal = cumulativeCoalesceFromStoT(0., mDiscretization[i]);
     coalDist.push_back(coal - lastCoal);
     lastCoal = coal;
   }
