@@ -32,8 +32,8 @@ public:
   double getFrom() { return mFrom; }
   double getTo() { return mTo; }
   unsigned int getSamples() { return mSamples; }
-  const mat_dt& getCSFS() const { return mCSFS; }
-  void setCSFS(const mat_dt& csfs) { mCSFS = csfs; }
+  const mat_dt& getCSFSMatrix() const { return mCSFS; }
+  void setCSFSMatrix(const mat_dt& csfs) { mCSFS = csfs; }
 
   std::string toString() const;
 };

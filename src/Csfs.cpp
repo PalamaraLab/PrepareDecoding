@@ -191,7 +191,7 @@ std::string CSFS::toString() const {
 void CSFS::fixAscertainment(Data data, unsigned int samples, Transition transition) {
     computeArraySamplingFactors(data, samples, transition);
     // CSFS is loaded here, but fixed later.
-    for (auto const& entry: mCSFS) mAscertainedCSFS.emplace(entry);
+    mAscertainedCSFS = mCSFS;
     applyFactors();
     mFoldedAscertainedCSFS = foldCSFS(mAscertainedCSFS);
     mCompressedAscertainedEmissionTable = compressCSFS(mFoldedAscertainedCSFS);
@@ -216,7 +216,7 @@ void CSFS::computeArraySamplingFactors(Data data, unsigned int samples, Transiti
     // the first entry of the CSFS may not be zero, since it's a shared doubleton
     unsigned counter = 0;
     for (auto &[from, csfsEntry] : mCSFS) {
-      auto mat_csfs = csfsEntry.getCSFS();
+      auto mat_csfs = csfsEntry.getCSFSMatrix();
       for (unsigned row = 0; row < 3; row++) {
         for (unsigned column = 0; column < samples - 1; column++) {
           auto pos = row + column;
@@ -256,8 +256,9 @@ void CSFS::applyFactors() {
   // apply sampling factors and renormalize
   // note that the first entry of the CSFS may not be zero, since it's a shared doubleton
   double monomorphic = mArraySpectrum.getMonomorphic();
+  fmt::print("monomorphic {}\n", monomorphic);
   for (auto &[from, csfsEntry] : mAscertainedCSFS) {
-    auto thisCSFS = csfsEntry.getCSFS();
+    auto thisCSFS = csfsEntry.getCSFSMatrix();
     if (thisCSFS.size() > 0) thisCSFS(0, 0) = 0.; else throw std::runtime_error("CSFS is empty!");
     double norm = 0.;
     for (unsigned row = 0; row < 3; row++) {
@@ -274,8 +275,8 @@ void CSFS::applyFactors() {
     norm /= 1 - monomorphic;
     thisCSFS /= norm;
     thisCSFS(0, 0) = monomorphic;
-    // ascertainedCSFS.get(from).CSFS = thisCSFS; [notreq, using refs]
-    }
+    mAscertainedCSFS.at(from).setCSFSMatrix(thisCSFS);
+  }
 }
 
 std::map<double, CSFSEntry> CSFS::foldCSFS(std::map<double, CSFSEntry> csfsMap) {
@@ -284,7 +285,7 @@ std::map<double, CSFSEntry> CSFS::foldCSFS(std::map<double, CSFSEntry> csfsMap) 
   assert(samples >= 2);
   auto undistinguished = samples - 2;
   for (auto &[from, foldedEntry] : csfsMap) {
-    auto thisCsfs_double = foldedEntry.getCSFS();
+    auto thisCsfs_double = foldedEntry.getCSFSMatrix();
     // code to fold the spectrum
     if (samples % 2 != 0) throw std::runtime_error("ConditionalSFS called with odd number of samples.");
     auto half = samples / 2;
@@ -296,7 +297,7 @@ std::map<double, CSFSEntry> CSFS::foldCSFS(std::map<double, CSFSEntry> csfsMap) 
         thisCsfs_double_folded(dist, undist) += thisCsfs_double(row, column);
       }
     }
-    foldedEntry.setCSFS(thisCsfs_double_folded);
+    foldedEntry.setCSFSMatrix(thisCsfs_double_folded);
     foldedCSFS.emplace(std::make_pair(from, foldedEntry));
     }
   return foldedCSFS;
@@ -317,7 +318,7 @@ mat_dt CSFS::compressCSFS(std::map<double, CSFSEntry> csfsMap) {
   compressed.setZero();
   int timeInterval = 0;
   for (auto &[from, csfsEntry] : csfsMap) {
-    auto thisCSFS = csfsEntry.getCSFS();
+    auto thisCSFS = csfsEntry.getCSFSMatrix();
     for (int k = 0; k < thisCSFS.cols(); k++) {
       compressed(0, timeInterval) += thisCSFS(0, k);
       compressed(1, timeInterval) += thisCSFS(1, k);
