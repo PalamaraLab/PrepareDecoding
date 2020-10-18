@@ -61,9 +61,10 @@ std::string readNextLineFromGzip(gzFile& gzFileHandle) {
   return line;
 }
 
-void normalize(std::vector<double>& spectrum) {
+std::vector<double> normalize(std::vector<double> spectrum) {
   double tot = std::reduce(spectrum.begin(), spectrum.end());
   std::for_each(spectrum.begin(), spectrum.end(), [tot](double& s) { s /= tot;});
+  return spectrum;
 }
 
 int writegz(gzFile& file, const std::string& s) {

@@ -45,7 +45,7 @@ ArraySpectrum::ArraySpectrum(Data data, unsigned samples) {
   // the term in 0 will contain monomorphic samples that are either present in the data, or due to subsampling
   spectrum[0] += monoMorphic;
 
-  normalize(spectrum);
+  spectrum = normalize(spectrum);
 
   // store monomorphic probability separately, then renormalize excluding monomorphic at 0 and samples
   // add alleles for which all samples are carriers to monomorphic probability
@@ -55,7 +55,7 @@ ArraySpectrum::ArraySpectrum(Data data, unsigned samples) {
   // renormalize without monomorphic
   spectrum[0] = 0.;
   spectrum[samples] = 0.;
-  normalize(spectrum);
+  spectrum = normalize(spectrum);
 
   // fold to minor allele
   unsigned halfTotal = samples / 2;
