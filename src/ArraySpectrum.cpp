@@ -12,7 +12,8 @@ namespace asmc {
 ArraySpectrum::ArraySpectrum(Data data, unsigned samples) {
   std::unordered_map<double, std::tuple<int, int, int>> distributions;
   std::unordered_map<double, int> distCounts;
-  std::vector<double> spectrum;
+  array_dt spectrum(samples + 1);
+  spectrum.setZero();
 
   // get hypergeometric for each allele
   int monoMorphic = 0;
@@ -38,14 +39,12 @@ ArraySpectrum::ArraySpectrum(Data data, unsigned samples) {
   // sum all hypergeometrics to get spectrum in subsample (exclude [0] and [samples], which are monomorphic.
   for (std::pair<double, int> distCount: distCounts) {
     for (unsigned i = 0; i <= samples; i++)
-      spectrum.push_back(
-          std::apply(hypergeometricPmf, std::tuple_cat(distributions[distCount.first], std::tie(i)))
-          * distCount.second);
+      spectrum[i] +=
+          std::apply(hypergeometricPmf, std::tuple_cat(distributions[distCount.first], std::tie(i))) * distCount.second;
   }
   // the term in 0 will contain monomorphic samples that are either present in the data, or due to subsampling
   spectrum[0] += monoMorphic;
-
-  spectrum = normalize(spectrum);
+  spectrum /= spectrum.sum();
 
   // store monomorphic probability separately, then renormalize excluding monomorphic at 0 and samples
   // add alleles for which all samples are carriers to monomorphic probability
@@ -55,14 +54,12 @@ ArraySpectrum::ArraySpectrum(Data data, unsigned samples) {
   // renormalize without monomorphic
   spectrum[0] = 0.;
   spectrum[samples] = 0.;
-  spectrum = normalize(spectrum);
+  spectrum /= spectrum.sum();
 
   // fold to minor allele
   unsigned halfTotal = samples / 2;
-  for (unsigned i = 0; i < halfTotal; i++) {
-      spectrum[i] = spectrum[i] + spectrum[samples - i];
-  }
-  mSpectrum = std::vector<double>(spectrum.begin(), spectrum.begin() + halfTotal + 1);
+  for (unsigned i = 0; i < halfTotal; i++) spectrum[i] += spectrum[samples - i];
+  mSpectrum = spectrum.head(halfTotal + 1);
 }
 
 } // namespace asmc
