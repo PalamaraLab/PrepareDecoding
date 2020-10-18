@@ -13,12 +13,6 @@
 
 namespace asmc {
 
-TEST_CASE("Util: normalize", "[Utils]") {
-  std::vector<double> s{1.0, 2.0, 3.0, 4.0};
-  std::vector<double> normalized{0.1, 0.2, 0.3, 0.4};
-  CHECK(normalize(s) == normalized);
-}
-
 TEST_CASE("Util: hypergeometric PMF specific values", "[Utils]") {
 
   Catch::StringMaker<double>::precision = 18;

@@ -29,7 +29,6 @@ std::vector<double> readDiscretization(std::string_view discretizationFile);
 
 std::string vecToString(const vec_dt& v);
 
-std::vector<double> normalize(std::vector<double> spectrum);
 int writegz(gzFile& file, const std::string& s);
 } // namespace asmc
 
