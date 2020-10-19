@@ -126,7 +126,7 @@ std::string DecodingQuantities::vectorsToString(const std::string& header, const
 void DecodingQuantities::saveDecodingQuantities(std::string_view outputFileRoot) {
   gzFile file = gzopen(fmt::format("{}.decodingQuantities.gz", outputFileRoot).c_str(), "wb");
   // write model parameters
-  writegz(file, fmt::format("TransitionType\n{}\n\n", mTransitionType));
+  writegz(file, fmt::format("TransitionType\n{}\n\n", TransitionType_str[mTransitionType]));
   writegz(file, fmt::format("States\n{}\n\n", mStates));
   writegz(file, fmt::format("CSFSSamples\n{}\n\n", mCSFSSamples));
   writegz(file, fmt::format("TimeVector\n{}\n\nSizeVector\n{}\n\nDiscretization\n{}\n\nExpectedTimes\n{}\n\n",

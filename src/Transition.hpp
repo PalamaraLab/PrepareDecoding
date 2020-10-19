@@ -13,6 +13,7 @@ using asmc::mat_dt;
 namespace asmc {
 
 enum TransitionType { SMC, SMC1, CSC };
+const std::array<const char*, 3> TransitionType_str = {"SMC", "SMC1", "CSC"};
 
 class Transition {
 
