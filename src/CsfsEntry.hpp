@@ -4,6 +4,7 @@
 #ifndef PREPAREDECODING_CSFSENTRY_HPP
 #define PREPAREDECODING_CSFSENTRY_HPP
 
+#include <vector>
 #include "EigenTypes.hpp"
 
 namespace asmc {
@@ -28,10 +29,10 @@ public:
 
   std::vector<double>& getTime() { return mTimeVector; }
   std::vector<double>& getSize() { return mSizeVector; }
-  double getMu() { return mMu; }
-  double getFrom() { return mFrom; }
-  double getTo() { return mTo; }
-  unsigned int getSamples() { return mSamples; }
+  double getMu() const { return mMu; }
+  double getFrom() const { return mFrom; }
+  double getTo() const { return mTo; }
+  unsigned int getSamples() const { return mSamples; }
   const mat_dt& getCSFSMatrix() const { return mCSFS; }
   void setCSFSMatrix(const mat_dt& csfs) { mCSFS = csfs; }
 
