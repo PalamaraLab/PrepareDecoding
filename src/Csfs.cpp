@@ -16,14 +16,6 @@
 namespace asmc {
 
 
-const std::map<std::string, CSFSParserState> CSFS::stateMap{
-  {"Size:", CSFSParserState::Size},
-  {"Time:", CSFSParserState::Time},
-  {"Mu:", CSFSParserState::Mu},
-  {"Samples:", CSFSParserState::Samples},
-  {"Interval:", CSFSParserState::Interval}
-};
-
 CSFS::CSFS(std::map<double, CSFSEntry> CSFS_) : mCSFS(std::move(CSFS_)),
   mAscertainedCSFS({}), mFoldedAscertainedCSFS({}) {
   if (!mCSFS.empty()) mFoldedCSFS = foldCSFS(mCSFS);
@@ -145,9 +137,9 @@ CSFS CSFS::loadFromFile(std::string_view filename) {
 
 bool CSFS::verify(std::vector<double> timeVectorOriginal, std::vector<double> sizeVectorOriginal,
     double mu, unsigned int samples, std::vector<double> discretizationOriginal) {
-  std::vector<double> timeVector(timeVectorOriginal);
-  std::vector<double> sizeVector(sizeVectorOriginal);
-  std::vector<double> discretization(discretizationOriginal);
+  std::vector<double> timeVector(std::move(timeVectorOriginal));
+  std::vector<double> sizeVector(std::move(sizeVectorOriginal));
+  std::vector<double> discretization(std::move(discretizationOriginal));
   timeVector.pop_back();
   sizeVector.pop_back();
   discretization.pop_back();
@@ -189,7 +181,7 @@ std::string CSFS::toString() const {
 }
 
 void CSFS::fixAscertainment(Data data, unsigned int samples, Transition transition) {
-    computeArraySamplingFactors(data, samples, transition);
+    computeArraySamplingFactors(std::move(data), samples, std::move(transition));
     // CSFS is loaded here, but fixed later.
     mAscertainedCSFS = mCSFS;
     applyFactors();
@@ -244,7 +236,7 @@ void CSFS::computeArraySamplingFactors(Data data, unsigned int samples, Transiti
     array_dt foldedAFS = AFS.head(halfTotal + 1);
 
     // now get foldedAFS_array, the probability a site has MAF i given it is polymorphic in the sample (array)
-    mArraySpectrum = ArraySpectrum(data, samples);
+    mArraySpectrum = ArraySpectrum(std::move(data), samples);
     auto foldedAFS_array = mArraySpectrum.getSpectrum();
     mArraySamplingFactors.resize(halfTotal + 1);
     mArraySamplingFactors[0] = 0.0;

@@ -13,6 +13,13 @@
 namespace asmc {
 
 enum class CSFSParserState { Null, Time, Size, Mu, Samples, Interval, CSFS };
+const std::map<std::string, CSFSParserState> stateMap = {
+  {"Size:", CSFSParserState::Size},
+  {"Time:", CSFSParserState::Time},
+  {"Mu:", CSFSParserState::Mu},
+  {"Samples:", CSFSParserState::Samples},
+  {"Interval:", CSFSParserState::Interval}
+};
 
 class CSFS {
 
@@ -27,7 +34,6 @@ private:
   std::map<double, CSFSEntry> mFoldedAscertainedCSFS;
   mat_dt mCompressedAscertainedEmissionTable;
 
-  const static std::map<std::string, CSFSParserState> stateMap;
   array_dt mArraySamplingFactors;
   unsigned int mSamples = 0;
 
