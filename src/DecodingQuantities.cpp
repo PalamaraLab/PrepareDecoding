@@ -102,9 +102,10 @@ void DecodingQuantities::computeTransitionQuantitiesForOnePosition(double genDis
 
 std::string DecodingQuantities::csfsToString(const std::string& header, const std::map<double, CSFSEntry>& csfs_map) {
   std::string out;
+  int nrows = header.rfind("Folded", 0) == 0 ? 2 : 3;
   for (int undistinguished = 0; undistinguished < (csfs_map.begin()->second).getCSFSMatrix().cols(); undistinguished++) {
     out += fmt::format("{}\t{}\n", header, undistinguished);
-    for (int distinguished = 0; distinguished < 3; distinguished++) {
+    for (int distinguished = 0; distinguished < nrows; distinguished++) {
       for (auto const& [from, csfs] : csfs_map) {
         out += fmt::format("{}\t", csfs.getCSFSMatrix()(distinguished, undistinguished));
       }
