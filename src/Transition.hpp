@@ -5,6 +5,7 @@
 #define PREPAREDECODING_TRANSITION_HPP
 
 #include <vector>
+#include <array>
 #include "EigenTypes.hpp"
 
 using asmc::vec_dt;
