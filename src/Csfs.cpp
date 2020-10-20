@@ -305,11 +305,11 @@ std::pair<unsigned int, unsigned int> CSFS::getFoldedObservationFromUnfolded(std
   return std::make_pair(dist, undist);
 }
 
-mat_dt CSFS::compressCSFS(std::map<double, CSFSEntry> csfsMap) {
+mat_dt CSFS::compressCSFS(const std::map<double, CSFSEntry>& csfsMap) {
   mat_dt compressed(2, csfsMap.size());
   compressed.setZero();
   int timeInterval = 0;
-  for (auto &[from, csfsEntry] : csfsMap) {
+  for (const auto &[from, csfsEntry] : csfsMap) {
     auto thisCSFS = csfsEntry.getCSFSMatrix();
     for (int k = 0; k < thisCSFS.cols(); k++) {
       compressed(0, timeInterval) += thisCSFS(0, k);
