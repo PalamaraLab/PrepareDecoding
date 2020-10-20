@@ -4,6 +4,7 @@
 #ifndef PREPAREDECODING_DATA_HPP
 #define PREPAREDECODING_DATA_HPP
 
+#include <vector>
 #include "EigenTypes.hpp"
 
 namespace asmc {
@@ -12,8 +13,8 @@ class Data {
 
 private:
 
-  std::vector<double> mAllSNPsFreq;
-  std::vector<unsigned int> mAllSNPsMinorAlleles;
+  std::vector<double> mAllSNPsFreq = {};
+  std::vector<unsigned int> mAllSNPsMinorAlleles = {};
   std::vector<unsigned int> mAllSNPsAlleleCounts = {};
   unsigned int mHaploidSampleSize = 0;
 
