@@ -26,15 +26,15 @@ class CSFS {
 private:
 
   ArraySpectrum mArraySpectrum;
-  std::map<double, CSFSEntry> mCSFS;
-  std::map<double, CSFSEntry> mFoldedCSFS;
+  std::map<double, CSFSEntry> mCSFS = {};
+  std::map<double, CSFSEntry> mFoldedCSFS = {};
 
   // ascertained emission
-  std::map<double, CSFSEntry> mAscertainedCSFS;
-  std::map<double, CSFSEntry> mFoldedAscertainedCSFS;
-  mat_dt mCompressedAscertainedEmissionTable;
+  std::map<double, CSFSEntry> mAscertainedCSFS = {};
+  std::map<double, CSFSEntry> mFoldedAscertainedCSFS = {};
+  mat_dt mCompressedAscertainedEmissionTable = {};
 
-  array_dt mArraySamplingFactors;
+  array_dt mArraySamplingFactors = {};
   unsigned int mSamples = 0;
 
 public:
@@ -54,7 +54,7 @@ public:
   static std::map<double, CSFSEntry> foldCSFS(std::map<double, CSFSEntry> csfsMap);
   static std::pair<unsigned int, unsigned int> getFoldedObservationFromUnfolded(
       std::pair<unsigned int, unsigned int> unfolded, unsigned int totalSamples);
-  static mat_dt compressCSFS(std::map<double, CSFSEntry> csfsMap);
+  static mat_dt compressCSFS(const std::map<double, CSFSEntry>& csfsMap);
 
   std::map<double, CSFSEntry>& getCSFS() { return mCSFS; }
   std::map<double, CSFSEntry>& getFoldedCSFS() { return mFoldedCSFS; }
