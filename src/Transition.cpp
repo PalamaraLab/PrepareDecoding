@@ -138,33 +138,24 @@ std::tuple<vec_dt, vec_dt, vec_dt, vec_dt> Transition::getLinearTimeDecodingQuan
   B.setZero();
   U.setZero();
   RR.setZero();
-  vec_dt omegaAtBoundaries, omegaAtExpectedTimes;
-    /* DoubleMatrix D = new DoubleMatrix(states); */
-    /* DoubleMatrix B = new DoubleMatrix(states - 1); */
-    /* DoubleMatrix U = new DoubleMatrix(states - 1); */
-    /* DoubleMatrix RR = new DoubleMatrix(states - 1); */
 
   // others should be computed only for i > 0
-  omegaAtBoundaries = omegasAtBoundaries.row(0);
-  omegaAtExpectedTimes = omegasAtExpectedTimes.row(0);
   D[0] = (mType == CSC)
-    ? omegaAtExpectedTimes(0, 0) + mProbCoalesceBetweenExpectedTimesAndUpperLimit[0] *
-      (omegaAtExpectedTimes(0, 1) + omegaAtExpectedTimes(0, 2)) + omegaAtExpectedTimes(0, 3) - omegaAtBoundaries(0, 3)
-    : omegaAtExpectedTimes(0, 0) + mProbCoalesceBetweenExpectedTimesAndUpperLimit[0] *
-      omegaAtExpectedTimes(0, 1) + omegaAtExpectedTimes(0, 2) - omegaAtBoundaries(0, 2);
+    ? omegasAtExpectedTimes(0, 0) + mProbCoalesceBetweenExpectedTimesAndUpperLimit[0] *
+      (omegasAtExpectedTimes(0, 1) + omegasAtExpectedTimes(0, 2)) + omegasAtExpectedTimes(0, 3) - omegasAtBoundaries(0, 3)
+    : omegasAtExpectedTimes(0, 0) + mProbCoalesceBetweenExpectedTimesAndUpperLimit[0] *
+      omegasAtExpectedTimes(0, 1) + omegasAtExpectedTimes(0, 2) - omegasAtBoundaries(0, 2);
 
   // now compute all for each i
   for (unsigned i = 1; i < mStates; i++) {
-    omegaAtBoundaries = omegasAtBoundaries.row(i);
-    omegaAtExpectedTimes = omegasAtExpectedTimes.row(i);
-    D[i] = (mType == CSC)
-      ? omegaAtExpectedTimes(0, 0) + mProbCoalesceBetweenExpectedTimesAndUpperLimit[i] *
-        (omegaAtExpectedTimes(0, 1) + omegaAtExpectedTimes(0, 2)) + omegaAtExpectedTimes(0, 3) - omegaAtBoundaries(0, 3)
-      : omegaAtExpectedTimes(0, 0) + mProbCoalesceBetweenExpectedTimesAndUpperLimit[i] *
-        omegaAtExpectedTimes(0, 1) + omegaAtExpectedTimes(0, 2) - omegaAtBoundaries(0, 2);
+    D[i] = ((mType == CSC)
+      ? omegasAtExpectedTimes(i, 0) + mProbCoalesceBetweenExpectedTimesAndUpperLimit[i] *
+        (omegasAtExpectedTimes(i, 1) + omegasAtExpectedTimes(i, 2)) + omegasAtExpectedTimes(i, 3) - omegasAtBoundaries(i, 3)
+      : omegasAtExpectedTimes(i, 0) + mProbCoalesceBetweenExpectedTimesAndUpperLimit[i] *
+        omegasAtExpectedTimes(i, 1) + omegasAtExpectedTimes(i, 2) - omegasAtBoundaries(i, 2));
     B[i - 1] = ((mType == CSC)
-      ? omegaAtBoundaries(0, 3) - omegasAtBoundaries.row(i - 1)(0, 3)
-      : omegaAtBoundaries(0, 2) - omegasAtBoundaries.row(i - 1)(0, 2));
+      ? omegasAtBoundaries(i, 3) - omegasAtBoundaries.row(i - 1)(0, 3)
+      : omegasAtBoundaries(i, 2) - omegasAtBoundaries.row(i - 1)(0, 2));
   }
   // do U and RR up to states - 2
   for (unsigned i = 0; i < mStates - 2; i++) {
