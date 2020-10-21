@@ -87,6 +87,19 @@ std::vector<double> readDiscretization(std::string_view discretizationFile) {
   return discs;
 }
 
+std::string matToString(const mat_dt& m, int precision) {
+  std::stringstream ss;
+  ss.precision(precision);
+  if (!m.size()) return "";
+  auto nrows = m.rows();
+  auto ncols = m.cols();
+  for(unsigned i = 0; i < nrows; i++) {
+    for(unsigned j = 0; j < ncols - 1; j++) ss << m(i, j) << "\t";
+    ss << m(i, ncols - 1) << "\n";
+  }
+  return ss.str();
+}
+
 std::string vecToString(const vec_dt& v, int precision) {
   std::stringstream ss;
   ss.precision(precision);

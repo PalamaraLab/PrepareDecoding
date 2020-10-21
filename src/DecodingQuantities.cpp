@@ -130,16 +130,16 @@ void DecodingQuantities::saveDecodingQuantities(std::string_view outputFileRoot)
   writegz(file, fmt::format("TransitionType\n{}\n\n", TransitionType_str[mTransitionType]));
   writegz(file, fmt::format("States\n{}\n\n", mStates));
   writegz(file, fmt::format("CSFSSamples\n{}\n\n", mCSFSSamples));
-  writegz(file, fmt::format("TimeVector\n{}\n\nSizeVector\n{}\n\nDiscretization\n{}\n\nExpectedTimes\n{}\n\n",
+  writegz(file, fmt::format("TimeVector\n{}\n\nSizeVector\n{}\n\nDiscretization\n{}\n\nExpectedTimes\n{:.12f}\n\n",
                             fmt::join(mTime, "\t"), fmt::join(mSize, "\t"), fmt::join(mDiscretization, "\t"),
                             fmt::join(mExpectedTimes, "\t")));
   // write sequence Emissions
   writegz(file, csfsToString("CSFS", mCSFS));
   writegz(file, csfsToString("FoldedCSFS", mFoldedCSFS));
-  writegz(file, fmt::format("ClassicEmission\n{}\n\n", mClassicEmissionTable));
+  writegz(file, fmt::format("ClassicEmission\n{}\n\n", matToString(mClassicEmissionTable)));
   writegz(file, csfsToString("AscertainedCSFS", mAscertainedCSFS));
   writegz(file, csfsToString("FoldedAscertainedCSFS", mFoldedAscertainedCSFS));
-  writegz(file, fmt::format("CompressedAscertainedEmission\n{}\n\n", mCompressedEmissionTable));
+  writegz(file, fmt::format("CompressedAscertainedEmission\n{}\n\n", matToString(mCompressedEmissionTable)));
    // write initial state distribution
   writegz(file, fmt::format("initialStateProb\n{}\n\n", vecToString(mInitialStateProb)));
   writegz(file, fmt::format("ColumnRatios\n{}\n\n", vecToString(mColumnRatios)));

@@ -27,6 +27,7 @@ std::string readNextLineFromGzip(gzFile& gzFileHandle);
 std::pair<std::vector<double>, std::vector<double>> readDemographic(std::string_view demographicFile);
 std::vector<double> readDiscretization(std::string_view discretizationFile);
 
+std::string matToString(const mat_dt& v, int precision = 16);
 std::string vecToString(const vec_dt& v, int precision = 16);
 
 int writegz(gzFile& file, const std::string& s);
