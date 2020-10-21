@@ -200,8 +200,15 @@ class DecodingQuantities:
             "ClassicEmission",
             "CompressedAscertainedEmission",
             "ColumnRatios",
+            "TimeVector",
+            "SizeVector",
+            "Discretization",
+            "ExpectedTimes",
+            "initialStateProb",
         ]:
-            o[matrix] = np.allclose(self.data[matrix], other.data[matrix])
+            o[matrix] = np.allclose(
+                self.data[matrix], other.data[matrix], rtol=1e-10, atol=1e-14,
+            )
         result = all(o.values())
         if not result:
             if quiet:
