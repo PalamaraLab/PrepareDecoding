@@ -17,10 +17,10 @@ namespace fs = std::filesystem;
 
 namespace asmc {
 
-DecodingQuantities prepareDecoding(std::string_view demographicFile, std::string_view discretizationFile,
-                                   int coalescentQuantiles, int mutationAgeIntervals, std::string_view fileRoot,
-                                   std::string_view freqFile, double mutRate, unsigned int samples,
-                                   std::string_view CSFSFile) {
+DecodingQuantities prepareDecoding(std::string_view CSFSFile, std::string_view demographicFile,
+                                   std::string_view discretizationFile, int coalescentQuantiles,
+                                   int mutationAgeIntervals, std::string_view fileRoot, std::string_view freqFile,
+                                   double mutRate, unsigned int samples) {
 
   std::vector<double> times, sizes, discs;
   Data data;
