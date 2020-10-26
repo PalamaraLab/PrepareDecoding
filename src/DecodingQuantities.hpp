@@ -69,6 +69,30 @@ class DecodingQuantities {
     void saveDecodingQuantities(std::string_view outputFileRoot);
     void saveIntervals(std::string_view outputFileRoot);
 
+    TransitionType getTransitionType() { return mTransitionType; }
+    vec_dt getInitialStateProb() const { return mInitialStateProb; }
+    std::vector<double> getTimes() const { return mTime; }
+    std::vector<double> getSizes() const { return mSize; }
+    std::vector<double> getDiscretization() const { return mDiscretization; }
+    std::vector<double> getExpectedTimes() const { return mExpectedTimes; }
+    std::vector<double> getGeneticDistances() const { return mGeneticDistances; }
+    std::vector<int> getPhysDistances() const { return mPhysDistances; }
+    std::vector<vec_dt> getDvectors() const { return mDvectors; }
+    std::vector<vec_dt> getBvectors() const { return mBvectors; }
+    std::vector<vec_dt> getUvectors() const { return mUvectors; }
+    std::vector<vec_dt> getRowRatioVectors() const { return mRowRatioVectors; }
+    std::vector<mat_dt> getHomozygousEmissions() const { return mHomozygousEmissions; }
+    vec_dt getColumnRatios() const { return mColumnRatios; }
+    unsigned int getStates() const { return mStates; }
+    unsigned int getCSFSSamples() const { return mCSFSSamples; }
+    double getMu() const { return mMu; }
+    std::map<double, CSFSEntry> getCSFS() { return mCSFS; }
+    std::map<double, CSFSEntry> getFoldedCSFS() { return mFoldedCSFS; }
+    std::map<double, CSFSEntry> getAscertainedCSFS() { return mAscertainedCSFS; }
+    std::map<double, CSFSEntry> getFoldedAscertainedCSFS() { return mFoldedAscertainedCSFS; }
+    mat_dt getClassicEmission() const { return mClassicEmissionTable; }
+    mat_dt getCompressedEmission() const { return mCompressedEmissionTable; }
+
 };
 
 } // namespace asmc
