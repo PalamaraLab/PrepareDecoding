@@ -1,1 +1,1 @@
-catch2 cxxopts eigen3 fmt zlib
+catch2 cxxopts eigen3 fmt zlib pybind11

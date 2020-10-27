@@ -30,6 +30,8 @@ include(cmake/StaticAnalysers.cmake)
 option(BUILD_SHARED_LIBS "Enable compilation of shared libraries" OFF)
 option(ENABLE_TESTING "Enable Test Builds" ON)
 
+option(PYTHON_BINDINGS "Whether to build the ASMCPrepareDecoding python bindings" ON)
+
 add_subdirectory(src)
 add_subdirectory(exe)
 
