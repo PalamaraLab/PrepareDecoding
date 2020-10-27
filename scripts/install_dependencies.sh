@@ -2,7 +2,7 @@
 # See accompanying LICENSE and COPYING for copyright notice and full details.
 
 # Path to the base directory of the repo, no matter where this script is invoked from
-repo_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/../" >/dev/null 2>&1 && pwd)"
+repo_dir="$(cd "$(dirname "$0")/../" >/dev/null 2>&1 && pwd)"
 
 # Read the list of dependencies from file
 dependencies=$(cat "${repo_dir}"/scripts/vcpkg_dependencies)
