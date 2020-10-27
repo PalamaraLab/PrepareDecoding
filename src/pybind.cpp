@@ -18,10 +18,15 @@
 #include <pybind11/stl_bind.h>
 #include <pybind11/stl.h>
 #include <pybind11/eigen.h>
+#include "CsfsEntry.hpp"
 #include "EigenTypes.hpp"
 #include "DecodingQuantities.hpp"
 #include "PrepareDecoding.hpp"
 #include "Transition.hpp"
+
+namespace py = pybind11;
+using namespace py::literals;
+using namespace asmc;
 
 PYBIND11_MAKE_OPAQUE(DecodingQuantities)
 PYBIND11_MAKE_OPAQUE(CSFSEntry)
@@ -29,9 +34,6 @@ PYBIND11_MAKE_OPAQUE(std::vector<double>)
 PYBIND11_MAKE_OPAQUE(std::vector<int>)
 PYBIND11_MAKE_OPAQUE(std::vector<vec_dt>)
 PYBIND11_MAKE_OPAQUE(std::map<double, CSFSEntry>)
-
-namespace py = pybind11;
-using namespace py::literals;
 
 PYBIND11_MODULE(pyASMCPrepareDecoding, m) {
     py::enum_<TransitionType>(m, "TransitionType", py::arithmetic())
@@ -41,7 +43,7 @@ PYBIND11_MODULE(pyASMCPrepareDecoding, m) {
     py::bind_vector<std::vector<int>>(m, "VectorInt");
     py::bind_vector<std::vector<double>>(m, "VectorDouble");
     py::bind_vector<std::vector<vec_dt>>(m, "VectorEigenVector");
-    py::bind_map<std::map<double, CSFSEntry>(m, "MapDoubleToCSFSEntry");
+    py::bind_map<std::map<double, CSFSEntry>>(m, "MapDoubleToCSFSEntry");
     py::class_<DecodingQuantities>(m, "DecodingQuantities")
       .def_property_readonly("times", &DecodingQuantities::getTimes)
       .def_property_readonly("sizes", &DecodingQuantities::getSizes)
