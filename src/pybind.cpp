@@ -35,7 +35,7 @@ PYBIND11_MAKE_OPAQUE(std::vector<int>)
 PYBIND11_MAKE_OPAQUE(std::vector<vec_dt>)
 PYBIND11_MAKE_OPAQUE(std::map<double, CSFSEntry>)
 
-PYBIND11_MODULE(pyASMCPrepareDecoding, m) {
+PYBIND11_MODULE(ASMCPrepareDecoding, m) {
     py::enum_<TransitionType>(m, "TransitionType", py::arithmetic())
         .value("SMC", SMC)
         .value("SMC1", SMC1)
