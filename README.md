@@ -24,6 +24,16 @@ git clone --recurse-submodules https://github.com/PalamaraLab/PrepareDecoding.gi
 cd PrepareDecoding
 ```
 
+One can either compile the prepare decoding library or use `pip` to install the Python module. If installing via pip, switch to the source folder and run:
+
+    pip install .
+
+The python module is called `ASMCPrepareDecoding` ([see
+example](notebooks/PrepareDecoding.ipynb)).
+
+If you wish to install the library or the command line tool, continue to the
+next section.
+
 ### Installing dependencies
 
 The recommended way to install dependencies is to use the provided scripts, which use the [vcpkg](https://github.com/microsoft/vcpkg) submodule.
