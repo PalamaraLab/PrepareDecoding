@@ -71,8 +71,10 @@ class Transition {
     vec_dt& getColumnRatios() { return mColumnRatios; }
 
     std::vector<double> getCoalDist();
-    static const std::vector<double> EUsize;
-    static const std::vector<double> EUtime;
+
+    // NOTE: Change array size if the array is updated!
+    static const std::array<double, 113> EUsize;
+    static const std::array<double, 112> EUtime;
 };
 
 } // namespace asmc

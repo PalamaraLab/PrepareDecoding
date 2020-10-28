@@ -31,8 +31,8 @@ DecodingQuantities prepareDecoding(std::string_view CSFSFile, std::string_view d
     times = ts.first;
     sizes = ts.second;
   } else {
-    times = Transition::EUtime;
-    sizes = Transition::EUsize;
+    times = std::vector<double>(Transition::EUtime.begin(), Transition::EUtime.end());
+    sizes = std::vector<double>(Transition::EUsize.begin(), Transition::EUsize.end());
     fmt::print("Did not input a demographic model, using default EU model.\n");
   }
   times.emplace_back(std::numeric_limits<double>::infinity());

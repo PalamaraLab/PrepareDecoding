@@ -14,6 +14,7 @@
 //    along with ASMC.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <vector>
+#include <array>
 #include <fmt/core.h>
 #include <fmt/ranges.h>
 #include <unsupported/Eigen/MatrixFunctions>
@@ -22,7 +23,8 @@
 
 namespace asmc {
     
-const std::vector<double> Transition::EUsize{ 145041., 129827., 116209.,
+// NOTE: Change array size if the array is updated!
+const std::array<double, 113> Transition::EUsize{ 145041., 129827., 116209.,
   104020., 93109., 83342., 74600., 66775., 59771., 53501., 47892., 44915.,
   43684., 42486.,  41321.,  40188.,  39086.,  38014., 36972., 35958.,
   34972., 34013., 33080., 32173., 31291., 30433., 29598.,  28787.,  27997.,
@@ -37,7 +39,8 @@ const std::vector<double> Transition::EUsize{ 145041., 129827., 116209.,
   26035., 24927., 23896., 22998., 23071., 23312., 23339.,  23145.,  22510.,
   21536.,  20189., 18401., 15099., 15628., 15628.};
 
-const std::vector<double> Transition::EUtime{0., 10., 20., 30., 40., 50.,
+// NOTE: Change array size if the array is updated!
+const std::array<double, 112> Transition::EUtime{0., 10., 20., 30., 40., 50.,
   60., 70., 80., 90., 100., 110., 120., 130., 140., 150., 160., 170., 180.,
   190., 200., 210., 220., 230., 240., 250., 260., 270., 280., 290., 300.,
   310., 320., 330., 340., 350., 360., 370., 380., 390., 400., 410., 420.,
