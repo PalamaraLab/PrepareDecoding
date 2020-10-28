@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <iostream>
+#include <unordered_map>
 #include "Data.hpp"
 #include "Utils.hpp"
 #include "ArraySpectrum.hpp"
