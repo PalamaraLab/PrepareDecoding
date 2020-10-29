@@ -1,5 +1,5 @@
 import numpy as np
-from smcpp import _smcpp, util, estimation_tools
+from smcpp import _smcpp
 from smcpp.model import OldStyleModel
 
 from ..ASMCPrepareDecoding import (
