@@ -43,6 +43,8 @@ public:
   explicit CSFS(std::map<double, CSFSEntry> CSFS_);
   static CSFSParserState currentState(const std::string& line);
   static std::pair<CSFSParserState, int> nextState(CSFSParserState state, int line);
+  static CSFS load(const std::vector<double>& times, const std::vector<double>& sizes, double mu, unsigned int samples,
+      const std::vector<double>& froms, const std::vector<double>& tos, const std::vector<mat_dt>& csfses);
   static CSFS loadFromFile(std::string_view filename);
   bool verify(std::vector<double> timeVectorOriginal, std::vector<double> sizeVectorOriginal,
       double mu, unsigned int samples, std::vector<double> discretizationOriginal);

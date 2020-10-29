@@ -56,6 +56,20 @@ std::pair<CSFSParserState, int> CSFS::nextState(CSFSParserState state, int line 
   return std::make_pair(CSFSParserState::Null, 0);
 }
 
+CSFS CSFS::load(const std::vector<double>& times, const std::vector<double>& sizes,
+    const double mu, const unsigned int samples,
+    const std::vector<double>& froms,
+    const std::vector<double>& tos,
+    const std::vector<mat_dt>& csfses) {
+  std::map<double, CSFSEntry> out;
+  auto N = froms.size();
+  assert(tos.size() == N);
+  assert(csfses.size() == N);
+  for (size_t i = 0; i < N; i++)
+    out.emplace(froms[i], CSFSEntry(times, sizes, mu, froms[i], tos[i], samples, csfses[i]));
+  return CSFS(out);
+}
+
 CSFS CSFS::loadFromFile(std::string_view filename) {
   std::ifstream file;
   file.open(filename.data());

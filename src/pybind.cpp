@@ -23,6 +23,7 @@
 #include "DecodingQuantities.hpp"
 #include "PrepareDecoding.hpp"
 #include "Transition.hpp"
+#include "Csfs.hpp"
 
 namespace py = pybind11;
 using namespace py::literals;
@@ -33,6 +34,7 @@ PYBIND11_MAKE_OPAQUE(CSFSEntry)
 PYBIND11_MAKE_OPAQUE(std::vector<double>)
 PYBIND11_MAKE_OPAQUE(std::vector<int>)
 PYBIND11_MAKE_OPAQUE(std::vector<vec_dt>)
+PYBIND11_MAKE_OPAQUE(std::vector<mat_dt>)
 PYBIND11_MAKE_OPAQUE(std::map<double, CSFSEntry>)
 
 PYBIND11_MODULE(ASMCPrepareDecoding, m) {
@@ -43,6 +45,7 @@ PYBIND11_MODULE(ASMCPrepareDecoding, m) {
     py::bind_vector<std::vector<int>>(m, "VectorInt");
     py::bind_vector<std::vector<double>>(m, "VectorDouble");
     py::bind_vector<std::vector<vec_dt>>(m, "VectorEigenVector");
+    py::bind_vector<std::vector<mat_dt>>(m, "VectorEigenMatrix");
     py::bind_map<std::map<double, CSFSEntry>>(m, "MapDoubleToCSFSEntry");
     py::class_<DecodingQuantities>(m, "DecodingQuantities")
         .def_property_readonly("times", &DecodingQuantities::getTimes)
@@ -70,6 +73,10 @@ PYBIND11_MODULE(ASMCPrepareDecoding, m) {
              "outputFileRoot"_a)
         .def("saveDecodingQuantities", &DecodingQuantities::saveDecodingQuantities, "Save DecodingQuantities",
              "outputFileRoot"_a);
+    py::class_<CSFS>(m, "CSFS")
+      .def_static("load", &CSFS::load, "Construct CSFS from parameters",
+          "times"_a, "sizes"_a, "mu"_a, "samples"_a,
+          "froms"_a, "tos"_a, "csfses"_a);
     py::class_<CSFSEntry>(m, "CSFSEntry")
       .def_property_readonly("times", &CSFSEntry::getTime)
       .def_property_readonly("sizes", &CSFSEntry::getSize)
