@@ -4,7 +4,7 @@ import sys
 import platform
 import subprocess
 
-from setuptools import setup, Extension, find_packages
+from setuptools import setup, Extension, find_namespace_packages
 from setuptools.command.build_ext import build_ext
 from distutils.version import LooseVersion
 
@@ -82,13 +82,14 @@ class CMakeBuild(build_ext):
 
 
 setup(
-    name="ASMCPrepareDecoding",
+    name="asmc-preparedecoding",
     version="1.0",
     author="Pier Palamara",
     author_email="palamara@stats.ox.ac.uk",
     description="Prepare decoding quantities for ASMC",
+    packages=find_namespace_packages(include=['asmc.*']),
     long_description="",
-    ext_modules=[CMakeExtension("ASMCPrepareDecoding")],
+    ext_modules=[CMakeExtension("asmc/preparedecoding")],
     cmdclass=dict(build_ext=CMakeBuild),
     zip_safe=False,
 )
