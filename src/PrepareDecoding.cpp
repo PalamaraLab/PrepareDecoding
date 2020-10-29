@@ -17,7 +17,7 @@ namespace fs = std::filesystem;
 
 namespace asmc {
 
-DecodingQuantities prepareDecoding(std::string_view CSFSFile, std::string_view demographicFile,
+DecodingQuantities prepareDecoding(CSFS& csfs, std::string_view demographicFile,
                                    std::string_view discretizationFile, int coalescentQuantiles,
                                    int mutationAgeIntervals, std::string_view fileRoot, std::string_view freqFile,
                                    double mutRate, unsigned int samples) {
@@ -70,22 +70,13 @@ DecodingQuantities prepareDecoding(std::string_view CSFSFile, std::string_view d
 
   // Transition
   Transition transition(times, sizes, discs, CSC);
-
-  // Parse CSFS
-  CSFS csfs;
-  if(!CSFSFile.empty() & fs::exists(CSFSFile)) {
-    fmt::print("Will load precomputed CSFS from {} ...\n", CSFSFile);
-    csfs = CSFS::loadFromFile(CSFSFile);
-    fmt::print("Verifying CSFS loaded from {} ...\n", CSFSFile);
-    if(csfs.verify(times, sizes, mutRate, samples, discs)) {
+  if(csfs.verify(times, sizes, mutRate, samples, discs)) {
       fmt::print("Verified " + std::to_string(csfs.getCSFS().size()) + " CSFS entries.\n");
     } else {
       throw std::runtime_error("CSFS could not be verified. The Python version can be used"
           "to fetch CSFS and prepare decoding quantities.");
     }
-  } else {
-    throw std::runtime_error("Valid CSFS file needs to be specified\n");
-  }
+
   csfs.fixAscertainment(data, samples, transition);
 
   // Build decoding quantities
@@ -93,4 +84,17 @@ DecodingQuantities prepareDecoding(std::string_view CSFSFile, std::string_view d
   return DecodingQuantities(csfs, transition, mutRate);
 }
 
+DecodingQuantities prepareDecodingCSFSFile(std::string_view CSFSFile, std::string_view demographicFile,
+                                   std::string_view discretizationFile, int coalescentQuantiles,
+                                   int mutationAgeIntervals, std::string_view fileRoot, std::string_view freqFile,
+                                   double mutRate, unsigned int samples) {
+  if(!CSFSFile.empty() & fs::exists(CSFSFile)) {
+    fmt::print("Will load precomputed CSFS from {} ...\n", CSFSFile);
+    auto csfs = CSFS::loadFromFile(CSFSFile);
+    return prepareDecoding(csfs, demographicFile, discretizationFile, coalescentQuantiles, mutationAgeIntervals,
+                           fileRoot, freqFile, mutRate, samples);
+  } else {
+    throw std::runtime_error("Valid CSFS file needs to be specified\n");
+  }
+}
 } // namespace asmc

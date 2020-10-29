@@ -87,7 +87,7 @@ int main(int argc, char* argv[]) {
   auto outputFileRoot = result["outputFileRoot"].as<std::string>();
   if(result.count("CSFS")) CSFSFile = result["CSFS"].as<std::string>();
 
-  auto dq = prepareDecoding(CSFSFile, demographicFile, discretizationFile,
+  auto dq = prepareDecodingCSFSFile(CSFSFile, demographicFile, discretizationFile,
                             coalescentQuantiles, mutationAgeIntervals, fileRoot,
                             freqFile, mutRate, samples);
   dq.saveDecodingQuantities(outputFileRoot);

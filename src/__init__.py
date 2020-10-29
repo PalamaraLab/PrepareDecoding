@@ -7,11 +7,17 @@ from ..ASMCPrepareDecoding import (
     prepareDecoding,
     CSFSEntry,
     CSFS,
+    VectorDouble,
+    VectorEigenMatrix,
 )
 
 DEFAULT_MU = 1.65e-8
+DEFAULT_SAMPLES = 300
 
-def makeCSFS(demographicFile: str, discretizationFile: str, samples: int, mu: float = DEFAULT_MU):
+
+def makeCSFS(
+    demographicFile: str, discretizationFile: str, samples: int, mu: float = DEFAULT_MU
+) -> CSFS:
     "Make CSFS object using smcpp"
     demo = np.loadtxt(demographicFile)
     arrayTime = demo[:, 0]
@@ -46,9 +52,29 @@ def makeCSFS(demographicFile: str, discretizationFile: str, samples: int, mu: fl
     froms = arrayDiscOriginal[:-1]
     tos = arrayDiscOriginal[1:]
     csfses = [_csfs(t0, t1) for t0, t1 in zip(froms, tos)]
-    return CSFS.load(arrayTime, arraySize, samples, mu, froms, tos, csfses)
+    return CSFS.load(
+        VectorDouble(arrayTime),
+        VectorDouble(arraySize),
+        samples,
+        mu,
+        VectorDouble(froms),
+        VectorDouble(tos),
+        VectorEigenMatrix(csfses),
+    )
 
 
-def run(demographicFile: str, discretizationFile: str, samples: int = 300, mu: float = DEFAULT_MU):
+def run(
+    demographicFile: str,
+    discretizationFile: str,
+    freqFile: str,
+    samples: int = DEFAULT_SAMPLES,
+    mu: float = DEFAULT_MU,
+) -> DecodingQuantities:
     "Run prepareDecoding and construct CSFS automatically using smcpp"
-    pass
+    return prepareDecoding(
+        makeCSFS(demographicFile, discretizationFile, samples, mu),
+        demographicFile,
+        discretizationFile,
+        freqFile=freqFile,
+        samples=samples,
+    )
