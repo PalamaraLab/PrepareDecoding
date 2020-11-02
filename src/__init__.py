@@ -55,8 +55,8 @@ def makeCSFS(
     return CSFS.load(
         VectorDouble(arrayTime),
         VectorDouble(arraySize),
-        samples,
         mu,
+        samples,
         VectorDouble(froms),
         VectorDouble(tos),
         VectorEigenMatrix(csfses),
