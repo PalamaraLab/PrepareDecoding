@@ -161,7 +161,8 @@ class DecodingQuantities:
     def compare_tuplefloatvectors(a1, a2):
         return a1[0] == a2[0] and np.allclose(a1[1], a2[1])
 
-    def __eq__(self, other, quiet=False):
+    def equals(self, other, quiet=False) -> Tuple[bool, Optional[List[str]]]:
+        "Returns (True, None) if the DecodingQuantities are equal, (False, error_list) otherwise"
         o = {}
         for identical_attribute in ["TransitionType", "States", "CSFSSamples"]:
             o[identical_attribute] = (
@@ -212,10 +213,14 @@ class DecodingQuantities:
         result = all(o.values())
         if not result:
             if quiet:
-                print("\n".join(set(k.split(".")[0] for k in sorted(o) if not o[k])))
+                return False, set(k.split(".")[0] for k in sorted(o) if not o[k])
             else:
-                print("\n".join(k for k in sorted(o) if not o[k]))
-        return result
+                return False, set(k for k in sorted(o) if not o[k]))
+        return True, None
+
+    def __eq__(self, other):
+        is_equal, _ = self.equals(other, quiet=True)
+        return is_equal
 
 
 if __name__ == "__main__":
