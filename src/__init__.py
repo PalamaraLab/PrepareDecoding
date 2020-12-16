@@ -10,6 +10,7 @@ from ..ASMCPrepareDecoding import (
     VectorDouble,
     VectorEigenMatrix,
 )
+from .decoding_quantities import DecodingQuantities
 
 DEFAULT_MU = 1.65e-8
 DEFAULT_SAMPLES = 300
