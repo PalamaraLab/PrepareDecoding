@@ -208,14 +208,17 @@ class DecodingQuantities:
             "initialStateProb",
         ]:
             o[matrix] = np.allclose(
-                self.data[matrix], other.data[matrix], rtol=1e-10, atol=1e-14,
+                self.data[matrix],
+                other.data[matrix],
+                rtol=1e-10,
+                atol=1e-14,
             )
         result = all(o.values())
         if not result:
             if quiet:
                 return False, set(k.split(".")[0] for k in sorted(o) if not o[k])
             else:
-                return False, set(k for k in sorted(o) if not o[k]))
+                return False, set(k for k in sorted(o) if not o[k])
         return True, None
 
     def __eq__(self, other):
@@ -223,7 +226,7 @@ class DecodingQuantities:
         return is_equal
 
 
-if __name__ == "__main__":
+def main():
     parser = argparse.ArgumentParser(
         description="Compare decoding quantities and show differences"
     )
@@ -238,4 +241,11 @@ if __name__ == "__main__":
     args = parser.parse_args()
     d1 = DecodingQuantities(args.file1)
     d2 = DecodingQuantities(args.file2)
-    sys.exit(not (d1.__eq__(d2, args.quiet)))
+    is_equal, errors = d1.equals(d2)
+    if not is_equal:
+        print("\n".join(errors))
+    sys.exit(int(not is_equal))  # 0 (success) if is_equal is True
+
+
+if __name__ == "__main__":
+    main()
