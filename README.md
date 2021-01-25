@@ -48,7 +48,7 @@ Switch to the source directory and run:
 python3 -m venv venv
 source venv/bin/activate
 pip install --upgrade pip setuptools wheel
-pip install Cython numpy
+pip install Cython numpy jupyter
 pip install .
 ```
 
