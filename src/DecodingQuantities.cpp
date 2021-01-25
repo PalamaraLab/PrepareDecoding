@@ -136,10 +136,10 @@ void DecodingQuantities::saveDecodingQuantities(std::string_view outputFileRoot)
   // write sequence Emissions
   writegz(file, csfsToString("CSFS", mCSFS));
   writegz(file, csfsToString("FoldedCSFS", mFoldedCSFS));
-  writegz(file, fmt::format("ClassicEmission\n{}\n\n", matToString(mClassicEmissionTable)));
+  writegz(file, fmt::format("ClassicEmission\n{}\n", matToString(mClassicEmissionTable)));
   writegz(file, csfsToString("AscertainedCSFS", mAscertainedCSFS));
   writegz(file, csfsToString("FoldedAscertainedCSFS", mFoldedAscertainedCSFS));
-  writegz(file, fmt::format("CompressedAscertainedEmission\n{}\n\n", matToString(mCompressedEmissionTable)));
+  writegz(file, fmt::format("CompressedAscertainedEmission\n{}\n", matToString(mCompressedEmissionTable)));
    // write initial state distribution
   writegz(file, fmt::format("initialStateProb\n{}\n\n", vecToString(mInitialStateProb)));
   writegz(file, fmt::format("ColumnRatios\n{}\n\n", vecToString(mColumnRatios)));
