@@ -12,7 +12,7 @@ jobs:
 
   build-and-test:
     name: Test decoding quantities can be generated
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     steps:
       - uses: actions/checkout@v2
@@ -46,6 +46,8 @@ jobs:
           python -m pip install --upgrade pip setuptools wheel
           python -m pip install cython numpy
           python -m pip install .
+        env:
+          CXX: g++-10
 
       - name: compile prepare decoding
         run: |
