@@ -85,7 +85,7 @@ setup(
     name="asmc-preparedecoding",
     version="1.0",
     author="Pier Palamara",
-    install_requires=["smcpp @ https://github.com/popgenmethods/smcpp/archive/v1.15.2.zip"],
+    install_requires=["smcpp @ git+https://github.com/popgenmethods/smcpp/#egg=smcpp@v1.15.2"],
     description="Prepare decoding quantities for ASMC",
     packages=find_namespace_packages(include=['asmc.*']),
     long_description="",

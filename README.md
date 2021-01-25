@@ -24,15 +24,37 @@ git clone --recurse-submodules https://github.com/PalamaraLab/PrepareDecoding.gi
 cd PrepareDecoding
 ```
 
-One can either compile the prepare decoding library or use `pip` to install the Python module. If installing via pip, switch to the source folder and run:
+### Installing the Python module
 
-    pip install .
+One can either compile the prepare decoding library or use `pip` to install the Python module.
+The Python module has [smcpp](https://github.com/popgenmethods/smcpp/) as a dependency, which requires a few additional dependencies.
 
-The python module is called `ASMCPrepareDecoding` ([see
-example](notebooks/PrepareDecoding.ipynb)).
+On **Linux**, run
 
-If you wish to install the library or the command line tool, continue to the
-next section.
+```bash
+sudo apt install libgmp-dev libmpfr-dev libgsl0-dev
+```
+
+on **macOS**, run
+
+```bash
+brew install mpfr gmp gsl
+```
+
+Then, we recommend starting from a clean virtual environment. 
+Switch to the source directory and run:
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip install --upgrade pip setuptools wheel
+pip install Cython numpy
+pip install .
+```
+
+The python module is called `ASMCPrepareDecoding` ([see example](notebooks/PrepareDecoding.ipynb)).
+
+If you wish to install the library or the command line tool, continue to the next section.
 
 ### Installing dependencies
 
