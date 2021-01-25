@@ -49,6 +49,8 @@ class CMakeBuild(build_ext):
         ]
 
         cfg = "Debug" if self.debug else "Release"
+        warnings_as_errors = "ON" if self.debug else "OFF"
+
         # build_args = ['--config', cfg]
         build_args = []
 
@@ -61,6 +63,7 @@ class CMakeBuild(build_ext):
             build_args += ["--", "/m"]
         else:
             cmake_args += ["-DCMAKE_BUILD_TYPE=" + cfg]
+            cmake_args += ["-DWARNINGS_AS_ERRORS=" + warnings_as_errors]
             build_args += ["--", "-j2"]
 
         env = os.environ.copy()
@@ -70,6 +73,9 @@ class CMakeBuild(build_ext):
         build = os.path.join(self.build_temp, "build")
         if not os.path.exists(build):
             os.makedirs(build)
+
+        print("Using CMake arg " + x for x in cmake_args)
+
         subprocess.check_call(
             ["cmake", ext.sourcedir] + cmake_args,
             cwd=build,
