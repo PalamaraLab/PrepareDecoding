@@ -22,7 +22,19 @@
 #include "Transition.hpp"
 
 namespace asmc {
-    
+
+std::string getTransitionTypeString(TransitionType tt) {
+  switch (tt) {
+  case TransitionType::SMC:
+    return "SMC";
+  case TransitionType::SMC1:
+    return "SMC1";
+  case TransitionType::CSC:
+    return "CSC";
+  }
+  return "";
+}
+
 // NOTE: Change array size if the array is updated!
 const std::array<double, 113> Transition::EUsize{ 145041., 129827., 116209.,
   104020., 93109., 83342., 74600., 66775., 59771., 53501., 47892., 44915.,
@@ -124,7 +136,7 @@ Transition::Transition(std::vector<double> timeVector, std::vector<double> sizeV
 }
 
 mat_dt Transition::identity(TransitionType type) {
-  if (type == CSC) {
+  if (type == TransitionType::CSC) {
     return four_dt::Identity();
   } else {
     return three_dt::Identity();
@@ -143,7 +155,7 @@ std::tuple<vec_dt, vec_dt, vec_dt, vec_dt> Transition::getLinearTimeDecodingQuan
   RR.setZero();
 
   // others should be computed only for i > 0
-  D[0] = (mType == CSC)
+  D[0] = (mType == TransitionType::CSC)
     ? omegasAtExpectedTimes(0, 0) + mProbCoalesceBetweenExpectedTimesAndUpperLimit[0] *
       (omegasAtExpectedTimes(0, 1) + omegasAtExpectedTimes(0, 2)) + omegasAtExpectedTimes(0, 3) - omegasAtBoundaries(0, 3)
     : omegasAtExpectedTimes(0, 0) + mProbCoalesceBetweenExpectedTimesAndUpperLimit[0] *
@@ -151,21 +163,21 @@ std::tuple<vec_dt, vec_dt, vec_dt, vec_dt> Transition::getLinearTimeDecodingQuan
 
   // now compute all for each i
   for (unsigned i = 1; i < mStates; i++) {
-    D[i] = ((mType == CSC)
+    D[i] = ((mType == TransitionType::CSC)
       ? omegasAtExpectedTimes(i, 0) + mProbCoalesceBetweenExpectedTimesAndUpperLimit[i] *
         (omegasAtExpectedTimes(i, 1) + omegasAtExpectedTimes(i, 2)) + omegasAtExpectedTimes(i, 3) - omegasAtBoundaries(i, 3)
       : omegasAtExpectedTimes(i, 0) + mProbCoalesceBetweenExpectedTimesAndUpperLimit[i] *
         omegasAtExpectedTimes(i, 1) + omegasAtExpectedTimes(i, 2) - omegasAtBoundaries(i, 2));
-    B[i - 1] = ((mType == CSC)
+    B[i - 1] = ((mType == TransitionType::CSC)
       ? omegasAtBoundaries(i, 3) - omegasAtBoundaries.row(i - 1)(0, 3)
       : omegasAtBoundaries(i, 2) - omegasAtBoundaries.row(i - 1)(0, 2));
   }
   // do U and RR up to states - 2
   for (unsigned i = 0; i < mStates - 2; i++) {
-    double omegaSi = (mType == CSC)
+    double omegaSi = (mType == TransitionType::CSC)
       ? omegasAtExpectedTimes.row(i)(0, 1) + omegasAtExpectedTimes.row(i)(0, 2)
       : omegasAtExpectedTimes.row(i)(0, 1);
-    double omegaSiplus1 = (mType == CSC)
+    double omegaSiplus1 = (mType == TransitionType::CSC)
       ? omegasAtExpectedTimes.row(i + 1)(0, 1) + omegasAtExpectedTimes.row(i + 1)(0, 2)
       : omegasAtExpectedTimes.row(i + 1)(0, 1);
     U[i] = omegaSi * (1 - mProbCoalesceBetweenExpectedTimesAndUpperLimit[i]) *
@@ -174,7 +186,7 @@ std::tuple<vec_dt, vec_dt, vec_dt, vec_dt> Transition::getLinearTimeDecodingQuan
     RR[i] = ((rho == 0) ? 1. : omegaSi * mProbNotCoalesceBetweenExpectedTimes[i] / omegaSiplus1);
   }
   // do last for U
-  double omegaSi = (mType == CSC)
+  double omegaSi = (mType == TransitionType::CSC)
     ? omegasAtExpectedTimes.row(mStates - 2)(0, 1) + omegasAtExpectedTimes.row(mStates - 2)(0, 2)
     : omegasAtExpectedTimes.row(mStates - 2)(0, 1);
   U[mStates - 2] = omegaSi * (1 - mProbCoalesceBetweenExpectedTimesAndUpperLimit[mStates - 2]) *
@@ -226,19 +238,19 @@ mat_dt Transition::getExponentiatedTransitionMatrix(double N, double r, double t
   double rho = 2 * r * time;
   double eta = 1 / N * time;
   switch (type) {
-    case SMC: {
+    case TransitionType::SMC: {
       mat3 << -rho,  rho,   0,
                  0, -eta, eta,
                  0,    0,   0;
       return mat3.exp();
     }
-    case SMC1: {
+    case TransitionType::SMC1: {
       mat3 << -rho,    rho,   0,
                eta, -2*eta, eta,
                  0,      0,   0;
       return mat3.exp();
     }
-    case CSC: {
+    case TransitionType::CSC: {
       four_dt mat4;
       mat4 << -rho,                  rho,        0,   0,
                eta, -(2 * eta + rho / 2),  rho / 2, eta,
@@ -296,18 +308,18 @@ double Transition::getCumulativeTransitionProbability(double r, double timeS, do
     Omega = computeTransitionPiecewiseUpToTimeT(r, timeT, type);
     return Omega(
         0,
-        (type == CSC) ? 3 : 2
+        (type == TransitionType::CSC) ? 3 : 2
     );
   } else if (timeT == timeS) {
     Omega = computeTransitionPiecewiseUpToTimeT(r, timeS, type);
     return Omega(0, 0) + Omega(
         0,
-        (type == CSC) ? 3 : 2
+        (type == TransitionType::CSC) ? 3 : 2
     );
   } else {
     Omega = computeTransitionPiecewiseUpToTimeT(r, timeS, type);
     double cumCoalFromStoT = cumulativeCoalesceFromStoT(timeS, timeT);
-    if (type == CSC) {
+    if (type == TransitionType::CSC) {
       return Omega(0, 0) + cumCoalFromStoT * (Omega(0, 1) + Omega(0, 2)) + Omega(0, 3);
     } else {
       return Omega(0, 0) + cumCoalFromStoT * Omega(0, 1) + Omega(0, 2);
@@ -382,7 +394,7 @@ double Transition::cumulativeCoalesceFromStoTsmart(double timeS, double timeT) {
 }
 
 std::pair<mat_dt, mat_dt> Transition::getOmegas(double r, TransitionType type) {
-  int cols = (type == CSC) ? 4 : 3;
+  int cols = (type == TransitionType::CSC) ? 4 : 3;
   mat_dt omegasAtBoundaries, omegasAtExpectedTimes, latestOmega, M;
   latestOmega = identity(type);
   omegasAtBoundaries.resize(mStates + 1, cols);

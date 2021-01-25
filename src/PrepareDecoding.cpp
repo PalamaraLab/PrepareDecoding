@@ -69,7 +69,7 @@ DecodingQuantities prepareDecoding(CSFS& csfs, std::string_view demographicFile,
   fmt::print("Number of samples in CSFS calculations: {}.\n", samples);
 
   // Transition
-  Transition transition(times, sizes, discs, CSC);
+  Transition transition(times, sizes, discs, TransitionType::CSC);
   if(csfs.verify(times, sizes, mutRate, samples, discs)) {
       fmt::print("Verified " + std::to_string(csfs.getCSFS().size()) + " CSFS entries.\n");
     } else {
