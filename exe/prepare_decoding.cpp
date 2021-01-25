@@ -12,19 +12,18 @@
 namespace fs = std::filesystem;
 using namespace asmc;
 
-
-static const std::string VERSION("1.0");
-static const std::string VERSION_DATE("July 1, 2018");
-static const std::string YEAR("2018");
-static const std::string LICENSE("GPL v3");
-static const std::string WEBSITE("www.palamaralab.org/software/ASMC");
-static const std::string PROGRAM("ASMC");
-
 /* DecodingQuantities prepareDecoding(std::string_view demographicFile, std::string_view discretizationFile, */
 /*                                           int coalescentQuantiles, int mutationAgeIntervals, std::string_view fileRoot, */
 /*                                           std::string_view freqFile, double mutRate, unsigned int samples, */
 /*                                           std::string_view CSFSFile) { */
 int main(int argc, char* argv[]) {
+
+  const std::string VERSION("1.0");
+  const std::string VERSION_DATE("July 1, 2018");
+  const std::string YEAR("2018");
+  const std::string LICENSE("GPL v3");
+  const std::string WEBSITE("www.palamaralab.org/software/ASMC");
+  const std::string PROGRAM("ASMC");
 
   fmt::print(R"header(
  █████╗   ███████╗  ███╗   ███╗   ██████╗
