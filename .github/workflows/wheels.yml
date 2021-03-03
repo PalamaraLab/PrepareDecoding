@@ -10,10 +10,11 @@ on:
 
 env:
   CIBW_BUILD: cp38-*
+  CIBW_ARCHS: auto64
   CIBW_MANYLINUX_X86_64_IMAGE: manylinux2014
   CIBW_MANYLINUX_I686_IMAGE: manylinux2014
   CIBW_BEFORE_BUILD: pip install --upgrade pip setuptools wheel numpy cython
-  CIBW_BEFORE_BUILD_LINUX: bash scripts/install_dependencies.sh
+  CIBW_BEFORE_BUILD_LINUX: bash {package}/scripts/install_dependencies.sh
   CIBW_BEFORE_BUILD_MACOS: bash scripts/install_dependencies.sh
   CIBW_BEFORE_BUILD_WINDOWS: scripts/install_dependencies.bat
 
@@ -24,7 +25,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-20.04, windows-2019, macos-10.15]
+        os: [ubuntu-20.04]
 
     steps:
 
