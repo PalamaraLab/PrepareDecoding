@@ -40,3 +40,8 @@ build
 # IDE generated directories
 .idea/*
 cmake-build*
+
+# Pythong package directories
+*.egg-info/
+dist/
+__pycache__/

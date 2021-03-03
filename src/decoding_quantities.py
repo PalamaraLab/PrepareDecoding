@@ -11,6 +11,8 @@ import numpy as np
 from enum import Enum, auto
 import gzip
 
+from typing import Tuple, Optional, List
+
 
 class ParserState(Enum):
     TransitionType = auto()
