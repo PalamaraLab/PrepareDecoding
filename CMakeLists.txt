@@ -3,6 +3,7 @@
 
 cmake_minimum_required(VERSION 3.16)
 message(STATUS "Using CMake version ${CMAKE_VERSION}")
+include(cmake/AutodetectVcpkgToolchainFile.cmake)
 
 project(PrepareDecoding LANGUAGES CXX VERSION 0.0)
 
