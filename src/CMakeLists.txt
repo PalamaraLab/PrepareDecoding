@@ -41,3 +41,9 @@ add_library(prepare_decoding_lib STATIC ${prepare_decoding_src} ${prepare_decodi
 target_include_directories(prepare_decoding_lib INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(prepare_decoding_lib PRIVATE Eigen3::Eigen fmt::fmt ZLIB::ZLIB)
 target_link_libraries(prepare_decoding_lib PRIVATE project_warnings project_settings)
+
+if (PYTHON_BINDINGS)
+    set_target_properties(prepare_decoding_lib PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
+    pybind11_add_module(ASMCPrepareDecoding pybind.cpp)
+    target_link_libraries(ASMCPrepareDecoding PRIVATE Eigen3::Eigen fmt::fmt prepare_decoding_lib project_settings)
+endif ()
