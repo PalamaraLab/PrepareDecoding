@@ -42,23 +42,23 @@ jobs:
           name: wheels
           path: ./wheelhouse/*.whl
 
-  upload_all:
-    name: Upload to PyPI
-    needs: build_wheels
-    runs-on: ubuntu-latest
-#    if: github.event_name == 'release' && github.event.action == 'published'
-
-    steps:
-      - uses: actions/setup-python@v2
-
-      - name: Download wheels
-        uses: actions/download-artifact@v1
-        with:
-          name: wheels
-
-      - uses: pypa/gh-action-pypi-publish@v1.4.2
-        with:
-          user: __token__
-          password: ${{ secrets.TESTPYPI_TOKEN }}
-          packages_dir: wheels/
-          repository_url: https://test.pypi.org/legacy/
+#  upload_all:
+#    name: Upload to PyPI
+#    needs: build_wheels
+#    runs-on: ubuntu-latest
+##    if: github.event_name == 'release' && github.event.action == 'published'
+#
+#    steps:
+#      - uses: actions/setup-python@v2
+#
+#      - name: Download wheels
+#        uses: actions/download-artifact@v1
+#        with:
+#          name: wheels
+#
+#      - uses: pypa/gh-action-pypi-publish@v1.4.2
+#        with:
+#          user: __token__
+#          password: ${{ secrets.TESTPYPI_TOKEN }}
+#          packages_dir: wheels/
+#          repository_url: https://test.pypi.org/legacy/
