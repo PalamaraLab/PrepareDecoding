@@ -1,16 +1,14 @@
+import sys
 import numpy as np
-from smcpp import _smcpp
-from smcpp.model import OldStyleModel
 
-from ..ASMCPrepareDecoding import (
+from asmc.preparedecoding_python_bindings import (
     DecodingQuantities,
     prepareDecoding,
-    CSFSEntry,
     CSFS,
     VectorDouble,
     VectorEigenMatrix,
 )
-from .decoding_quantities import DecodingQuantities
+# from .decoding_quantities import DecodingQuantities
 
 DEFAULT_MU = 1.65e-8
 DEFAULT_SAMPLES = 300
@@ -19,7 +17,27 @@ DEFAULT_SAMPLES = 300
 def makeCSFS(
     demographicFile: str, discretizationFile: str, samples: int, mu: float = DEFAULT_MU
 ) -> CSFS:
-    "Make CSFS object using smcpp"
+    """Make CSFS object using smcpp"""
+
+    try:
+        from smcpp import _smcpp
+        from smcpp.model import OldStyleModel
+    except ImportError:
+        error_massage = """This method requires PrepareDecoding be built with optional smcpp dependency.
+This (smcpp) is not available on PyPI, so it cannot be installed automatically
+when installing PrepareDecoding from PyPI. If you want to generate CSFS from
+a demographic file and discretization file, we recommend installing this module
+directly from GitHub: https://github.com/PalamaraLab/PrepareDecoding by running
+```
+pip install .[smcpp]
+```
+See the repository README for full installation instructions.
+
+You can still create decoding quantities with pre-computed CSFS.
+"""
+        print(error_massage, file=sys.stderr)
+        sys.exit(1)
+
     demo = np.loadtxt(demographicFile)
     arrayTime = demo[:, 0]
     arraySize = demo[:, 1]
@@ -65,17 +83,43 @@ def makeCSFS(
 
 
 def run(
-    demographicFile: str,
-    discretizationFile: str,
-    freqFile: str,
-    samples: int = DEFAULT_SAMPLES,
-    mu: float = DEFAULT_MU,
+        demographicFile: str,
+        discretizationFile: str,
+        freqFile: str,
+        samples: int = DEFAULT_SAMPLES,
+        mu: float = DEFAULT_MU,
 ) -> DecodingQuantities:
-    "Run prepareDecoding and construct CSFS automatically using smcpp"
+    """Run prepareDecoding and construct CSFS automatically using smcpp"""
     return prepareDecoding(
         makeCSFS(demographicFile, discretizationFile, samples, mu),
         demographicFile,
         discretizationFile,
         freqFile=freqFile,
+        samples=samples,
+    )
+
+
+def create_from_precomputed_csfs(
+        csfs_file: str,
+        demographic_file: str,
+        discretization_file: str,
+        freq_file: str,
+        samples: int = DEFAULT_SAMPLES
+) -> DecodingQuantities:
+    """
+    Create decoding quantities from precomputed CSFS values.
+
+    :param csfs_file: file containing the precomputed CSFS values
+    :param demographic_file: the demographic file
+    :param discretization_file: the discretization file
+    :param freq_file: the frequencies file
+    :param samples: number of samples (default 300)
+    :return: a decoding quantities object
+    """
+    return prepareDecoding(
+        CSFS.loadFromFile(csfs_file),
+        demographic_file,
+        discretization_file,
+        freqFile=freq_file,
         samples=samples,
     )

@@ -44,6 +44,6 @@ target_link_libraries(prepare_decoding_lib PRIVATE project_warnings project_sett
 
 if (PYTHON_BINDINGS)
     set_target_properties(prepare_decoding_lib PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
-    pybind11_add_module(ASMCPrepareDecoding pybind.cpp)
-    target_link_libraries(ASMCPrepareDecoding PRIVATE Eigen3::Eigen fmt::fmt prepare_decoding_lib project_settings)
+    pybind11_add_module(preparedecoding_python_bindings pybind.cpp)
+    target_link_libraries(preparedecoding_python_bindings PRIVATE Eigen3::Eigen fmt::fmt prepare_decoding_lib project_settings)
 endif ()

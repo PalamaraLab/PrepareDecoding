@@ -37,7 +37,7 @@ PYBIND11_MAKE_OPAQUE(std::vector<vec_dt>)
 PYBIND11_MAKE_OPAQUE(std::vector<mat_dt>)
 PYBIND11_MAKE_OPAQUE(std::map<double, CSFSEntry>)
 
-PYBIND11_MODULE(ASMCPrepareDecoding, m) {
+PYBIND11_MODULE(preparedecoding_python_bindings, m) {
     py::enum_<TransitionType>(m, "TransitionType", py::arithmetic())
         .value("SMC", TransitionType::SMC)
         .value("SMC1", TransitionType::SMC1)
@@ -76,7 +76,9 @@ PYBIND11_MODULE(ASMCPrepareDecoding, m) {
     py::class_<CSFS>(m, "CSFS")
       .def_static("load", &CSFS::load, "Construct CSFS from parameters",
           "times"_a, "sizes"_a, "mu"_a, "samples"_a,
-          "froms"_a, "tos"_a, "csfses"_a);
+          "froms"_a, "tos"_a, "csfses"_a)
+      .def_static("loadFromFile", &CSFS::loadFromFile, "Load precomputed CSFS from file",
+          "filename"_a);
     py::class_<CSFSEntry>(m, "CSFSEntry")
       .def_property_readonly("times", &CSFSEntry::getTime)
       .def_property_readonly("sizes", &CSFSEntry::getSize)

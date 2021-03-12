@@ -91,7 +91,12 @@ setup(
     name="asmc-preparedecoding",
     version="1.0",
     author="Pier Palamara",
-    install_requires=["numpy", "smcpp @ git+https://github.com/popgenmethods/smcpp/#egg=smcpp@v1.15.2"],
+    install_requires=["numpy", ""],
+    extras_require={
+        'smcpp': [
+            'smcpp @ git+https://github.com/popgenmethods/smcpp/#egg=smcpp@v1.15.2',  # for optional smcpp dependency
+        ],
+    },
     description="Prepare decoding quantities for ASMC",
     packages=find_namespace_packages(include=['asmc.*']),
     long_description="",
