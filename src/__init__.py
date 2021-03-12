@@ -1,21 +1,21 @@
 import sys
 import numpy as np
 
-from asmc.preparedecoding_python_bindings import (
-    DecodingQuantities,
-    prepareDecoding,
-    CSFS,
-    VectorDouble,
-    VectorEigenMatrix,
-)
-# from .decoding_quantities import DecodingQuantities
+from asmc.preparedecoding_python_bindings import DecodingQuantities
+from asmc.preparedecoding_python_bindings import prepareDecoding
+from asmc.preparedecoding_python_bindings import CSFS
+from asmc.preparedecoding_python_bindings import VectorDouble
+from asmc.preparedecoding_python_bindings import VectorEigenMatrix
 
 DEFAULT_MU = 1.65e-8
 DEFAULT_SAMPLES = 300
 
 
-def makeCSFS(
-    demographicFile: str, discretizationFile: str, samples: int, mu: float = DEFAULT_MU
+def _make_csfs(
+        demographic_file: str,
+        discretization_file: str,
+        samples: int,
+        mu: float = DEFAULT_MU,
 ) -> CSFS:
     """Make CSFS object using smcpp"""
 
@@ -38,42 +38,42 @@ You can still create decoding quantities with pre-computed CSFS.
         print(error_massage, file=sys.stderr)
         sys.exit(1)
 
-    demo = np.loadtxt(demographicFile)
-    arrayTime = demo[:, 0]
-    arraySize = demo[:, 1]
-    arrayDisc = np.loadtxt(discretizationFile)
+    demo = np.loadtxt(demographic_file)
+    array_time = demo[:, 0]
+    array_size = demo[:, 1]
+    array_disc = np.loadtxt(discretization_file)
 
     # add dummy last time to get np.diff
-    arrayTimeAppend = np.append(arrayTime, arrayTime[-1] + 100)
+    array_time_append = np.append(array_time, array_time[-1] + 100)
 
     # set n and N0
     n = samples  # number of total haploids, distinguished+undistinguished
-    N0 = arraySize[0]
+    n0 = array_size[0]
     # Population scaled mutation rate
-    theta = mu * 2.0 * N0
+    theta = mu * 2.0 * n0
     om = OldStyleModel(
-        arraySize / (2.0 * N0),
-        arraySize / (2.0 * N0),
-        np.diff(arrayTimeAppend / (2.0 * N0)),
-        N0,
+        array_size / (2.0 * n0),
+        array_size / (2.0 * n0),
+        np.diff(array_time_append / (2.0 * n0)),
+        n0,
     )
 
     def _csfs(t0, t1):
-        res = _smcpp.raw_sfs(om, n - 2, t0 / (2.0 * N0), t1 / (2.0 * N0)) * theta
+        res = _smcpp.raw_sfs(om, n - 2, t0 / (2.0 * n0), t1 / (2.0 * n0)) * theta
         res[0, 0] = 1 - np.sum(res)
         return res
 
-    arrayDiscOriginal = arrayDisc
-    arrayDisc = arrayDisc / (2.0 * N0)
+    array_disc_original = array_disc
+    array_disc = array_disc / (2.0 * n0)
 
-    arrayDisc = np.append(arrayDisc, np.inf)
-    arrayDiscOriginal = np.append(arrayDiscOriginal, np.inf)
-    froms = arrayDiscOriginal[:-1]
-    tos = arrayDiscOriginal[1:]
+    array_disc = np.append(array_disc, np.inf)
+    array_disc_original = np.append(array_disc_original, np.inf)
+    froms = array_disc_original[:-1]
+    tos = array_disc_original[1:]
     csfses = [_csfs(t0, t1) for t0, t1 in zip(froms, tos)]
     return CSFS.load(
-        VectorDouble(arrayTime),
-        VectorDouble(arraySize),
+        VectorDouble(array_time),
+        VectorDouble(array_size),
         mu,
         samples,
         VectorDouble(froms),
@@ -82,19 +82,19 @@ You can still create decoding quantities with pre-computed CSFS.
     )
 
 
-def run(
-        demographicFile: str,
-        discretizationFile: str,
-        freqFile: str,
+def create_from_scratch(
+        demographic_file: str,
+        discretization_file: str,
+        freq_file: str,
         samples: int = DEFAULT_SAMPLES,
         mu: float = DEFAULT_MU,
 ) -> DecodingQuantities:
     """Run prepareDecoding and construct CSFS automatically using smcpp"""
     return prepareDecoding(
-        makeCSFS(demographicFile, discretizationFile, samples, mu),
-        demographicFile,
-        discretizationFile,
-        freqFile=freqFile,
+        _make_csfs(demographic_file, discretization_file, samples, mu),
+        demographic_file,
+        discretization_file,
+        freqFile=freq_file,
         samples=samples,
     )
 
