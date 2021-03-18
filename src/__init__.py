@@ -26,14 +26,16 @@ def _make_csfs(
         error_massage = """This method requires PrepareDecoding be built with optional smcpp dependency.
 This (smcpp) is not available on PyPI, so it cannot be installed automatically
 when installing PrepareDecoding from PyPI. If you want to generate CSFS from
-a demographic file and discretization file, we recommend installing this module
-directly from GitHub: https://github.com/PalamaraLab/PrepareDecoding by running
+a demographic file and discretization file, you must also install smcpp:
 ```
-pip install .[smcpp]
+python -m pip install git+https://github.com/popgenmethods/smcpp/@v1.15.3
 ```
-See the repository README for full installation instructions.
+This will require several other dependencies to also be installed. See
+https://github.com/PalamaraLab/PrepareDecoding/blob/master/README.md
+for details.
 
-You can still create decoding quantities with pre-computed CSFS.
+You can still create decoding quantities with pre-computed CSFS without
+installing smcpp.
 """
         print(error_massage, file=sys.stderr)
         sys.exit(1)
