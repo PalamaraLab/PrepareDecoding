@@ -12,52 +12,33 @@
 
 Tool to compute decoding quantities.
 
-:warning: this is a work in progress, and is not yet fully featured :warning:
-
 ## Quickstart
 
-### Obtaining the source code
+### Install the Python module from PyPI
 
-Get the source, together with the [vcpkg](https://github.com/microsoft/vcpkg) submodule for installing dependencies:
+Most functionality is available through a Python module which can be installed with:
+
+```bash
+pip install asmc_prepare_decoding
+```
+
+This Python module is available on Linux, macOS and Windows.
+
+Some additional functionality, for creating CSFS, requires the additional dependency [smcpp](https://github.com/popgenmethods/smcpp/), which is not available via PyPI.
+If you require this functionality, you should additionally [follow these instructions](#installing-smcpp) to install smcpp.
+
+Examples for using the Python module can be found in the notebooks directory:
+- [creating decoding quantities from precomputed CSFS](notebooks/CreateDecodingQuantitiesFromPrecomputedCSFS.ipynb)
+- [creating decoding quantities from scratch](notebooks/CreateDecodingQuantitiesFromScratch.ipynb) (requires smcpp)
+
+### Compiling the C++ library and executable
+
+Get the source, together with the [vcpkg](https://github.com/microsoft/vcpkg) and [pybind11](https://github.com/pybind/pybind11) submodules:
 
 ```bash
 git clone --recurse-submodules https://github.com/PalamaraLab/PrepareDecoding.git
 cd PrepareDecoding
 ```
-
-### Installing the Python module
-
-One can either compile the prepare decoding library or use `pip` to install the Python module.
-The Python module has [smcpp](https://github.com/popgenmethods/smcpp/) as a dependency, which requires a few additional dependencies.
-
-On **Linux**, run
-
-```bash
-sudo apt install libgmp-dev libmpfr-dev libgsl0-dev
-```
-
-on **macOS**, run
-
-```bash
-brew install mpfr gmp gsl
-```
-
-Then, we recommend starting from a clean virtual environment. 
-Switch to the source directory and run:
-
-```bash
-python3 -m venv venv
-source venv/bin/activate
-pip install --upgrade pip setuptools wheel
-pip install Cython numpy jupyter
-pip install .
-```
-
-The python module is called `ASMCPrepareDecoding` ([see example](notebooks/PrepareDecoding.ipynb)).
-
-If you wish to install the library or the command line tool, continue to the next section.
-
-### Installing dependencies
 
 The recommended way to install dependencies is to use the provided scripts, which use the [vcpkg](https://github.com/microsoft/vcpkg) submodule.
 
@@ -109,7 +90,34 @@ cmake --build . --parallel 4 --target unit_tests
 ctest --output-on-failure
 ```
 
-## Extra tools
+### Installing smcpp
+
+The optional smcpp dependency is not available on PyPI, and itself requires a few additional dependencies.
+
+On **Linux**, run
+
+```bash
+sudo apt install libgmp-dev libmpfr-dev libgsl0-dev
+```
+
+on **macOS**, run
+
+```bash
+brew install mpfr gmp gsl
+```
+
+Then, we recommend starting from a clean virtual environment. 
+Switch to the source directory and run:
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+python -m pip install --upgrade pip setuptools wheel
+python -m pip install asmc_prepare_decoding
+python -m pip install git+https://github.com/popgenmethods/smcpp/@v1.15.3
+```
+
+## Extra tools for the C++ library
 
 ### Coverage
 

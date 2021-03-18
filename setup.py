@@ -87,19 +87,18 @@ class CMakeBuild(build_ext):
         )
 
 
+with open('PyPI_README.md', encoding='utf-8') as f:
+    long_description = f.read()
+
 setup(
     name="asmc-preparedecoding",
     version="1.0",
-    author="Pier Palamara",
-    install_requires=["numpy", ""],
-    extras_require={
-        'smcpp': [
-            'smcpp @ git+https://github.com/popgenmethods/smcpp/#egg=smcpp@v1.15.2',  # for optional smcpp dependency
-        ],
-    },
+    author="PalamaraLab (https://palamaralab.github.io/)",
+    install_requires=["numpy"],
     description="Prepare decoding quantities for ASMC",
     packages=find_namespace_packages(include=['asmc.*']),
-    long_description="",
+    long_description=long_description,
+    long_description_content_type='text/markdown',
     ext_modules=[CMakeExtension("asmc/preparedecoding")],
     cmdclass=dict(build_ext=CMakeBuild),
     zip_safe=False,
