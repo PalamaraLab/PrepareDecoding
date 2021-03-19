@@ -19,7 +19,7 @@ Tool to compute decoding quantities.
 Most functionality is available through a Python module which can be installed with:
 
 ```bash
-pip install asmc_prepare_decoding
+pip install asmc-preparedecoding
 ```
 
 This Python module is available on Linux, macOS and Windows.
@@ -54,7 +54,7 @@ Switch to the source directory and run:
 python3 -m venv venv
 source venv/bin/activate
 python -m pip install --upgrade pip setuptools wheel
-python -m pip install asmc_prepare_decoding
+python -m pip install asmc-preparedecoding
 python -m pip install git+https://github.com/popgenmethods/smcpp/@v1.15.3
 ```
 
