@@ -1,7 +1,10 @@
-name: Build wheels
+name: Build python wheels
 
 on:
   push:
+    branches:
+      - master
+  pull_request:
     branches:
       - master
   release:
@@ -12,11 +15,7 @@ env:
   CIBW_BUILD: cp36-* cp37-* cp38-* cp39-*
   CIBW_ARCHS: auto64
   CIBW_MANYLINUX_X86_64_IMAGE: manylinux2014
-  CIBW_MANYLINUX_I686_IMAGE: manylinux2014
-  CIBW_BEFORE_BUILD: pip install --upgrade pip setuptools wheel numpy cython
-  CIBW_BEFORE_ALL_LINUX: bash scripts/install_dependencies.sh
-  CIBW_BEFORE_ALL_MACOS: bash scripts/install_dependencies.sh
-  CIBW_BEFORE_ALL_WINDOWS: .\scripts\install_dependencies.bat
+  CIBW_BEFORE_BUILD: pip install --upgrade pip setuptools wheel ninja numpy cython
   MACOSX_DEPLOYMENT_TARGET: 10.15
 
 jobs:

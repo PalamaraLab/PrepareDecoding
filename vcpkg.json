@@ -1,0 +1,13 @@
+{
+  "name": "asmc-prepare-decoding",
+  "version-string": "1.1",
+  "homepage": "https://github.com/PalamaraLab/PrepareDecoding/",
+  "description": "Prepare decoding quantities for ASMC & FastSMC",
+  "dependencies": [
+    "catch2",
+    "cxxopts",
+    "eigen3",
+    "fmt",
+    "zlib"
+  ]
+}

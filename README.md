@@ -172,7 +172,7 @@ where `{{{SANITISER}}}` is one of:
 
 ## For developers: making a release
 
-- Bump the version number in [setup.py](setup.py) and [CMakeLists.txt](CMakeLists.txt)
+- Bump the version number in [setup.py](setup.py), [CMakeLists.txt](CMakeLists.txt), and [vcpkg.json](vcpkg.json)
 - Update [RELEASE_NOTES.md](RELEASE_NOTES.md)
 - Push changes and check that all [GitHub workflows](https://github.com/PalamaraLab/PrepareDecoding/actions) pass
 - Tag the commit in Git using syntax `vX.Y`

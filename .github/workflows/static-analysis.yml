@@ -12,11 +12,13 @@ jobs:
 
   build-and-test:
     name: Static analysis checks
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
+    env:
+      CXX: clang++-10
 
     steps:
 
-      - name: checkout repo & vcpkg submodule
+      - name: checkout repo & submodules
         uses: actions/checkout@v2
         with:
           submodules: true
@@ -25,34 +27,28 @@ jobs:
         uses: actions/cache@v2
         id: cache
         with:
-          path: vcpkg/installed
-          key: ${{ runner.os }}-${{ hashFiles('scripts/vcpkg_dependencies', 'vcpkg/CHANGELOG.md') }}
+          path: |
+            vcpkg/
+            build_dir/vcpkg_installed/
+          key: ${{ runner.os }}-${{ env.CXX }}-${{ hashFiles('vcpkg.json', 'vcpkg/CHANGELOG.md') }}
 
-      - name: install dependencies
-        run: |
-          bash scripts/install_dependencies.sh
+      - name: make build directory
+        run: mkdir build_dir
         if: steps.cache.outputs.cache-hit != 'true'
 
       - name: install analysers
         run: sudo apt install cppcheck clang-tidy-10
 
-      - name: make build directories
-        run: |
-          mkdir cppcheck_dir
-          mkdir clang_tidy_dir
-
       - name: compile with cppcheck
         run: |
+          mv vcpkg_installed .. && rm -rf * && mv ../vcpkg_installed .
           cmake .. -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Debug -DENABLE_CPPCHECK=ON
           cmake --build . --parallel 2 --target prepare_decoding_lib prepare_decoding_exe
-        working-directory: cppcheck_dir
-        env:
-          CXX: clang++-10
+        working-directory: build_dir
 
       - name: compile with clang tidy
         run: |
+          mv vcpkg_installed .. && rm -rf * && mv ../vcpkg_installed .
           cmake .. -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Debug -DENABLE_CLANG_TIDY=ON
           cmake --build . --parallel 2 --target prepare_decoding_lib prepare_decoding_exe
-        working-directory: clang_tidy_dir
-        env:
-          CXX: clang++-10
+        working-directory: build_dir
