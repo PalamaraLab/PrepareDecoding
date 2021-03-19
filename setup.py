@@ -90,16 +90,21 @@ class CMakeBuild(build_ext):
 with open('PyPI_README.md', encoding='utf-8') as f:
     long_description = f.read()
 
+with open('RELEASE_NOTES.md', encoding='utf-8') as f:
+    release_notes = f.read()
+
+
 setup(
-    name="asmc-preparedecoding",
+    name='asmc-preparedecoding',
     version="1.0",
-    author="PalamaraLab (https://palamaralab.github.io/)",
-    install_requires=["numpy"],
-    description="Prepare decoding quantities for ASMC",
+    author='PalamaraLab (https://palamaralab.github.io/)',
+    url='https://github.com/PalamaraLab/PrepareDecoding/',
+    install_requires=['numpy'],
+    description='Prepare decoding quantities for ASMC & FastSMC',
     packages=find_namespace_packages(include=['asmc.*']),
-    long_description=long_description,
+    long_description='\n'.join([long_description, release_notes]),
     long_description_content_type='text/markdown',
-    ext_modules=[CMakeExtension("asmc/preparedecoding")],
+    ext_modules=[CMakeExtension('asmc/preparedecoding')],
     cmdclass=dict(build_ext=CMakeBuild),
     zip_safe=False,
 )

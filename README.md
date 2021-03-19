@@ -117,7 +117,7 @@ python -m pip install asmc-preparedecoding
 python -m pip install git+https://github.com/popgenmethods/smcpp/@v1.15.3
 ```
 
-## Extra tools for the C++ library
+## Extra tools for C++ developers
 
 ### Coverage
 
@@ -168,6 +168,16 @@ where `{{{SANITISER}}}` is one of:
 - [LEAK](https://clang.llvm.org/docs/LeakSanitizer.html)
 - [UNDEFINED_BEHAVIOUR](https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html)
 - [THREAD](https://clang.llvm.org/docs/ThreadSanitizer.html)
+
+
+## For developers: making a release
+
+- Bump the version number in [setup.py](setup.py) and [CMakeLists.txt](CMakeLists.txt)
+- Update [RELEASE_NOTES.md](RELEASE_NOTES.md)
+- Push changes and check that all [GitHub workflows](https://github.com/PalamaraLab/PrepareDecoding/actions) pass
+- Tag the commit in Git using syntax `vX.Y`
+- Make a release on GitHub, which should trigger a new build that will upload Python wheels to PyPI
+
 
 ## License
 
