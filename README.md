@@ -40,19 +40,8 @@ git clone --recurse-submodules https://github.com/PalamaraLab/PrepareDecoding.gi
 cd PrepareDecoding
 ```
 
-The recommended way to install dependencies is to use the provided scripts, which use the [vcpkg](https://github.com/microsoft/vcpkg) submodule.
-
-On **macOS** and **Linux**, run
-
-```bash
-scripts/install_dependencies.sh
-```
-
-On **Windows**, run
-
-```bash
-scripts\install_dependencies.bat
-```
+The recommended way to install dependencies is via the [vcpkg](https://github.com/microsoft/vcpkg) submodule.
+If you have checked out this submodule, dependencies will be automatically installed when you run the CMake configuration step (below).
 
 ### Configuring and compiling the project
 
@@ -65,25 +54,15 @@ mkdir build
 cd build
 ```
 
-Configure using the vcpkg toolchain file:
+Configure, and build the PrepareDecoding library and executable:
 
 ```bash
-cmake .. -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake
-```
-
-Build the PrepareDecoding library:
-
-```bash
+cmake ..
 cmake --build . --parallel 4 --target prepare_decoding_lib
-```
-
-Build the PrepareDecoding executable:
-
-```bash
 cmake --build . --parallel 4 --target prepare_decoding_exe
 ```
 
-Build the and run the unit tests:
+You can optionally build the and run the unit tests:
 
 ```bash
 cmake --build . --parallel 4 --target unit_tests
