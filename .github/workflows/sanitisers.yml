@@ -66,4 +66,4 @@ jobs:
           cmake .. -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Debug -DENABLE_SANITISER_THREAD=ON
           cmake --build . --parallel 2 --target unit_tests
           ./test/unit_tests
-       working-directory: build_dir
+        working-directory: build_dir
