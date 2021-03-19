@@ -49,12 +49,12 @@ jobs:
       - name: make build directory
         run: mkdir build_dir
         if: steps.cache.outputs.cache-hit != 'true'
-        working-directory: build_dir
 
       - name: compile prepare decoding
         run: |
           cmake .. -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release
           cmake --build . --parallel 2 --target prepare_decoding_exe
+        working-directory: build_dir
 
       - name: generate & check decoding quantities
         run: |
