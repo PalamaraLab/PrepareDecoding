@@ -6,6 +6,7 @@
 #include <iostream>
 #include <fmt/core.h>
 #include <fmt/ranges.h>
+#include <fmt/os.h>
 #include <fmt/ostream.h>
 #include "DecodingQuantities.hpp"
 #include "Utils.hpp"
@@ -157,11 +158,17 @@ void DecodingQuantities::saveDecodingQuantities(std::string_view outputFileRoot)
 }
 
 void DecodingQuantities::saveIntervals(std::string_view outputFileRoot) {
-  std::ofstream file(fmt::format("{}.intervalsInfo", outputFileRoot));
-  for (unsigned i = 0; i < mExpectedTimes.size(); i++)
-    file << mDiscretization.at(i) << "\t" << mExpectedTimes.at(i) <<
-    "\t" << mDiscretization.at(i + 1) << std::endl;
-  file.close();
+  auto fmtOutFile = fmt::output_file(fmt::format("{}.intervalsInfo", outputFileRoot));
+  for (auto i = 0ul; i < mExpectedTimes.size(); i++) {
+    fmtOutFile.print("{:#}\t{:#}\t{:#}\n", mDiscretization.at(i), mExpectedTimes.at(i), mDiscretization.at(i + 1ul));
+  }
+}
+
+void DecodingQuantities::saveCsfs(std::string_view outputFileRoot) {
+  auto fmtOutFile = fmt::output_file(fmt::format("{}.csfs", outputFileRoot));
+  for (auto const& csfsEntry: mCSFS) {
+    fmtOutFile.print("{}\n", csfsEntry.second.toString());
+  }
 }
 
 } // namespace asmc
