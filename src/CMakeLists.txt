@@ -42,6 +42,25 @@ target_include_directories(prepare_decoding_lib INTERFACE ${CMAKE_CURRENT_SOURCE
 target_link_libraries(prepare_decoding_lib PRIVATE Eigen3::Eigen fmt::fmt ZLIB::ZLIB)
 target_link_libraries(prepare_decoding_lib PRIVATE project_warnings project_settings)
 
+option(BUILD_WITH_SMCPP_SUPPORT "Enable compilation of smcpp support" ON)
+if (BUILD_WITH_SMCPP_SUPPORT)
+
+    find_package(GMP REQUIRED)
+    message(STATUS "Found gmp ${GMP_VERSION}")
+
+    find_package(cereal CONFIG REQUIRED)
+    message(STATUS "Found cereal ${cereal_VERSION}")
+
+    find_package(OpenMP REQUIRED)
+
+    add_library(smcpp_lib 3rd_party/smcpp.cpp 3rd_party/smcpp.hpp 3rd_party/mpreal.h)
+    target_include_directories(smcpp_lib INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/3rd_party)
+    target_link_libraries(smcpp_lib PRIVATE Eigen3::Eigen fmt::fmt gmp gmpxx cereal OpenMP::OpenMP_CXX)
+
+    target_link_libraries(prepare_decoding_lib PRIVATE smcpp_lib)
+endif ()
+
+
 if (PYTHON_BINDINGS)
     set_target_properties(prepare_decoding_lib PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
     pybind11_add_module(preparedecoding_python_bindings pybind.cpp)

@@ -5,9 +5,11 @@
   "description": "Prepare decoding quantities for ASMC & FastSMC",
   "dependencies": [
     "catch2",
+    "cereal",
     "cxxopts",
     "eigen3",
     "fmt",
+    "gmp",
     "zlib"
   ]
 }
