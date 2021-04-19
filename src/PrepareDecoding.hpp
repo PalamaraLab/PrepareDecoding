@@ -15,10 +15,36 @@ DecodingQuantities prepareDecoding(CSFS& csfs, std::string_view demographicFile,
                                    int mutationAgeIntervals, std::string_view fileRoot, std::string_view freqFile,
                                    double mutRate, unsigned int samples);
 
-DecodingQuantities prepareDecodingCSFSFile(std::string_view CSFSFile, std::string_view demographicFile,
-                                   std::string_view discretizationFile, int coalescentQuantiles,
-                                   int mutationAgeIntervals, std::string_view fileRoot, std::string_view freqFile,
-                                   double mutRate, unsigned int samples);
+DecodingQuantities prepareDecodingPrecalculatedCsfs(std::string_view CSFSFile, std::string_view demographicFile,
+                                                    std::string_view discretizationFile, int coalescentQuantiles,
+                                                    int mutationAgeIntervals, std::string_view fileRoot,
+                                                    std::string_view freqFile, double mutRate, unsigned int samples);
+
+DecodingQuantities calculateCsfsAndPrepareDecoding(std::string_view demographicFile,
+                                                   std::string_view discretizationFile, int coalescentQuantiles,
+                                                   int mutationAgeIntervals, std::string_view fileRoot,
+                                                   std::string_view freqFile, double mutRate, unsigned int samples);
+
+/**
+ * Read demographic info from file, or use default EU demographic information
+ * @param demographicFile path to the demographic file, or an empty stringview
+ * @return vector of times, appended with inf, and vector of sizes, appended with a copy of the final element
+ */
+std::tuple<std::vector<double>, std::vector<double>> getDemographicInfo(std::string_view demographicFile);
+
+/**
+ * Read discretization info from file, or use coalescent quantiles or mutation age intervals
+  * @param coalescentQuantiles
+  * @param mutationAgeIntervals
+  * @param times
+  * @param sizes
+ * @return vector of discretizations, appended with inf
+ */
+
+std::vector<double> getDiscretizationInfo(std::string_view discretizationFile, int coalescentQuantiles,
+                                          int mutationAgeIntervals, const std::vector<double>& times,
+                                          const std::vector<double>& sizes);
+
 } // namespace asmc
 
 #endif  // PREPAREDECODING_HPP
