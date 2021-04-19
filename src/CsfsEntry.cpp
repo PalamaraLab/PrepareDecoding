@@ -30,8 +30,10 @@ CSFSEntry::CSFSEntry(std::vector<double> timeVector, std::vector<double> sizeVec
 }
 
 std::string CSFSEntry::toString() const {
-  return fmt::format("Time:\t{}\nSize:\t{}\nMu:\t{}\nSamples:\t{}\nInterval:\t{}\t{}\n{}\n",
-      fmt::join(mTimeVector, " "), fmt::join(mSizeVector, " "), mMu, mSamples, mFrom, mTo, mCSFS);
+  Eigen::IOFormat csfsFmt(Eigen::FullPrecision, Eigen::DontAlignCols, " ", "\n");
+  return fmt::format("Time:\t{}\nSize:\t{}\nMu:\t{}\nSamples:\t{}\nInterval:\t{:#}\t{:#}\n{}",
+                     fmt::format("{:#}", fmt::join(mTimeVector, " ")), fmt::format("{:#}", fmt::join(mSizeVector, " ")),
+                     mMu, mSamples, mFrom, mTo, mCSFS.format(csfsFmt));
 }
 
 } // namespace asmc
