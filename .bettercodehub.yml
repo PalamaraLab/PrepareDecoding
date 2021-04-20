@@ -10,6 +10,7 @@ languages:
         - /scripts/.*
         - /test/.*
         - /vcpkg/.*
+        - /src/3rd_party/.*
     test:
       include:
         - /test/.*\.cpp
