@@ -99,8 +99,6 @@ DecodingQuantities calculateCsfsAndPrepareDecoding(std::string_view demographicF
     sVec.push_back((arrayTimeAppend[i + 1] - arrayTimeAppend[i]) / (2.0 * N0));
   }
 
-  PdModel model(aVec, sVec, N0);
-
   std::vector<double> froms;
   std::vector<double> tos;
   std::vector<Matrix<double>> csfses;
@@ -115,7 +113,7 @@ DecodingQuantities calculateCsfsAndPrepareDecoding(std::string_view demographicF
     froms.push_back(t0);
     tos.push_back(t1);
 
-    csfses.emplace_back(raw_sfs(model, static_cast<int>(samples - 2u), t0 / (2. * N0), t1 / (2. * N0)) * theta);
+    csfses.emplace_back(raw_sfs(aVec, sVec, static_cast<int>(samples - 2u), t0 / (2. * N0), t1 / (2. * N0)) * theta);
     csfses.back()(0, 0) = 1.0 - csfses.back().sum();
   }
 
