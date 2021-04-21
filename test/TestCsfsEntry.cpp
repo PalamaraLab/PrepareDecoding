@@ -91,7 +91,7 @@ TEST_CASE("CSFSEntry toString method", "[CSFSEntry]") {
 
   REQUIRE(csfs_entry.toString() ==
           "Time:\t1.2 1.2 1.2\nSize:\t2.3 2.3 2.3\nMu:\t3.4\nSamples:\t7\nInterval:\t4.5\t5.6\n8.9 8.9 8.9 8.9 8.9 "
-          "8.9\n8.9 8.9 8.9 8.9 8.9 8.9\n8.9 8.9 8.9 8.9 8.9 8.9\n");
+          "8.9\n8.9 8.9 8.9 8.9 8.9 8.9\n8.9 8.9 8.9 8.9 8.9 8.9");
 }
 
 } // namespace asmc
