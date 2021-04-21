@@ -56,7 +56,7 @@ if (BUILD_WITH_SMCPP_SUPPORT)
     add_library(smcpp_lib 3rd_party/smcpp.cpp 3rd_party/smcpp.hpp 3rd_party/mpreal.h)
     target_include_directories(smcpp_lib INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/3rd_party)
     target_link_libraries(smcpp_lib PRIVATE Eigen3::Eigen fmt::fmt gmp gmpxx cereal OpenMP::OpenMP_CXX)
-
+    set_target_properties(smcpp_lib PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
     target_link_libraries(prepare_decoding_lib PRIVATE smcpp_lib)
 endif ()
 
