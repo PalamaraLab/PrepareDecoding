@@ -15,7 +15,10 @@ env:
   CIBW_BUILD: cp36-* cp37-* cp38-* cp39-*
   CIBW_ARCHS: auto64
   CIBW_MANYLINUX_X86_64_IMAGE: manylinux2014
+  CIBW_BEFORE_ALL_MACOS: brew install autoconf-archive
+  CIBW_BEFORE_ALL_LINUX: apt install autoconf-archive
   CIBW_BEFORE_BUILD: pip install --upgrade pip setuptools wheel ninja numpy cython
+  CIBW_BEFORE_BUILD_WINDOWS: "{project}\vcpkg\vcpkg install yasm-tool:x86-windows"
   MACOSX_DEPLOYMENT_TARGET: 10.15
 
 jobs:
