@@ -3,10 +3,10 @@ name: "Unit tests: Windows"
 on:
   push:
     branches:
-      - master
+      - none
   pull_request:
     branches:
-      - '**'
+      - none
 
 jobs:
 
