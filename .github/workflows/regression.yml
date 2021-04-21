@@ -30,9 +30,20 @@ jobs:
             build_dir/vcpkg_installed/
           key: ${{ runner.os }}-${{ env.CXX }}-${{ hashFiles('vcpkg.json', 'vcpkg/CHANGELOG.md') }}
 
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+          architecture: x64
+
       - name: install system dependencies
         run: |
           sudo apt install autoconf-archive
+
+      - name: install python dependencies
+        run: |
+          python -m pip install --upgrade pip setuptools wheel
+          python -m pip install numpy
 
       - name: make build directory
         run: mkdir build_dir
