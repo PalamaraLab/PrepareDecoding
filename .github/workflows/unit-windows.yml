@@ -31,7 +31,9 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('vcpkg.json', 'vcpkg/CHANGELOG.md') }}
 
       - name: install system packages
-        run: .\vcpkg install yasm-tool:x86-windows
+        run: |
+          .\bootstrap-vcpkg.bat
+          .\vcpkg install yasm-tool:x86-windows
         working-directory: vcpkg
 
       - name: make build directory
