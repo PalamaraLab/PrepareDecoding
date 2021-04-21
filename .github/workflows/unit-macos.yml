@@ -35,6 +35,9 @@ jobs:
             build_dir/vcpkg_installed/
           key: ${{ runner.os }}-${{ hashFiles('vcpkg.json', 'vcpkg/CHANGELOG.md') }}
 
+      - name: install system packages
+        run: brew install autoconf-archive
+
       - name: make build directory
         run: mkdir build_dir
         if: steps.cache.outputs.cache-hit != 'true'
