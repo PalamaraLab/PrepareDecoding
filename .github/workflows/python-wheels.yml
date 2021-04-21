@@ -18,7 +18,7 @@ env:
   CIBW_BEFORE_ALL_MACOS: brew install autoconf-archive
   CIBW_BEFORE_ALL_LINUX: yum install autoconf-archive
   CIBW_BEFORE_BUILD: pip install --upgrade pip setuptools wheel ninja numpy cython
-  CIBW_BEFORE_BUILD_WINDOWS: "{project}\vcpkg\bootstrap-vcpkg.bat & {project}\vcpkg\vcpkg install yasm-tool:x86-windows"
+  CIBW_BEFORE_BUILD_WINDOWS: "{project}/vcpkg/bootstrap-vcpkg.bat & {project}/vcpkg/vcpkg install yasm-tool:x86-windows"
   MACOSX_DEPLOYMENT_TARGET: 10.15
 
 jobs:
