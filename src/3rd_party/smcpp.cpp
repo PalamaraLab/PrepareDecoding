@@ -15,12 +15,20 @@
 
 #include <fcntl.h> // for open()
 
+#include <algorithm>
+#include <array>
+#include <cmath>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+#include <limits>
+#include <map>
 #include <random>
+#include <stdexcept>
+#include <string>
 #include <unistd.h>
 #include <utility>
+#include <vector>
 
 #ifdef NO_CHECK_NAN
 #define CHECK_NAN(x)
