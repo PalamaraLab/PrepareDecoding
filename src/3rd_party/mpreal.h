@@ -2198,7 +2198,7 @@ namespace mpfr {
     inline const mpreal root(const mpreal& x, unsigned long int k, mp_rnd_t r = mpreal::get_default_rnd())
     {
       mpreal y(0, mpfr_get_prec(x.mpfr_srcptr()));
-      mpfr_root(y.mpfr_ptr(), x.mpfr_srcptr(), k, r);
+      mpfr_rootn_ui(y.mpfr_ptr(), x.mpfr_srcptr(), k, r);
       return y;
     }
 
@@ -2643,7 +2643,7 @@ namespace mpfr {
     inline const mpreal grandom (gmp_randstate_t& state, mp_rnd_t rnd_mode = mpreal::get_default_rnd())
     {
       mpreal x;
-      mpfr_grandom(x.mpfr_ptr(), NULL, state, rnd_mode);
+      mpfr_nrandom(x.mpfr_ptr(), state, rnd_mode);
       return x;
     }
 
