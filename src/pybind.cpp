@@ -88,11 +88,15 @@ PYBIND11_MODULE(preparedecoding_python_bindings, m) {
       .def_property_readonly("csfsTo", &CSFSEntry::getTo)
       .def_property_readonly("csfs", &CSFSEntry::getCSFSMatrix)
     ;
-    m.def("prepareDecodingCSFSFile", &prepareDecodingCSFSFile, "Prepare decoding quantities", "CSFSFile"_a, "demographicFile"_a = "",
+    m.def("prepareDecodingPrecalculatedCsfs", &prepareDecodingPrecalculatedCsfs,
+          "Prepare decoding quantities from precomputed CSFS", "CSFSFile"_a, "demographicFile"_a = "",
+          "discretizationFile"_a = "", "coalescentQuantiles"_a = -1, "mutationAgeIntervals"_a = -1, "fileRoot"_a = "",
+          "freqFile"_a = "", "mutRate"_a = 1.65e-8, "samples"_a = 300);
+    m.def("calculateCsfsAndPrepareDecoding", &calculateCsfsAndPrepareDecoding,
+          "Calculate CSFS and prepare decoding quantities","demographicFile"_a = "",
           "discretizationFile"_a = "", "coalescentQuantiles"_a = -1, "mutationAgeIntervals"_a = -1, "fileRoot"_a = "",
           "freqFile"_a = "", "mutRate"_a = 1.65e-8, "samples"_a = 300);
     m.def("prepareDecoding", &prepareDecoding, "Prepare decoding quantities", "csfs"_a, "demographicFile"_a = "",
           "discretizationFile"_a = "", "coalescentQuantiles"_a = -1, "mutationAgeIntervals"_a = -1, "fileRoot"_a = "",
           "freqFile"_a = "", "mutRate"_a = 1.65e-8, "samples"_a = 300);
-
 }
