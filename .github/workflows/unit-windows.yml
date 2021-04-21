@@ -30,15 +30,17 @@ jobs:
             build_dir/vcpkg_installed/
           key: ${{ runner.os }}-${{ hashFiles('vcpkg.json', 'vcpkg/CHANGELOG.md') }}
 
+      - name: make build directory
+        run: |
+          mkdir build_dir
+          mkdir build_dir\vcpkg_installed
+        if: steps.cache.outputs.cache-hit != 'true'
+
       - name: install system packages
         run: |
           .\bootstrap-vcpkg.bat
-          .\vcpkg install yasm-tool:x86-windows
+          .\vcpkg --x-install-root=${{ github.workspace }}\build_dir\vcpkg_installed install yasm-tool:x86-windows
         working-directory: vcpkg
-
-      - name: make build directory
-        run: mkdir build_dir
-        if: steps.cache.outputs.cache-hit != 'true'
 
       - name: cmake configure
         run: cmake .. -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}\vcpkg\scripts\buildsystems\vcpkg.cmake -DCMAKE_BUILD_TYPE=Debug
