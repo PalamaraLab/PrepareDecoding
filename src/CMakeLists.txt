@@ -52,6 +52,12 @@ if (BUILD_WITH_SMCPP_SUPPORT)
     message(STATUS "Found GMPXX_INCLUDE_DIR:  ${GMPXX_INCLUDE_DIR}")
     message(STATUS "Found GMPXX_LIB:          ${GMPXX_LIB}")
 
+    find_package(MPFR REQUIRED)
+    message(STATUS "Found MPFR_FOUND:     ${MPFR_FOUND}")
+    message(STATUS "Found MPFR_INCLUDES:  ${MPFR_INCLUDES}")
+    message(STATUS "Found MPFR_LIBRARIES: ${MPFR_LIBRARIES}")
+    message(STATUS "Found MPFR_VERSION:   ${MPFR_VERSION}")
+
     find_package(cereal CONFIG REQUIRED)
     message(STATUS "Found cereal ${cereal_VERSION}")
 
