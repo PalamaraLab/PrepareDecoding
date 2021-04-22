@@ -43,12 +43,12 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
 
       - name: cmake configure
-        run: cmake .. -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Debug
+        run: cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON
         working-directory: build_dir
 
-#      - name: cmake build
-#        run: cmake --build . --parallel 2 --target unit_tests
-#        working-directory: build_dir
+      - name: cmake build
+        run: cmake --build . --parallel 2 --target unit_tests
+        working-directory: build_dir
 #
 #      - name: cmake test
 #        run: ctest -j2 --output-on-failure
