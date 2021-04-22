@@ -72,6 +72,8 @@ PYBIND11_MODULE(preparedecoding_python_bindings, m) {
         .def("saveIntervals", &DecodingQuantities::saveIntervals, "Save DecodingQuantities intervals",
              "outputFileRoot"_a)
         .def("saveDecodingQuantities", &DecodingQuantities::saveDecodingQuantities, "Save DecodingQuantities",
+             "outputFileRoot"_a)
+        .def("saveCsfs", &DecodingQuantities::saveCsfs, "Save CSFS",
              "outputFileRoot"_a);
     py::class_<CSFS>(m, "CSFS")
       .def_static("load", &CSFS::load, "Construct CSFS from parameters",
