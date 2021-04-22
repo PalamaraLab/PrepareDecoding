@@ -9,8 +9,6 @@
     "cxxopts",
     "eigen3",
     "fmt",
-    "gmp",
-    "mpfr",
     "zlib"
   ]
 }
