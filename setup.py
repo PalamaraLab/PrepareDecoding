@@ -111,7 +111,7 @@ with open('RELEASE_NOTES.md', encoding='utf-8') as f:
 
 setup(
     name='asmc-preparedecoding',
-    version='1.1',
+    version='2.0',
     author='PalamaraLab (https://palamaralab.github.io/)',
     url='https://github.com/PalamaraLab/PrepareDecoding/',
     install_requires=['numpy'],
