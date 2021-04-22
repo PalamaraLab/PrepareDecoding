@@ -3,10 +3,10 @@ name: "Unit tests: Windows"
 on:
   push:
     branches:
-      - master
+      - none
   pull_request:
     branches:
-      - '**'
+      - none
 
 jobs:
 
@@ -31,8 +31,16 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('vcpkg.json', 'vcpkg/CHANGELOG.md') }}
 
       - name: make build directory
-        run: mkdir build_dir
+        run: |
+          mkdir build_dir
+          mkdir build_dir\vcpkg_installed
         if: steps.cache.outputs.cache-hit != 'true'
+
+      - name: install system packages
+        run: |
+          .\bootstrap-vcpkg.bat
+          .\vcpkg --x-install-root=${{ github.workspace }}\build_dir\vcpkg_installed install yasm-tool:x86-windows
+        working-directory: vcpkg
 
       - name: cmake configure
         run: cmake .. -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}\vcpkg\scripts\buildsystems\vcpkg.cmake -DCMAKE_BUILD_TYPE=Debug

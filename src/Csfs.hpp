@@ -49,6 +49,13 @@ public:
   bool verify(std::vector<double> timeVectorOriginal, std::vector<double> sizeVectorOriginal,
       double mu, unsigned int samples, std::vector<double> discretizationOriginal);
   std::string toString() const;
+
+  /**
+   * Save CSFS to file
+   * @param outputFileRoot the CSFS file will be saved as {outputFileRoot}.csfs
+   */
+  void saveCsfs(std::string_view outputFileRoot) const;
+
   void fixAscertainment(Data data, unsigned int samples, Transition transition);
   static mat_dt computeClassicEmission(std::vector<double> expectedTimes, double mu);
   void computeArraySamplingFactors(Data data, unsigned int samples, Transition transition);

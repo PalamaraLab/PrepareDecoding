@@ -8,6 +8,7 @@
 #include <iostream>
 #include <fstream>
 #include <fmt/core.h>
+#include <fmt/os.h>
 #include <fmt/ostream.h>
 #include <fmt/ranges.h>
 
@@ -56,17 +57,16 @@ std::pair<CSFSParserState, int> CSFS::nextState(CSFSParserState state, int line 
   return std::make_pair(CSFSParserState::Null, 0);
 }
 
-CSFS CSFS::load(const std::vector<double>& times, const std::vector<double>& sizes,
-    const double mu, const unsigned int samples,
-    const std::vector<double>& froms,
-    const std::vector<double>& tos,
-    const std::vector<mat_dt>& csfses) {
+CSFS CSFS::load(const std::vector<double>& times, const std::vector<double>& sizes, const double mu,
+                const unsigned int samples, const std::vector<double>& froms, const std::vector<double>& tos,
+                const std::vector<mat_dt>& csfses) {
   std::map<double, CSFSEntry> out;
   auto N = froms.size();
   assert(tos.size() == N);
   assert(csfses.size() == N);
-  for (size_t i = 0; i < N; i++)
+  for (size_t i = 0; i < N; i++) {
     out.emplace(froms[i], CSFSEntry(times, sizes, mu, froms[i], tos[i], samples, csfses[i]));
+  }
   return CSFS(out);
 }
 
@@ -192,6 +192,13 @@ std::string CSFS::toString() const {
   std::string repr;
   for (auto const& x: mCSFS) repr += x.second.toString();
   return repr;
+}
+
+void CSFS::saveCsfs(std::string_view outputFileRoot) const {
+  auto fmtOutFile = fmt::output_file(fmt::format("{}.csfs", outputFileRoot));
+  for (auto const& csfsEntry: mCSFS) {
+    fmtOutFile.print("{}\n", csfsEntry.second.toString());
+  }
 }
 
 void CSFS::fixAscertainment(Data data, unsigned int samples, Transition transition) {

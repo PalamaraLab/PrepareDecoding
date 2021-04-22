@@ -35,12 +35,15 @@ jobs:
             build_dir/vcpkg_installed/
           key: ${{ runner.os }}-${{ hashFiles('vcpkg.json', 'vcpkg/CHANGELOG.md') }}
 
+      - name: install system packages
+        run: brew install gmp mpfr libomp
+
       - name: make build directory
         run: mkdir build_dir
         if: steps.cache.outputs.cache-hit != 'true'
 
       - name: cmake configure
-        run: cmake .. -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Debug
+        run: cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON
         working-directory: build_dir
 
       - name: cmake build

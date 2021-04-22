@@ -66,8 +66,24 @@ class DecodingQuantities {
     DecodingQuantities(CSFS& csfs, Transition& transition, double mu);
     static int nextPhys(int phys);
     static double nextGen(double gen);
+
+    /**
+     * Save decoding quantities to file
+     * @param outputFileRoot the decoding quantities file will be saved as {outputFileRoot}.decodingQuantities.gz
+     */
     void saveDecodingQuantities(std::string_view outputFileRoot);
+
+    /**
+     * Save intervals to file
+     * @param outputFileRoot the intervals file will be saved as {outputFileRoot}.intervalsInfo
+     */
     void saveIntervals(std::string_view outputFileRoot);
+
+    /**
+     * Save CSFS to file
+     * @param outputFileRoot the CSFS file will be saved as {outputFileRoot}.csfs
+     */
+    void saveCsfs(std::string_view outputFileRoot);
 
     TransitionType getTransitionType() { return mTransitionType; }
     vec_dt getInitialStateProb() const { return mInitialStateProb; }

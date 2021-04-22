@@ -69,7 +69,9 @@ def two_lines_identical(line1, line2):
     if line_is_numeric(line1):
         l1_array = np.fromstring(line1, dtype='float', sep=' ')
         l2_array = np.fromstring(line2, dtype='float', sep=' ')
-        return np.allclose(l1_array, l2_array)
+        return np.allclose(l1_array, l2_array, rtol=1e-12, atol=1e-12)
+    elif 'Infinity' in line1 or 'Infinity' in line2:
+        return line1.replace('Infinity', 'inf') == line2.replace('Infinity', 'inf')
     else:
         return line1 == line2
 

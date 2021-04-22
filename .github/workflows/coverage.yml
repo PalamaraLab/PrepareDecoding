@@ -33,7 +33,7 @@ jobs:
           key: ${{ runner.os }}-${{ env.CXX }}-${{ hashFiles('vcpkg.json', 'vcpkg/CHANGELOG.md') }}
 
       - name: install tools
-        run: sudo apt install g++-10 lcov libcurl4-openssl-dev
+        run: sudo apt install g++-10 lcov libcurl4-openssl-dev libgmp-dev libmpfr-dev
 
       - name: make build directory
         run: mkdir build_dir

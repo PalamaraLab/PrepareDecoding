@@ -23,11 +23,6 @@ outFile=test_output
 # frequency file
 freqFile=input_UKBB.frq
 
-# get csfs
-echo "Building csfs"
-python3 get_csfs.py -D ${demoFile} -d ${discFile} -n ${CSFSsamples} -o ${outFile} > /dev/null || exit 1
-echo "Finished building csfs"
-
 # precompute decoding quantities
 echo "Precomputing decoding quantities"
 ./"$prepareDecodingExe" \
@@ -35,7 +30,6 @@ echo "Precomputing decoding quantities"
 	-d ${discFile} \
 	-n ${CSFSsamples} \
 	-F ${freqFile} \
-	-C ${outFile}.csfs \
 	-o ${outFile} || exit 1
 echo "Finished precomputing decoding quantities"
 

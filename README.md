@@ -22,14 +22,18 @@ Most functionality is available through a Python module which can be installed w
 pip install asmc-preparedecoding
 ```
 
-This Python module is available on Linux, macOS and Windows.
+This Python module is currently available on Linux and macOS.
+We hope it will be available soon on Windows.
 
-Some additional functionality, for creating CSFS, requires the additional dependency [smcpp](https://github.com/popgenmethods/smcpp/), which is not available via PyPI.
-If you require this functionality, you should additionally [follow these instructions](#installing-smcpp) to install smcpp.
+Examples for using the Python module can be found in the following Jupyter notebook:
+- [creating decoding quantities](notebooks/CreatingDecodingQuantities.ipynb)
 
-Examples for using the Python module can be found in the notebooks directory:
-- [creating decoding quantities from precomputed CSFS](notebooks/CreateDecodingQuantitiesFromPrecomputedCSFS.ipynb)
-- [creating decoding quantities from scratch](notebooks/CreateDecodingQuantitiesFromScratch.ipynb) (requires smcpp)
+Please note that you must install Jupyter in order to view the notebook, and then open it:
+
+```bash
+pip install jupyter
+jupyter-notebook notebooks/CreatingDecodingQuantities.ipynb
+```
 
 ### Compiling the C++ library and executable
 
@@ -41,7 +45,24 @@ cd PrepareDecoding
 ```
 
 The recommended way to install dependencies is via the [vcpkg](https://github.com/microsoft/vcpkg) submodule.
-If you have checked out this submodule, dependencies will be automatically installed when you run the CMake configuration step (below).
+If you have checked out this submodule, most dependencies will be automatically installed when you run the CMake configuration step (below).
+
+Several additional dependencies should be obtained from your package manager:
+
+- Ubuntu/Debian:
+    ```bash
+    sudo apt install libgmp-dev libmpfr-dev
+    ```
+
+- CentOS/Fedora:
+    ```bash
+    sudo yum install gmp-devel mpfr-devel
+    ```
+
+- macOS:
+    ```bash
+    brew install gmp mpfr libomp
+    ```
 
 ### Configuring and compiling the project
 
@@ -69,33 +90,6 @@ cmake --build . --parallel 4 --target unit_tests
 ctest --output-on-failure
 ```
 
-### Installing smcpp
-
-The optional smcpp dependency is not available on PyPI, and itself requires a few additional dependencies.
-
-On **Linux**, run
-
-```bash
-sudo apt install libgmp-dev libmpfr-dev libgsl0-dev
-```
-
-on **macOS**, run
-
-```bash
-brew install mpfr gmp gsl
-```
-
-Then, we recommend starting from a clean virtual environment. 
-Switch to the source directory and run:
-
-```bash
-python3 -m venv venv
-source venv/bin/activate
-python -m pip install --upgrade pip setuptools wheel
-python -m pip install asmc-preparedecoding
-python -m pip install git+https://github.com/popgenmethods/smcpp/@v1.15.3
-```
-
 ## Extra tools for C++ developers
 
 ### Coverage
@@ -103,7 +97,7 @@ python -m pip install git+https://github.com/popgenmethods/smcpp/@v1.15.3
 Configure with coverage enabled, using `g++` or `clang++`:
 
 ```bash
-cmake .. -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Debug -DENABLE_COVERAGE=ON
+cmake .. -DCMAKE_BUILD_TYPE=Debug -DENABLE_COVERAGE=ON
 cmake --build . --parallel 2 --target unit_tests
 ctest -j2 --output-on-failure
 lcov --directory . --capture --output-file coverage.info
@@ -119,14 +113,14 @@ Enable the relevant option and compile with `clang++`.
 For clang tidy:
 
 ```bash
-cmake .. -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Debug -DENABLE_CLANG_TIDY=ON
+cmake .. -DCMAKE_BUILD_TYPE=Debug -DENABLE_CLANG_TIDY=ON
 cmake --build . --parallel 2 --target prepare_decoding_lib prepare_decoding_exe
 ```
 
 For cppcheck:
 
 ```bash
-cmake .. -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Debug -DENABLE_CPPCHECK=ON
+cmake .. -DCMAKE_BUILD_TYPE=Debug -DENABLE_CPPCHECK=ON
 cmake --build . --parallel 2 --target prepare_decoding_lib prepare_decoding_exe
 ```
 

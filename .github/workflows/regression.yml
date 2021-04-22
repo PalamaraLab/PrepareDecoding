@@ -38,13 +38,12 @@ jobs:
 
       - name: install system dependencies
         run: |
-          sudo apt install libgmp-dev libmpfr-dev libgsl0-dev
+          sudo apt install libgmp-dev libmpfr-dev
 
       - name: install python dependencies
         run: |
           python -m pip install --upgrade pip setuptools wheel
-          python -m pip install cython numpy
-          python -m pip install smcpp@git+https://github.com/popgenmethods/smcpp/#egg=smcpp@v1.15.2
+          python -m pip install numpy
 
       - name: make build directory
         run: mkdir build_dir
