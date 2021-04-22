@@ -46,14 +46,10 @@ jobs:
         run: cmake .. -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Debug
         working-directory: build_dir
 
-      - name: check log
-        run: cat /Users/runner/work/PrepareDecoding/PrepareDecoding/vcpkg/buildtrees/gmp/autoconf-x64-osx-err.log
-        if: ${{ always() }}
-
-      - name: cmake build
-        run: cmake --build . --parallel 2 --target unit_tests
-        working-directory: build_dir
-
-      - name: cmake test
-        run: ctest -j2 --output-on-failure
-        working-directory: build_dir
+#      - name: cmake build
+#        run: cmake --build . --parallel 2 --target unit_tests
+#        working-directory: build_dir
+#
+#      - name: cmake test
+#        run: ctest -j2 --output-on-failure
+#        working-directory: build_dir
