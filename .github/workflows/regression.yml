@@ -38,7 +38,7 @@ jobs:
 
       - name: install system dependencies
         run: |
-          sudo apt install autoconf-archive
+          sudo apt install libgmp-dev libmpfr-dev
 
       - name: install python dependencies
         run: |

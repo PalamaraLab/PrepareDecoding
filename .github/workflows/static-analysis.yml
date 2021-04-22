@@ -33,7 +33,7 @@ jobs:
           key: ${{ runner.os }}-${{ env.CXX }}-${{ hashFiles('vcpkg.json', 'vcpkg/CHANGELOG.md') }}
 
       - name: install system packages
-        run: sudo apt install autoconf-archive
+        run: sudo apt install libgmp-dev libmpfr-dev
 
       - name: make build directory
         run: mkdir build_dir
