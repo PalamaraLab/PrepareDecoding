@@ -3,10 +3,10 @@ name: Build python wheels
 on:
   push:
     branches:
-      - master
+      - xmaster
   pull_request:
     branches:
-      - master
+      - xmaster
   release:
     types:
       - published
