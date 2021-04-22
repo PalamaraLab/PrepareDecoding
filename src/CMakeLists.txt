@@ -58,6 +58,10 @@ if (BUILD_WITH_SMCPP_SUPPORT)
     message(STATUS "Found MPFR_LIBRARIES: ${MPFR_LIBRARIES}")
     message(STATUS "Found MPFR_VERSION:   ${MPFR_VERSION}")
 
+    if (${MPFR_VERSION} VERSION_LESS 4.0.0)
+        add_compile_definitions(MPFR_USE_DEPRECATED_FUNCTIONS)
+    endif ()
+
     find_package(cereal CONFIG REQUIRED)
     message(STATUS "Found cereal ${cereal_VERSION}")
 
