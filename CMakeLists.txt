@@ -54,3 +54,25 @@ if(ENABLE_UNITY)
     # Add for any project you want to apply unity builds for
     set_target_properties(intro PROPERTIES UNITY_BUILD ON)
 endif()
+
+add_library(asmc::prepare_decoding ALIAS prepare_decoding_lib)
+add_library(asmc::project_warnings ALIAS project_warnings)
+add_library(asmc::project_settings ALIAS project_settings)
+add_library(asmc::smcpp_lib ALIAS smcpp_lib)
+add_executable(asmc::prepare_decoding_exe ALIAS prepare_decoding_exe)
+include(GNUInstallDirs)
+install(TARGETS prepare_decoding_lib project_warnings project_settings smcpp_lib EXPORT asmc)
+
+
+install(
+        EXPORT asmc
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/AsmcPrepareDecoding
+        NAMESPACE AsmcPrepareDecoding::
+        FILE AsmcPrepareDecoding_Runtime.cmake
+        COMPONENT AsmcPrepareDecoding_Runtime
+)
+
+install(
+        FILES cmake/AsmcPrepareDecodingConfig.cmake
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/AsmcPrepareDecoding
+)

@@ -37,8 +37,27 @@ set(
         PrepareDecoding.hpp
 )
 
+set(
+        prepare_decoding_public_hdr
+        ${CMAKE_CURRENT_SOURCE_DIR}/Csfs.hpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/CsfsEntry.hpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Data.hpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/ArraySpectrum.hpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Transition.hpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/DecodingQuantities.hpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/PrepareDecoding.hpp
+)
+
 add_library(prepare_decoding_lib STATIC ${prepare_decoding_src} ${prepare_decoding_hdr})
-target_include_directories(prepare_decoding_lib INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
+
+target_include_directories(
+        prepare_decoding_lib INTERFACE
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+        $<INSTALL_INTERFACE:>
+)
+set_target_properties(prepare_decoding_lib PROPERTIES PUBLIC_HEADER "${prepare_decoding_public_hdr}")
+
+
 target_link_libraries(prepare_decoding_lib PRIVATE Eigen3::Eigen fmt::fmt ZLIB::ZLIB)
 target_link_libraries(prepare_decoding_lib PRIVATE project_warnings project_settings)
 
@@ -68,7 +87,13 @@ if (BUILD_WITH_SMCPP_SUPPORT)
     find_package(OpenMP REQUIRED)
 
     add_library(smcpp_lib 3rd_party/smcpp.cpp 3rd_party/smcpp.hpp 3rd_party/mpreal.h)
-    target_include_directories(smcpp_lib INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/3rd_party)
+
+    target_include_directories(
+            smcpp_lib INTERFACE
+            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/3rd_party>
+            $<INSTALL_INTERFACE:3rd_party>
+    )
+
     target_link_libraries(smcpp_lib PRIVATE Eigen3::Eigen fmt::fmt GMP::gmp cereal OpenMP::OpenMP_CXX)
     set_target_properties(smcpp_lib PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
     set_target_properties(smcpp_lib PROPERTIES CXX_CLANG_TIDY "")
