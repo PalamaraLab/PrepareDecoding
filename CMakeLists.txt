@@ -61,11 +61,11 @@ add_library(asmc::project_settings ALIAS project_settings)
 add_library(asmc::smcpp_lib ALIAS smcpp_lib)
 add_executable(asmc::prepare_decoding_exe ALIAS prepare_decoding_exe)
 include(GNUInstallDirs)
-install(TARGETS prepare_decoding_lib project_warnings project_settings smcpp_lib EXPORT asmc)
+install(TARGETS prepare_decoding_lib project_warnings project_settings smcpp_lib EXPORT AsmcPrepareDecoding_runtime)
 
 
 install(
-        EXPORT asmc
+        EXPORT AsmcPrepareDecoding_runtime
         DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/AsmcPrepareDecoding
         NAMESPACE AsmcPrepareDecoding::
         FILE AsmcPrepareDecoding_Runtime.cmake

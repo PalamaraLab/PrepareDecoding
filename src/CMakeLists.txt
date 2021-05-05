@@ -26,26 +26,28 @@ set(
 set(
         prepare_decoding_hdr
         library.hpp
+        ArraySpectrum.hpp
         Csfs.hpp
         CsfsEntry.hpp
         Data.hpp
-        EigenTypes.hpp
-        Utils.hpp
-        ArraySpectrum.hpp
-        Transition.hpp
         DecodingQuantities.hpp
+        EigenTypes.hpp
         PrepareDecoding.hpp
+        Transition.hpp
+        Utils.hpp
 )
 
 set(
         prepare_decoding_public_hdr
+        ${CMAKE_CURRENT_SOURCE_DIR}/ArraySpectrum.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Csfs.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/CsfsEntry.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Data.hpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/ArraySpectrum.hpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/Transition.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/DecodingQuantities.hpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/EigenTypes.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/PrepareDecoding.hpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Transition.hpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Utils.hpp
 )
 
 add_library(prepare_decoding_lib STATIC ${prepare_decoding_src} ${prepare_decoding_hdr})
