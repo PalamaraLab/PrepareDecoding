@@ -38,10 +38,11 @@ ArraySpectrum::ArraySpectrum(Data data, unsigned samples) {
   }
 
   // sum all hypergeometrics to get spectrum in subsample (exclude [0] and [samples], which are monomorphic.
-  for (std::pair<double, int> distCount: distCounts) {
-    for (unsigned i = 0; i <= samples; i++)
+  for (std::pair<double, int> distCount : distCounts) {
+    for (unsigned i = 0; i <= samples; i++) {
       spectrum[i] +=
           std::apply(hypergeometricPmf, std::tuple_cat(distributions[distCount.first], std::tie(i))) * distCount.second;
+    }
   }
   // the term in 0 will contain monomorphic samples that are either present in the data, or due to subsampling
   spectrum[0] += monoMorphic;
