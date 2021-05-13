@@ -1,5 +1,24 @@
 # Release Notes
 
+## v2.1 (2021-05-13)
+
+Default demographies are now bundled with Prepare Decoding.
+You can now either supply your own demography file, or choose from the following default demographies:
+- ACB, ASW, BEB, CDX, CEU, CHB, CHS, CLM, ESN, FIN, GBR, GIH, GWD, IBS, ITU, JPT, KHV, LWK, MSL, MXL, PEL, PJL, PUR, STU, TSI, YRI
+
+### Breaking changes
+
+- When using the C++ or Python libraries, methods that previous specified a demography file as a string now require an instance of a lightweight strong type `Demography`:
+  - In C++, to specify a file: `Demography d("/path/to/demography.demo");`
+  - In C++, to specify a default: `Demography d("CEU");`
+  - In Python, to specify a file: `d = Demography('/path/to/demography.demo')`
+  - In C++, to specify a default: `d = Demography('CEU')`
+- A default-constructed Demography will use the default CEU.
+
+### Other changes
+
+- None
+
 ## v2.0 (2021-04-22)
 
 Computing CSFS values is now bundled with this project, and no longer relies on the optional `smcpp` dependency.
