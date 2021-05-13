@@ -3,6 +3,7 @@
 
 #include "DecodingQuantities.hpp"
 #include "PrepareDecoding.hpp"
+#include "ThinParameterTypes.hpp"
 #include "Utils.hpp"
 #include <cstdlib>
 #include <cxxopts.hpp>
@@ -90,10 +91,11 @@ int main(int argc, char* argv[]) {
 
   DecodingQuantities dq =
       CSFSFile.empty()
-          ? calculateCsfsAndPrepareDecoding(demographicFile, discretizationFile, coalescentQuantiles,
+          ? calculateCsfsAndPrepareDecoding(Demography(demographicFile), discretizationFile, coalescentQuantiles,
                                             mutationAgeIntervals, fileRoot, freqFile, mutRate, samples)
-          : prepareDecodingPrecalculatedCsfs(CSFSFile, demographicFile, discretizationFile, coalescentQuantiles,
-                                             mutationAgeIntervals, fileRoot, freqFile, mutRate, samples);
+          : prepareDecodingPrecalculatedCsfs(CSFSFile, Demography(demographicFile), discretizationFile,
+                                             coalescentQuantiles, mutationAgeIntervals, fileRoot, freqFile, mutRate,
+                                             samples);
 
   dq.saveDecodingQuantities(outputFileRoot);
   dq.saveIntervals(outputFileRoot);

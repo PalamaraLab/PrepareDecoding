@@ -22,6 +22,7 @@
 #include "EigenTypes.hpp"
 #include "DecodingQuantities.hpp"
 #include "PrepareDecoding.hpp"
+#include "ThinParameterTypes.hpp"
 #include "Transition.hpp"
 #include "Csfs.hpp"
 
@@ -101,4 +102,8 @@ PYBIND11_MODULE(preparedecoding_python_bindings, m) {
     m.def("prepareDecoding", &prepareDecoding, "Prepare decoding quantities", "csfs"_a, "demographicFile"_a = "",
           "discretizationFile"_a = "", "coalescentQuantiles"_a = -1, "mutationAgeIntervals"_a = -1, "fileRoot"_a = "",
           "freqFile"_a = "", "mutRate"_a = 1.65e-8, "samples"_a = 300);
+
+    py::class_<Demography>(m, "Demography")
+        .def(py::init<>())
+        .def(py::init<std::string_view>());
 }

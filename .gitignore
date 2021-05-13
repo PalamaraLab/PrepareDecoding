@@ -45,3 +45,6 @@ cmake-build*
 *.egg-info/
 dist/
 __pycache__/
+
+# Temp notebook checkpoint files
+*checkpoint.ipynb

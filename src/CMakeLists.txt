@@ -31,8 +31,10 @@ set(
         CsfsEntry.hpp
         Data.hpp
         DecodingQuantities.hpp
+        DefaultDemographies.hpp
         EigenTypes.hpp
         PrepareDecoding.hpp
+        ThinParameterTypes.hpp
         Transition.hpp
         Utils.hpp
 )
@@ -44,8 +46,10 @@ set(
         ${CMAKE_CURRENT_SOURCE_DIR}/CsfsEntry.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Data.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/DecodingQuantities.hpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/DefaultDemographies.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/EigenTypes.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/PrepareDecoding.hpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/ThinParameterTypes.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Transition.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Utils.hpp
 )

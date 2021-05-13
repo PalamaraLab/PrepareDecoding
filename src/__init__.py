@@ -1,6 +1,7 @@
 from asmc.preparedecoding_python_bindings import DecodingQuantities
 from asmc.preparedecoding_python_bindings import prepareDecodingPrecalculatedCsfs
 from asmc.preparedecoding_python_bindings import calculateCsfsAndPrepareDecoding
+from asmc.preparedecoding_python_bindings import Demography
 
 DEFAULT_MU = 1.65e-8
 DEFAULT_SAMPLES = 300
