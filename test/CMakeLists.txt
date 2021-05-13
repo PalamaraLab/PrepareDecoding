@@ -16,6 +16,7 @@ set(
         TestCsfs.cpp
         TestCsfsEntry.cpp
         TestData.cpp
+        TestThinParameterTypes.cpp
         TestUtils.cpp
 )
 
