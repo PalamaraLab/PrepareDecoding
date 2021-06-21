@@ -37,30 +37,36 @@ std::string getTransitionTypeString(TransitionType tt) {
   return "";
 }
 
-std::vector<double> Transition::getTimeExponentialQuantiles(
-  int numQuantiles, std::vector<double> timeVector,
-  std::vector<double> sizeFromVector) {
+std::vector<double> Transition::getTimeExponentialQuantiles(int numQuantiles, std::vector<double> timeVector,
+                                                            std::vector<double> sizeFromVector) {
+  const double slice = 1.0 / numQuantiles;
+  const double timeStep = 0.1;
 
-  double slice = 1. / numQuantiles;
-  double nextQuant = slice;
-  double timeStep = 0.1;
-  std::vector<double> quantiles{0.};
-  double pNotCoal = 1.;
-  for (size_t i = 0; i < timeVector.size() - 1; i++) {
-    double notCoalRate = 1 - timeStep / sizeFromVector[i];
-    for (double t = timeVector[i]; t < timeVector[i + 1]; t += timeStep) {
+  double nextQuantile = slice;
+  std::vector<double> quantiles{0.0};
+
+  double pNotCoal = 1.0;
+
+  for (auto i = 0ul; i < timeVector.size() - 1; i++) {
+    const double tStart = timeVector.at(i);
+    const double tEnd = timeVector.at(i + 1);
+    const double notCoalRate = 1.0 - timeStep / sizeFromVector.at(i);
+
+    for (double t = tStart; t < tEnd; t += timeStep) {
       pNotCoal *= notCoalRate;
-      if (1 - pNotCoal > nextQuant) {
-        nextQuant += slice;
-        quantiles.push_back(std::round(t * 1000.) / 1000.);
-        if (nextQuant >= 1.0 - 1E-10) return quantiles;
+      if (1.0 - pNotCoal > nextQuantile) {
+        nextQuantile += slice;
+        quantiles.push_back(t);
+        if (nextQuantile >= 1.0 - 1E-10) {
+          return quantiles;
+        }
       }
     }
   }
   return quantiles;
 }
 
-    // unoptimized
+// unoptimized
 std::vector<double> Transition::getTimeErlangQuantiles(int numQuantiles, std::vector<double> timeVector,
                                            std::vector<double> sizeFromVector) {
   double slice = 1. / numQuantiles;
