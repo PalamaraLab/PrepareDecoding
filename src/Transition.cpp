@@ -13,17 +13,18 @@
 //    You should have received a copy of the GNU General Public License
 //    along with ASMC.  If not, see <https://www.gnu.org/licenses/>.
 
-#include <vector>
-#include <array>
+#include "Transition.hpp"
+#include "EigenTypes.hpp"
+
 #include <fmt/core.h>
 #include <fmt/ranges.h>
+
+#include <array>
+#include <vector>
+
 #include <unsupported/Eigen/MatrixFunctions>
-#include "EigenTypes.hpp"
-#include "Transition.hpp"
 
 namespace asmc {
-
-
 
 std::string getTransitionTypeString(TransitionType tt) {
   switch (tt) {
@@ -37,31 +38,53 @@ std::string getTransitionTypeString(TransitionType tt) {
   return "";
 }
 
-std::vector<double> Transition::getTimeExponentialQuantiles(int numQuantiles, std::vector<double> timeVector,
-                                                            std::vector<double> sizeFromVector) {
-  const double slice = 1.0 / numQuantiles;
+std::vector<double> Transition::getTimeExponentialQuantiles(int numQuantiles, const std::vector<double>& timeVector,
+                                                            const std::vector<double>& sizeFromVector) {
+  assert(!timeVector.empty());
+  assert(timeVector.size() == sizeFromVector.size());
+  assert(timeVector.back() != std::numeric_limits<double>::infinity());
+
+  // Add infinity to the end of the time vector for any quantiles lying past the final time point
+  std::vector<double> timesWithInf = timeVector;
+  timesWithInf.push_back(std::numeric_limits<double>::infinity());
+
+  // We choose an arbitrary small time step
   const double timeStep = 0.1;
 
-  double nextQuantile = slice;
+  double pNotCoal = 1.0;
+  double nextQuantile = 1.0 / numQuantiles;
   std::vector<double> quantiles{0.0};
 
-  double pNotCoal = 1.0;
-
-  for (auto i = 0ul; i < timeVector.size() - 1; i++) {
-    const double tStart = timeVector.at(i);
-    const double tEnd = timeVector.at(i + 1);
+  for (auto i = 0ul; i < timesWithInf.size() - 1; i++) {
+    const double tStart = timesWithInf.at(i);
+    const double tEnd = timesWithInf.at(i + 1);
     const double notCoalRate = 1.0 - timeStep / sizeFromVector.at(i);
 
-    for (double t = tStart; t < tEnd; t += timeStep) {
-      pNotCoal *= notCoalRate;
-      if (1.0 - pNotCoal > nextQuantile) {
-        nextQuantile += slice;
+    unsigned int count = 0u;
+    double t = tStart;
+    while (t < tEnd) {
+
+      // Calculate the new prob of not coalescing, avoiding repeated *=
+      double newPNotCoal = pNotCoal * std::pow(notCoalRate, count);
+
+      if (1.0 - newPNotCoal > nextQuantile) {
+        // Store the current time, and increment the next quantile fence by a slice of size 1.0 / numQuantiles,
+        // but without accumulating error with a += every time
         quantiles.push_back(t);
-        if (nextQuantile >= 1.0 - 1E-10) {
+        nextQuantile = static_cast<double>(quantiles.size()) / static_cast<double>(numQuantiles);
+
+        // If the next quantile is 1.0 we're done: check this with the length of the vector to avoid any floating point
+        // shenanigans
+        if (quantiles.size() == static_cast<std::size_t>(numQuantiles)) {
           return quantiles;
         }
       }
+      count++;
+      t = tStart + count * timeStep;
     }
+
+    // Update the prob of not coalescing, avoiding repeated *=
+    pNotCoal *= std::pow(notCoalRate, count - 1);
   }
   return quantiles;
 }

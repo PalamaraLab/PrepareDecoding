@@ -164,6 +164,18 @@ void DecodingQuantities::saveIntervals(std::string_view outputFileRoot) {
   }
 }
 
+void DecodingQuantities::saveDiscretization(std::string_view outputFileRoot) {
+
+  // Get a copy of the discretization that doesn't contain the final inf element
+  assert(std::isinf(mDiscretization.back()));
+  std::vector<double> discWithoutInf = mDiscretization;
+  discWithoutInf.pop_back();
+
+  // Write the discretization to file
+  auto fmtOutFile = fmt::output_file(fmt::format("{}.disc", outputFileRoot));
+  fmtOutFile.print(fmt::format("{:.1f}", fmt::join(discWithoutInf, "\n")));
+}
+
 void DecodingQuantities::saveCsfs(std::string_view outputFileRoot) {
   auto fmtOutFile = fmt::output_file(fmt::format("{}.csfs", outputFileRoot));
   for (auto const& csfsEntry: mCSFS) {

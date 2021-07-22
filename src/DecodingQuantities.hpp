@@ -80,6 +80,12 @@ class DecodingQuantities {
     void saveIntervals(std::string_view outputFileRoot);
 
     /**
+     * Save intervals to file
+     * @param outputFileRoot the intervals file will be saved as {outputFileRoot}.disc
+     */
+    void saveDiscretization(std::string_view outputFileRoot);
+
+    /**
      * Save CSFS to file
      * @param outputFileRoot the CSFS file will be saved as {outputFileRoot}.csfs
      */

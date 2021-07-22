@@ -58,8 +58,8 @@ class Transition {
 
     Transition(std::vector<double> timeVector, std::vector<double> sizeVector, std::vector<double> discretization,
                TransitionType type);
-    static std::vector<double> getTimeExponentialQuantiles(int numQuantiles, std::vector<double> timeVector,
-                                                           std::vector<double> sizeFromVector);
+    static std::vector<double> getTimeExponentialQuantiles(int numQuantiles, const std::vector<double>& timeVector,
+                                                           const std::vector<double>& sizeFromVector);
     static std::vector<double> getTimeErlangQuantiles(int numQuantiles, std::vector<double> timeVector,
                                                std::vector<double> sizeFromVector);
     double cumulativeCoalesceFromStoT(double timeS, double timeT);
