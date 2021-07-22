@@ -48,3 +48,6 @@ __pycache__/
 
 # Temp notebook checkpoint files
 *checkpoint.ipynb
+
+# Directory containing output generated for ASMC
+utils/dq_for_asmc
