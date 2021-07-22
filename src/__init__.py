@@ -30,7 +30,6 @@ def _validate_discretization(discretization):
             if not isinstance(x[0], numbers.Real) or not isinstance(x[1], numbers.Integral):
                 valid = False
         if valid:
-            print(f"##### {discretization}, {additional}")
             return Discretization(discretization, additional)
         else:
             print("Invalid discretization: expected a path to a file, or a list of the form [[a, b], [c, d], e], where"
@@ -42,7 +41,7 @@ def _validate_discretization(discretization):
 def calculate_csfs_and_prepare_decoding(
         demography: str,
         discretization: Union[list, str],
-        freq_file: str,
+        frequencies: str,
         samples: int = DEFAULT_SAMPLES,
         mutation_rate: float = DEFAULT_MU,
 ) -> DecodingQuantities:
@@ -51,7 +50,7 @@ def calculate_csfs_and_prepare_decoding(
 
     :param demography: the demographic file or code (e.g. 'CEU')
     :param discretization: the discretization file or discretization quantile information
-    :param freq_file: the frequencies file
+    :param frequencies: the frequencies file, or built-in (e.g. 'UKBB')
     :param samples: number of samples (default 300)
     :param mutation_rate: the mutation rate (default 1.65e-8)
     :return: a decoding quantities object
@@ -61,7 +60,7 @@ def calculate_csfs_and_prepare_decoding(
     return calculateCsfsAndPrepareDecoding(
         demography=Demography(demography),
         discretization=disc,
-        freqFile=Frequencies(freq_file, samples),
+        freqFile=Frequencies(frequencies, samples),
         samples=samples,
         mutRate=mutation_rate,
     )
@@ -71,7 +70,7 @@ def prepare_decoding_precalculated_csfs(
         csfs_file: str,
         demography: str,
         discretization: Union[list, str],
-        freq_file: str,
+        frequencies: str,
         samples: int = DEFAULT_SAMPLES,
         mutation_rate: float = DEFAULT_MU,
 ) -> DecodingQuantities:
@@ -81,7 +80,7 @@ def prepare_decoding_precalculated_csfs(
     :param csfs_file: file containing the precomputed CSFS values
     :param demography: the demographic file
     :param discretization: the discretization file
-    :param freq_file: the frequencies file
+    :param frequencies: the frequencies file, or built-in (e.g. 'UKBB')
     :param samples: number of samples (default 300)
     :param mutation_rate: the mutation rate (default 1.65e-8)
     :return: a decoding quantities object
@@ -90,7 +89,7 @@ def prepare_decoding_precalculated_csfs(
         CSFSFile=csfs_file,
         demography=Demography(demography),
         discretization=_validate_discretization(discretization),
-        freqFile=Frequencies(freq_file, samples),
+        freqFile=Frequencies(frequencies, samples),
         samples=samples,
         mutRate=mutation_rate,
     )
