@@ -2,6 +2,7 @@
 // See accompanying LICENSE and COPYING for copyright notice and full details.
 
 #include "Data.hpp"
+#include "ThinParameterTypes.hpp"
 
 #include <catch2/catch.hpp>
 
@@ -22,7 +23,7 @@ TEST_CASE("Data read frequency file", "[Data]") {
 
    {
      Data data;
-     data.addFreq(PREPARE_DECODING_TEST_DIR "/data/example.frq");
+     data.addFreq(Frequencies(PREPARE_DECODING_TEST_DIR "/data/example.frq"));
      CHECK(data.getAllSNPsFreq() == freq);
      CHECK(data.getAllSNPsAlleleCounts() == counts);
      CHECK(data.getAllSNPsMinorAlleles() == minorAlleles);

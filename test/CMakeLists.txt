@@ -16,6 +16,8 @@ set(
         TestCsfs.cpp
         TestCsfsEntry.cpp
         TestData.cpp
+        TestDefaultDemographies.cpp
+        TestPrepareDecoding.cpp
         TestThinParameterTypes.cpp
         TestUtils.cpp
 )
