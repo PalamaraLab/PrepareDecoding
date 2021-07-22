@@ -4,8 +4,10 @@
 #ifndef PREPAREDECODING_DATA_HPP
 #define PREPAREDECODING_DATA_HPP
 
-#include <vector>
 #include "EigenTypes.hpp"
+#include "ThinParameterTypes.hpp"
+
+#include <vector>
 
 namespace asmc {
 
@@ -17,6 +19,7 @@ private:
   std::vector<unsigned int> mAllSNPsMinorAlleles = {};
   std::vector<unsigned int> mAllSNPsAlleleCounts = {};
   unsigned int mHaploidSampleSize = 0;
+  Frequencies mFreq;
 
   void readMinorAlleleFrequencies(std::string_view freqFile);
   void readMinorAlleleFrequenciesGz(std::string_view freqFile);
@@ -42,13 +45,15 @@ public:
    */
   explicit Data(std::string_view hapsFileRoot);
 
-  unsigned int getHaploidSampleSize() const { return mHaploidSampleSize; }
+  [[nodiscard]] unsigned int getHaploidSampleSize() const { return mHaploidSampleSize; }
   std::vector<double> getAllSNPsFreq();
   std::vector<unsigned int> getAllSNPsMinorAlleles();
   std::vector<unsigned int> getAllSNPsAlleleCounts();
 
-  void addFreq(std::string_view freqFile);
+  void addFreq(const Frequencies& freq);
 
+  [[nodiscard]] const Frequencies& getFreq() const;
+  void setHaploidSampleSize(unsigned haploidSampleSize);
 };
 
 } // namespace asmc

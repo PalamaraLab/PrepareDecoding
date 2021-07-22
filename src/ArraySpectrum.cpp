@@ -7,10 +7,50 @@
 #include "Data.hpp"
 #include "Utils.hpp"
 #include "ArraySpectrum.hpp"
+#include "DefaultArraySpectra.hpp"
+
+#include <fmt/format.h>
+#include <fmt/ostream.h>
 
 namespace asmc {
 
 ArraySpectrum::ArraySpectrum(Data data, unsigned samples) {
+
+  // If we're using a built-in, simply generate from the existing values
+  if(const Frequencies& freq = data.getFreq(); freq.isBuiltIn()) {
+    assert(freq.getNumSamples() == samples);
+
+    std::vector<double> spectrumCopy;
+    if(freq.getFreqIdentifier() == "UKBB") {
+      switch (freq.getNumSamples()) {
+      case 50:
+        spectrumCopy = std::vector<double>(spectra::spectrumUkbb50.begin(), spectra::spectrumUkbb50.end());
+        mMonomorphicProbability = spectra::pssUkbb50;
+        break;
+      case 100:
+        spectrumCopy = std::vector<double>(spectra::spectrumUkbb100.begin(), spectra::spectrumUkbb100.end());
+        mMonomorphicProbability = spectra::pssUkbb100;
+        break;
+      case 200:
+        spectrumCopy = std::vector<double>(spectra::spectrumUkbb200.begin(), spectra::spectrumUkbb200.end());
+        mMonomorphicProbability = spectra::pssUkbb200;
+        break;
+      case 300:
+        spectrumCopy = std::vector<double>(spectra::spectrumUkbb300.begin(), spectra::spectrumUkbb300.end());
+        mMonomorphicProbability = spectra::pssUkbb300;
+        break;
+      }
+    }
+
+    mSpectrum.resize(static_cast<Eigen::Index>(spectrumCopy.size()));
+    for (auto i = 0ul; i < spectrumCopy.size(); ++i) {
+      mSpectrum[static_cast<Eigen::Index>(i)] = spectrumCopy.at(i);
+    }
+
+    return;
+  }
+
+  // If not using a built-in, we have to calculate them
   std::unordered_map<double, std::tuple<int, int, int>> distributions;
   std::unordered_map<double, int> distCounts;
   array_dt spectrum(samples + 1);
@@ -38,10 +78,10 @@ ArraySpectrum::ArraySpectrum(Data data, unsigned samples) {
   }
 
   // sum all hypergeometrics to get spectrum in subsample (exclude [0] and [samples], which are monomorphic.
-  for (std::pair<double, int> distCount : distCounts) {
+  for (auto [_freq, _count] : distCounts) {
     for (unsigned i = 0; i <= samples; i++) {
-      spectrum[i] +=
-          std::apply(hypergeometricPmf, std::tuple_cat(distributions[distCount.first], std::tie(i))) * distCount.second;
+      auto [p0, p1, p2] = distributions[_freq];
+      spectrum[i] += asmc::hypergeometricPmf(p0, p1, p2, static_cast<int>(i)) * _count;
     }
   }
   // the term in 0 will contain monomorphic samples that are either present in the data, or due to subsampling
@@ -51,8 +91,8 @@ ArraySpectrum::ArraySpectrum(Data data, unsigned samples) {
   // store monomorphic probability separately, then renormalize excluding monomorphic at 0 and samples
   // add alleles for which all samples are carriers to monomorphic probability
   mMonomorphicProbability = spectrum[0] + spectrum[samples];
-  std::cout << "Probability of a site being monomorphic due to subsampling: "
-    << std::round(mMonomorphicProbability * 1000) / 1000.0 << std::endl;
+  fmt::print("Probability of a site being monomorphic due to subsampling: {:.15f}\n", mMonomorphicProbability);
+
   // renormalize without monomorphic
   spectrum[0] = 0.;
   spectrum[samples] = 0.;

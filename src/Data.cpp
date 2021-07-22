@@ -19,19 +19,25 @@ namespace asmc {
 
 namespace fs = std::filesystem;
 
-Data::Data(std::string_view hapsFileRoot) {
-
-  if (auto frq_gz = fmt::format("{}.frq.gz", hapsFileRoot); fs::exists(frq_gz)) {
-    readMinorAlleleFrequenciesGz(frq_gz);
-  } else if (auto frq = fmt::format("{}.frq", hapsFileRoot); fs::exists(frq)) {
-    readMinorAlleleFrequencies(frq);
+Data::Data(std::string_view hapsFileRoot) : mFreq{hapsFileRoot} {
+  if (mFreq.isFile()) {
+    if (mFreq.isGz()) {
+      readMinorAlleleFrequenciesGz(mFreq.getFreqIdentifier());
+    } else {
+      readMinorAlleleFrequencies(mFreq.getFreqIdentifier());
+    }
   } else {
     computeMinorAlleleFrequenciesFromHaps(hapsFileRoot);
   }
 }
 
-void Data::addFreq(std::string_view freqFile) {
-  readMinorAlleleFrequencies(freqFile);
+void Data::addFreq(const Frequencies& freq) {
+  mFreq = freq;
+  if(mFreq.isBuiltIn()) {
+    setHaploidSampleSize(mFreq.getNumSamples());
+  } else {
+    readMinorAlleleFrequencies(mFreq.getFreqIdentifier());
+  }
 }
 
 std::vector<double> Data::getAllSNPsFreq() { return mAllSNPsFreq; }
@@ -45,13 +51,13 @@ void Data::readMinorAlleleFrequenciesLine(const std::string& line) {
   int chr = {};
   std::string SNP;
   double freq = {};
-  unsigned int popSize = {};
-  tokens >> chr >> SNP >> A1 >> A2 >> freq >> popSize;
-  if (popSize > mHaploidSampleSize) mHaploidSampleSize = popSize;
+  unsigned int sampleSize = {};
+  tokens >> chr >> SNP >> A1 >> A2 >> freq >> sampleSize;
+  if (sampleSize > mHaploidSampleSize) mHaploidSampleSize = sampleSize;
   mAllSNPsFreq.emplace_back(freq);
   mAllSNPsMinorAlleles.emplace_back(
-      static_cast<unsigned int>(static_cast<double>(popSize) * freq));
-  mAllSNPsAlleleCounts.emplace_back(popSize);
+      static_cast<unsigned int>(static_cast<double>(sampleSize) * freq));
+  mAllSNPsAlleleCounts.emplace_back(sampleSize);
 }
 
 void Data::readMinorAlleleFrequenciesGz(std::string_view freqFile) {
@@ -138,6 +144,15 @@ std::string Data::identifyAppropriateHapsFile(std::string_view hapsFileRoot) {
   }
 
   return fmt::format("{}{}", hapsFileRoot, *use_ext);
+}
+
+
+const Frequencies& Data::getFreq() const {
+  return mFreq;
+}
+
+void Data::setHaploidSampleSize(unsigned haploidSampleSize) {
+  mHaploidSampleSize = haploidSampleSize;
 }
 
 } // namespace asmc

@@ -16,6 +16,7 @@ set(
         Csfs.cpp
         CsfsEntry.cpp
         Data.cpp
+        DefaultDemographies.cpp
         Utils.cpp
         ArraySpectrum.cpp
         Transition.cpp
@@ -31,6 +32,7 @@ set(
         CsfsEntry.hpp
         Data.hpp
         DecodingQuantities.hpp
+        DefaultArraySpectra.hpp
         DefaultDemographies.hpp
         EigenTypes.hpp
         PrepareDecoding.hpp
@@ -46,6 +48,7 @@ set(
         ${CMAKE_CURRENT_SOURCE_DIR}/CsfsEntry.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Data.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/DecodingQuantities.hpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/DefaultArraySpectra.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/DefaultDemographies.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/EigenTypes.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/PrepareDecoding.hpp

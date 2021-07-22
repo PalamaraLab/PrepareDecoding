@@ -222,6 +222,7 @@ mat_dt CSFS::computeClassicEmission(std::vector<double> expectedTimes, double mu
 }
 
 void CSFS::computeArraySamplingFactors(Data data, unsigned int samples, Transition transition) {
+
     mSamples = samples;
     auto coalDist = transition.getCoalDist();
     array_dt AFS(samples);

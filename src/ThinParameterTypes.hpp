@@ -151,6 +151,94 @@ public:
     return mNumAdditionalPoints;
   }
 };
+
+class Frequencies {
+private:
+  bool mFile = false;
+  bool mBuiltIn = false;
+  bool mGz = false;
+  std::string mFreqIdentifier;
+  unsigned mNumSamples = 0;
+
+  constexpr static std::array mValidDefaults{"UKBB"};
+  constexpr static std::array mValidSamples{50, 100, 200, 300};
+
+public:
+
+  Frequencies() = default;
+
+  explicit Frequencies(std::string_view fileRoot) : mFreqIdentifier{fileRoot} {
+
+    // Check whether we're passed a file root containing a frequencies file
+    if (std::string freqGzFile = fmt::format("{}.frq.gz", mFreqIdentifier);
+        fs::exists(freqGzFile) && fs::is_regular_file(freqGzFile)) {
+      mFile = true;
+      mGz = true;
+      mFreqIdentifier = freqGzFile;
+      fmt::print("Frequencies file set to {}\n", mFreqIdentifier);
+      return;
+    }
+
+    if (std::string freqFile = fmt::format("{}.frq", mFreqIdentifier);
+        fs::exists(freqFile) && fs::is_regular_file(freqFile)) {
+      mFile = true;
+      mFreqIdentifier = freqFile;
+      fmt::print("Frequencies file set to {}\n", mFreqIdentifier);
+      return;
+    }
+
+  }
+
+  Frequencies(std::string_view frequencies, const unsigned numSamples)
+      : mFreqIdentifier{frequencies}, mNumSamples{numSamples} {
+
+    // First check if it's a valid built-in
+    bool validDataSource =
+        std::find(std::begin(mValidDefaults), std::end(mValidDefaults), mFreqIdentifier) != std::end(mValidDefaults);
+    bool validNumSamples =
+        std::find(std::begin(mValidSamples), std::end(mValidSamples), numSamples) != std::end(mValidSamples);
+
+    if (validDataSource && validNumSamples) {
+      mBuiltIn = true;
+      fmt::print("Frequencies set to built-in {} with {} samples\n", mFreqIdentifier, numSamples);
+      return;
+    }
+
+    // If we're passed a valid file, use that
+    if (fs::exists(mFreqIdentifier) && fs::is_regular_file(mFreqIdentifier)) {
+      mFile = true;
+      fmt::print("Frequencies file set to {}\n", mFreqIdentifier);
+      return;
+    }
+
+    // If neither of the above, it's an error
+    auto error_message = fmt::format("Expected either a valid frequencies file, or a valid data source (one of {}) and "
+                                     "a valid number of samples (one of {}), but got {} with {} samples",
+                                     mValidDefaults, mValidSamples, mFreqIdentifier, mNumSamples);
+    throw std::runtime_error(error_message);
+  }
+
+  [[nodiscard]] bool isFile() const {
+    return mFile;
+  }
+
+  [[nodiscard]] bool isBuiltIn() const {
+    return mBuiltIn;
+  }
+
+  [[nodiscard]] bool isGz() const {
+    return mGz;
+  }
+
+  [[nodiscard]] const std::string& getFreqIdentifier() const {
+    return mFreqIdentifier;
+  }
+
+  [[nodiscard]] unsigned getNumSamples() const {
+    return mNumSamples;
+  }
+};
+
 } // namespace asmc
 
 #endif // PREPAREDECODING_THIN_PARAMETER_TYPES_HPP
