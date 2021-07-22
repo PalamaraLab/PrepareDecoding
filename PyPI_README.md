@@ -22,40 +22,17 @@ Most functionality is available through a Python module which can be installed w
 pip install asmc-preparedecoding
 ```
 
-This Python module is available on Linux, macOS and Windows.
+This Python module is currently available on Linux and macOS.
+We hope it will be available soon on Windows.
 
-Some additional functionality, for creating CSFS, requires the additional dependency [smcpp](https://github.com/popgenmethods/smcpp/), which is not available via PyPI.
-If you require this functionality, you should additionally [follow these instructions](#installing-smcpp) to install smcpp.
+Examples for using the Python module can be found in the following Jupyter notebook:
+- [creating decoding quantities](notebooks/CreatingDecodingQuantities.ipynb)
 
-Examples for using the Python module can be found in the notebooks directory:
-- [creating decoding quantities from precomputed CSFS](https://github.com/PalamaraLab/PrepareDecoding/blob/master/notebooks/CreateDecodingQuantitiesFromPrecomputedCSFS.ipynb)
-- [creating decoding quantities from scratch](https://github.com/PalamaraLab/PrepareDecoding/blob/master/notebooks/CreateDecodingQuantitiesFromScratch.ipynb) (requires smcpp)
-
-### Installing smcpp
-
-The optional smcpp dependency is not available on PyPI, and itself requires a few additional dependencies.
-
-On **Linux**, run
+Please note that you must install Jupyter in order to view the notebook, and then open it:
 
 ```bash
-sudo apt install libgmp-dev libmpfr-dev libgsl0-dev
-```
-
-on **macOS**, run
-
-```bash
-brew install mpfr gmp gsl
-```
-
-Then, we recommend starting from a clean virtual environment. 
-Switch to the source directory and run:
-
-```bash
-python3 -m venv venv
-source venv/bin/activate
-python -m pip install --upgrade pip setuptools wheel
-python -m pip install asmc-preparedecoding
-python -m pip install git+https://github.com/popgenmethods/smcpp/@v1.15.3
+pip install jupyter
+jupyter-notebook notebooks/CreatingDecodingQuantities.ipynb
 ```
 
 ## License

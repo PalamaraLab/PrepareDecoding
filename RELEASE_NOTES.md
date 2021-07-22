@@ -1,5 +1,28 @@
 # Release Notes
 
+## v2.2 (2021-??-??)
+
+You can now specify discretizations in the following manner:
+- as a file: `discretization='/path/to/discretization.disc'` (existing functionality)
+- as a number of quantiles, which will be calculated at runtime: `discretization=[100]`
+- as a number of pre-specified quantiles plus a number of additional quantiles calculated at runtime: `discretization=[[30.0, 12], [100.0, 15], 39]`
+  - this will create 12 discretization points at a spacing of 30.0 (starting from 0.0), followed by 15 at a spacing of 100, followed by 39 additional quantiles
+
+You can now specify built-in frequencies information. Currently, the only supported frequencies are from UKBB. Frequencies can now be specified in the following manner:
+- as a file: `frequencies='/path/to/frequencies.frq'` (existing functionality)
+- as a string: `frequencies='UKBB'`
+
+### Breaking changes
+
+- The Python API has been simplified, and the strong types mentioned in the v2.1 release are no longer required in Python. 
+  Please see the Jupyter Notebook for examples of the current API.
+- The strong types remain in the C++ API.
+  Please see the file `TestPrepareDecoding.cpp` for examples of the C++ library API.
+  
+### Other changes
+
+Various other minor changes have been made.
+
 ## v2.1 (2021-05-13)
 
 Default demographies are now bundled with Prepare Decoding.
