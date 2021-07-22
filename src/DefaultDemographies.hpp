@@ -4,7 +4,16 @@
 #ifndef DEFAULTDEMOGRAPHIES_HPP
 #define DEFAULTDEMOGRAPHIES_HPP
 
+#include <array>
+#include <string_view>
+#include <tuple>
+#include <vector>
+
 namespace asmc::demo {
+
+constexpr inline std::array validDemographies{"ACB", "ASW", "BEB", "CDX", "CEU", "CHB", "CHS", "CLM", "ESN",
+                                              "FIN", "GBR", "GIH", "GWD", "IBS", "ITU", "JPT", "KHV", "LWK",
+                                              "MSL", "MXL", "PEL", "PJL", "PUR", "STU", "TSI", "YRI"};
 
 constexpr inline std::array timesACB{
     0.0,     37.8788, 40.8902, 44.141,  47.6503, 51.4385, 55.5279, 59.9425, 64.708,  69.8523, 75.4057, 81.4005, 87.8719,
@@ -543,6 +552,13 @@ constexpr inline std::array sizesYRI{
     41948.8,  40018.0,  37921.6,  35851.4,  33918.2,  32099.2,  30488.0,  29089.0,  27977.4,  27113.8,  26454.2,
     25992.6,  25767.0,  25841.4,  25991.0,  26272.2,  26662.2,  27170.2,  27593.2,  27974.8,  28529.0,  29421.2,
     30648.0,  32183.2};
+
+std::tuple<std::vector<double>, std::vector<double>> getBuiltInDemography(std::string_view demoCode);
+
+bool isValidDemography(std::string_view demoCode);
+
+void saveDemography(std::string_view outputDir, std::string_view demoCode);
+
 
 } // namespace asmc::demo
 

@@ -10,6 +10,7 @@
 #include "DefaultDemographies.hpp"
 #include "Transition.hpp"
 #include "Utils.hpp"
+#include <algorithm>
 #include <cstdlib>
 #include <filesystem>
 #include <fmt/core.h>
@@ -21,23 +22,28 @@ namespace fs = std::filesystem;
 
 namespace asmc {
 
-DecodingQuantities prepareDecoding(CSFS& csfs, const Demography& demo, std::string_view discretizationFile,
-                                   int coalescentQuantiles, int mutationAgeIntervals, std::string_view fileRoot,
-                                   std::string_view freqFile, double mutRate, unsigned int samples) {
+DecodingQuantities prepareDecoding(CSFS& csfs, const Demography& demo, const Discretization& disc,
+                                   std::string_view fileRoot, const Frequencies& freq, double mutRate,
+                                   unsigned int samples, std::vector<double> discValues = {}) {
 
   auto [times, sizes] = getDemographicInfo(demo);
-  auto discs = getDiscretizationInfo(discretizationFile, coalescentQuantiles, mutationAgeIntervals, times, sizes);
+
+  if(discValues.empty()) {
+    discValues = getDiscretizationInfo(disc, times, sizes);
+  }
 
   Data data;
   if (!fileRoot.empty()) {
     fmt::print("Files will be read from: {}*\n", fileRoot);
   }
-  if (!freqFile.empty()) {
-    if (!fs::exists(freqFile)) {
-      throw std::runtime_error(fmt::format("Could not open {}\n", freqFile));
-    }
-    fmt::print("Will load minor allele frequencies from {} ...\n", freqFile);
-    data.addFreq(freqFile);
+
+  if (freq.isBuiltIn()) {
+    assert(freq.getNumSamples() == samples);
+    data.addFreq(freq);
+    fmt::print("Using built-in frequency information from {} ...\n", freq.getFreqIdentifier());
+  } else if (freq.isFile()) {
+    fmt::print("Will use minor allele frequencies from {} ...\n", freq.getFreqIdentifier());
+    data.addFreq(freq);
   } else {
     if (fileRoot.empty()) {
       throw std::runtime_error("Either one of --freqFile or --fileRoot has to be specified\n");
@@ -50,8 +56,8 @@ DecodingQuantities prepareDecoding(CSFS& csfs, const Demography& demo, std::stri
   fmt::print("Number of samples in CSFS calculations: {}.\n", samples);
 
   // Transition
-  Transition transition(times, sizes, discs, TransitionType::CSC);
-  if (csfs.verify(times, sizes, mutRate, samples, discs)) {
+  Transition transition(times, sizes, discValues, TransitionType::CSC);
+  if (csfs.verify(times, sizes, mutRate, samples, discValues)) {
     fmt::print("Verified " + std::to_string(csfs.getCSFS().size()) + " CSFS entries.\n");
   } else {
     throw std::runtime_error("CSFS could not be verified. The Python version can be used"
@@ -65,9 +71,8 @@ DecodingQuantities prepareDecoding(CSFS& csfs, const Demography& demo, std::stri
   return DecodingQuantities(csfs, transition, mutRate);
 }
 
-DecodingQuantities calculateCsfsAndPrepareDecoding(const Demography& demo, std::string_view discretizationFile,
-                                                   const int coalescentQuantiles, const int mutationAgeIntervals,
-                                                   std::string_view fileRoot, std::string_view freqFile,
+DecodingQuantities calculateCsfsAndPrepareDecoding(const Demography& demo, const Discretization& disc,
+                                                   std::string_view fileRoot, const Frequencies& freq,
                                                    const double mutRate, const unsigned int samples) {
 
   // Get the array times and sizes, and remove the additional element added to the end of each array
@@ -75,8 +80,7 @@ DecodingQuantities calculateCsfsAndPrepareDecoding(const Demography& demo, std::
   arrayTime.pop_back();
   arraySize.pop_back();
 
-  auto arrayDisc =
-      getDiscretizationInfo(discretizationFile, coalescentQuantiles, mutationAgeIntervals, arrayTime, arraySize);
+  std::vector<double> arrayDisc = getDiscretizationInfo(disc, arrayTime, arraySize);
 
   const double N0 = arraySize.front();
   const double theta = mutRate * 2. * N0;
@@ -113,19 +117,16 @@ DecodingQuantities calculateCsfsAndPrepareDecoding(const Demography& demo, std::
 
   auto csfs = CSFS::load(arrayTime, arraySize, mutRate, samples, froms, tos, csfses);
 
-  return prepareDecoding(csfs, demo, discretizationFile, coalescentQuantiles, mutationAgeIntervals, fileRoot,
-                         freqFile, mutRate, samples);
+  return prepareDecoding(csfs, demo, disc, fileRoot, freq, mutRate, samples, std::move(arrayDisc));
 }
 
 DecodingQuantities prepareDecodingPrecalculatedCsfs(std::string_view CSFSFile, const Demography& demo,
-                                                    std::string_view discretizationFile, int coalescentQuantiles,
-                                                    int mutationAgeIntervals, std::string_view fileRoot,
-                                                    std::string_view freqFile, double mutRate, unsigned int samples) {
+                                                    const Discretization& disc, std::string_view fileRoot,
+                                                    const Frequencies& freq, double mutRate, unsigned int samples) {
   if (!CSFSFile.empty() & fs::exists(CSFSFile)) {
     fmt::print("Will load precomputed CSFS from {} ...\n", CSFSFile);
     auto csfs = CSFS::loadFromFile(CSFSFile);
-    return prepareDecoding(csfs, demo, discretizationFile, coalescentQuantiles, mutationAgeIntervals,
-                           fileRoot, freqFile, mutRate, samples);
+    return prepareDecoding(csfs, demo, disc, fileRoot, freq, mutRate, samples);
   } else {
     throw std::runtime_error("Valid CSFS file needs to be specified\n");
   }
@@ -140,85 +141,9 @@ std::tuple<std::vector<double>, std::vector<double>> getDemographicInfo(const De
     times = ts.first;
     sizes = ts.second;
   } else {
-    if (demo.getDemography() == "ACB") {
-      times = std::vector<double>(demo::timesACB.begin(), demo::timesACB.end());
-      sizes = std::vector<double>(demo::sizesACB.begin(), demo::sizesACB.end());
-    } else if (demo.getDemography() == "ASW") {
-      times = std::vector<double>(demo::timesASW.begin(), demo::timesASW.end());
-      sizes = std::vector<double>(demo::sizesASW.begin(), demo::sizesASW.end());
-    } else if (demo.getDemography() == "BEB") {
-      times = std::vector<double>(demo::timesBEB.begin(), demo::timesBEB.end());
-      sizes = std::vector<double>(demo::sizesBEB.begin(), demo::sizesBEB.end());
-    } else if (demo.getDemography() == "CDX") {
-      times = std::vector<double>(demo::timesCDX.begin(), demo::timesCDX.end());
-      sizes = std::vector<double>(demo::sizesCDX.begin(), demo::sizesCDX.end());
-    } else if (demo.getDemography() == "CEU") {
-      times = std::vector<double>(demo::timesCEU.begin(), demo::timesCEU.end());
-      sizes = std::vector<double>(demo::sizesCEU.begin(), demo::sizesCEU.end());
-    } else if (demo.getDemography() == "CHB") {
-      times = std::vector<double>(demo::timesCHB.begin(), demo::timesCHB.end());
-      sizes = std::vector<double>(demo::sizesCHB.begin(), demo::sizesCHB.end());
-    } else if (demo.getDemography() == "CHS") {
-      times = std::vector<double>(demo::timesCHS.begin(), demo::timesCHS.end());
-      sizes = std::vector<double>(demo::sizesCHS.begin(), demo::sizesCHS.end());
-    } else if (demo.getDemography() == "CLM") {
-      times = std::vector<double>(demo::timesCLM.begin(), demo::timesCLM.end());
-      sizes = std::vector<double>(demo::sizesCLM.begin(), demo::sizesCLM.end());
-    } else if (demo.getDemography() == "ESN") {
-      times = std::vector<double>(demo::timesESN.begin(), demo::timesESN.end());
-      sizes = std::vector<double>(demo::sizesESN.begin(), demo::sizesESN.end());
-    } else if (demo.getDemography() == "FIN") {
-      times = std::vector<double>(demo::timesFIN.begin(), demo::timesFIN.end());
-      sizes = std::vector<double>(demo::sizesFIN.begin(), demo::sizesFIN.end());
-    } else if (demo.getDemography() == "GBR") {
-      times = std::vector<double>(demo::timesGBR.begin(), demo::timesGBR.end());
-      sizes = std::vector<double>(demo::sizesGBR.begin(), demo::sizesGBR.end());
-    } else if (demo.getDemography() == "GIH") {
-      times = std::vector<double>(demo::timesGIH.begin(), demo::timesGIH.end());
-      sizes = std::vector<double>(demo::sizesGIH.begin(), demo::sizesGIH.end());
-    } else if (demo.getDemography() == "GWD") {
-      times = std::vector<double>(demo::timesGWD.begin(), demo::timesGWD.end());
-      sizes = std::vector<double>(demo::sizesGWD.begin(), demo::sizesGWD.end());
-    } else if (demo.getDemography() == "IBS") {
-      times = std::vector<double>(demo::timesIBS.begin(), demo::timesIBS.end());
-      sizes = std::vector<double>(demo::sizesIBS.begin(), demo::sizesIBS.end());
-    } else if (demo.getDemography() == "ITU") {
-      times = std::vector<double>(demo::timesITU.begin(), demo::timesITU.end());
-      sizes = std::vector<double>(demo::sizesITU.begin(), demo::sizesITU.end());
-    } else if (demo.getDemography() == "JPT") {
-      times = std::vector<double>(demo::timesJPT.begin(), demo::timesJPT.end());
-      sizes = std::vector<double>(demo::sizesJPT.begin(), demo::sizesJPT.end());
-    } else if (demo.getDemography() == "KHV") {
-      times = std::vector<double>(demo::timesKHV.begin(), demo::timesKHV.end());
-      sizes = std::vector<double>(demo::sizesKHV.begin(), demo::sizesKHV.end());
-    } else if (demo.getDemography() == "LWK") {
-      times = std::vector<double>(demo::timesLWK.begin(), demo::timesLWK.end());
-      sizes = std::vector<double>(demo::sizesLWK.begin(), demo::sizesLWK.end());
-    } else if (demo.getDemography() == "MSL") {
-      times = std::vector<double>(demo::timesMSL.begin(), demo::timesMSL.end());
-      sizes = std::vector<double>(demo::sizesMSL.begin(), demo::sizesMSL.end());
-    } else if (demo.getDemography() == "MXL") {
-      times = std::vector<double>(demo::timesMXL.begin(), demo::timesMXL.end());
-      sizes = std::vector<double>(demo::sizesMXL.begin(), demo::sizesMXL.end());
-    } else if (demo.getDemography() == "PEL") {
-      times = std::vector<double>(demo::timesPEL.begin(), demo::timesPEL.end());
-      sizes = std::vector<double>(demo::sizesPEL.begin(), demo::sizesPEL.end());
-    } else if (demo.getDemography() == "PJL") {
-      times = std::vector<double>(demo::timesPJL.begin(), demo::timesPJL.end());
-      sizes = std::vector<double>(demo::sizesPJL.begin(), demo::sizesPJL.end());
-    } else if (demo.getDemography() == "PUR") {
-      times = std::vector<double>(demo::timesPUR.begin(), demo::timesPUR.end());
-      sizes = std::vector<double>(demo::sizesPUR.begin(), demo::sizesPUR.end());
-    } else if (demo.getDemography() == "STU") {
-      times = std::vector<double>(demo::timesSTU.begin(), demo::timesSTU.end());
-      sizes = std::vector<double>(demo::sizesSTU.begin(), demo::sizesSTU.end());
-    } else if (demo.getDemography() == "TSI") {
-      times = std::vector<double>(demo::timesTSI.begin(), demo::timesTSI.end());
-      sizes = std::vector<double>(demo::sizesTSI.begin(), demo::sizesTSI.end());
-    } else if (demo.getDemography() == "YRI") {
-      times = std::vector<double>(demo::timesYRI.begin(), demo::timesYRI.end());
-      sizes = std::vector<double>(demo::sizesYRI.begin(), demo::sizesYRI.end());
-    }
+    auto [t, s] = demo::getBuiltInDemography(demo.getDemography());
+    times = std::move(t);
+    sizes = std::move(s);
   }
   if (times.empty() || sizes.empty()) {
     throw std::runtime_error(fmt::format("Unknown error getting demography: {}", demo.getDemography()));
@@ -228,25 +153,58 @@ std::tuple<std::vector<double>, std::vector<double>> getDemographicInfo(const De
   return std::make_tuple(times, sizes);
 }
 
-std::vector<double> getDiscretizationInfo(std::string_view discretizationFile, const int coalescentQuantiles,
-                                          const int mutationAgeIntervals, const std::vector<double>& times,
+std::vector<double> getDiscretizationInfo(const Discretization& disc, const std::vector<double>& times,
                                           const std::vector<double>& sizes) {
   std::vector<double> discs;
 
-  if (!discretizationFile.empty() & fs::exists(discretizationFile)) {
-    fmt::print("Will read discretization intervals from {} ...\n", discretizationFile);
-    discs = readDiscretization(discretizationFile);
-  } else if (coalescentQuantiles > 0) {
-    discs = Transition::getTimeExponentialQuantiles(coalescentQuantiles, times, sizes);
-    fmt::print("Using {} discretization intervals from coalescent distribution.\n", coalescentQuantiles);
-  } else if (mutationAgeIntervals > 0) {
-    discs = Transition::getTimeErlangQuantiles(mutationAgeIntervals, times, sizes);
-    fmt::print("Using {} discretization intervals from mutation age intervals.\n", mutationAgeIntervals);
+  if (disc.isFile()) {
+    fmt::print("Will read discretization intervals from {} ...\n", disc.getDiscretizationFile());
+    discs = readDiscretization(disc.getDiscretizationFile());
+  } else {
+    // The pre-specified discretization quantiles
+    discs = disc.getDiscretizationPoints();
+
+    // If none pre-specified we can generate them all
+    if (discs.empty()) {
+      discs.emplace_back(0.0);
+      fmt::print("Calculating {} discretization intervals from coalescent distribution.\n",
+                 disc.getNumAdditionalPoints());
+    } else {
+      fmt::print("Using the following pre-specified discretization intervals: {}\n and calculating {} additional "
+                 "intervals from coalescent distribution.\n",
+                 discs, disc.getNumAdditionalPoints());
+    }
+
+    // We now shift by the final pre-specified quantile, and generate additional quantiles as required
+    double lastPoint = discs.back();
+
+    std::vector<double> newTimes;
+    std::vector<double> newSizes = sizes;
+
+    for (double time : times) {
+      newTimes.push_back(time - lastPoint);
+    }
+
+    if (newTimes.front() > 0.0 || newTimes.back() <= 0.0) {
+      throw std::runtime_error("Something unexpected went wrong while calculating the discretization...\n");
+    }
+
+    auto i2 =
+        std::adjacent_find(newTimes.begin(), newTimes.end(), [](double a, double b) { return a <= 0.0 && b > 0; });
+
+    auto n = std::distance(newTimes.begin(), i2);
+
+    newTimes.erase(newTimes.begin(), newTimes.begin() + n);
+    newSizes.erase(newSizes.begin(), newSizes.begin() + n);
+    newTimes.front() = 0.0;
+
+    std::vector<double> newDiscs = Transition::getTimeExponentialQuantiles(1 + disc.getNumAdditionalPoints(), newTimes, newSizes);
+
+    for (auto discNum = 1ul; discNum < newDiscs.size(); ++discNum) {
+      discs.push_back(lastPoint + newDiscs.at(discNum));
+    }
   }
-  if (discs.empty()) {
-    throw std::runtime_error(
-        "Specify a valid option from --discretization, --coalescentQuantiles, --mutationQuantiles\n");
-  }
+
   discs.emplace_back(std::numeric_limits<double>::infinity());
 
   return discs;

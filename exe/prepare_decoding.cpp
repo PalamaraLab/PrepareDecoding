@@ -60,9 +60,6 @@ int main(int argc, char* argv[]) {
        cxxopts::value<int>()->default_value("0"))
       ("d,discretization", "File with vector of time discretization intervals",
        cxxopts::value<std::string>()->default_value(""))
-      ("q,coalescentQuantiles", "Desired number of discretization intervals "
-       " (quantiles from the pairwise coalescent distribution)",
-       cxxopts::value<int>()->default_value("0"))
       ("o,outputFileRoot", "Output file root.",
        cxxopts::value<std::string>()->default_value(""))
       ("f,fileRoot", "Root for name of hap/samples files from which allele "
@@ -82,20 +79,16 @@ int main(int argc, char* argv[]) {
   const std::string fileRoot = result["fileRoot"].as<std::string>();
   const std::string outputFileRoot = result["outputFileRoot"].as<std::string>();
 
-  const int coalescentQuantiles = result["coalescentQuantiles"].as<int>();
-  const int mutationAgeIntervals = result["mutationQuantiles"].as<int>();
-
   const unsigned int samples = result["samples"].as<unsigned int>();
 
   const double mutRate = result["mut"].as<double>();
 
   DecodingQuantities dq =
       CSFSFile.empty()
-          ? calculateCsfsAndPrepareDecoding(Demography(demographicFile), discretizationFile, coalescentQuantiles,
-                                            mutationAgeIntervals, fileRoot, freqFile, mutRate, samples)
-          : prepareDecodingPrecalculatedCsfs(CSFSFile, Demography(demographicFile), discretizationFile,
-                                             coalescentQuantiles, mutationAgeIntervals, fileRoot, freqFile, mutRate,
-                                             samples);
+          ? calculateCsfsAndPrepareDecoding(Demography(demographicFile), Discretization(discretizationFile), fileRoot,
+                                            Frequencies(freqFile, samples), mutRate, samples)
+          : prepareDecodingPrecalculatedCsfs(CSFSFile, Demography(demographicFile), Discretization(discretizationFile),
+                                             fileRoot, Frequencies(freqFile, samples), mutRate, samples);
 
   dq.saveDecodingQuantities(outputFileRoot);
   dq.saveIntervals(outputFileRoot);

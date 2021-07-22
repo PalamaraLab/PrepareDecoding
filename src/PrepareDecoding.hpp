@@ -11,18 +11,16 @@
 #include "ThinParameterTypes.hpp"
 
 namespace asmc {
-DecodingQuantities prepareDecoding(CSFS& csfs, const Demography& demo, std::string_view discretizationFile,
-                                   int coalescentQuantiles, int mutationAgeIntervals, std::string_view fileRoot,
-                                   std::string_view freqFile, double mutRate, unsigned int samples);
+DecodingQuantities prepareDecoding(CSFS& csfs, const Demography& demo, const Discretization& disc,
+                                   std::string_view fileRoot, const Frequencies& freq, double mutRate,
+                                   unsigned int samples, std::vector<double> discValues);
 
 DecodingQuantities prepareDecodingPrecalculatedCsfs(std::string_view CSFSFile, const Demography& demo,
-                                                    std::string_view discretizationFile, int coalescentQuantiles,
-                                                    int mutationAgeIntervals, std::string_view fileRoot,
-                                                    std::string_view freqFile, double mutRate, unsigned int samples);
+                                                    const Discretization& disc, std::string_view fileRoot,
+                                                    const Frequencies& freq, double mutRate, unsigned int samples);
 
-DecodingQuantities calculateCsfsAndPrepareDecoding(const Demography& demo, std::string_view discretizationFile,
-                                                   int coalescentQuantiles, int mutationAgeIntervals,
-                                                   std::string_view fileRoot, std::string_view freqFile, double mutRate,
+DecodingQuantities calculateCsfsAndPrepareDecoding(const Demography& demo, const Discretization& disc,
+                                                   std::string_view fileRoot, const Frequencies& freq, double mutRate,
                                                    unsigned int samples);
 
 /**
@@ -34,14 +32,12 @@ std::tuple<std::vector<double>, std::vector<double>> getDemographicInfo(const De
 
 /**
  * Read discretization info from file, or use coalescent quantiles or mutation age intervals
-  * @param coalescentQuantiles
-  * @param mutationAgeIntervals
+  * @param disc
   * @param times
   * @param sizes
  * @return vector of discretizations, appended with inf
  */
-std::vector<double> getDiscretizationInfo(std::string_view discretizationFile, int coalescentQuantiles,
-                                          int mutationAgeIntervals, const std::vector<double>& times,
+std::vector<double> getDiscretizationInfo(const Discretization& disc, const std::vector<double>& times,
                                           const std::vector<double>& sizes);
 
 } // namespace asmc
