@@ -45,6 +45,10 @@ jobs:
           python -m pip install --upgrade pip setuptools wheel
           python -m pip install numpy
 
+      - name: install python bindings
+        run: |
+          python -m pip install .
+
       - name: make build directory
         run: mkdir build_dir
         if: steps.cache.outputs.cache-hit != 'true'
@@ -55,7 +59,12 @@ jobs:
           cmake --build . --parallel 2 --target prepare_decoding_exe
         working-directory: build_dir
 
-      - name: generate & check decoding quantities
+      - name: generate & check decoding quantities (executable)
         run: |
           bash test_prepare.sh ../../build_dir/exe/prepare_decoding_exe
+        working-directory: test/regression
+
+      - name: generate & check decoding quantities (python)
+        run: |
+          bash test_prepare_python.sh
         working-directory: test/regression
