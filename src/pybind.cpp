@@ -51,7 +51,7 @@ PYBIND11_MODULE(preparedecoding_python_bindings, m) {
     py::class_<DecodingQuantities>(m, "DecodingQuantities")
         .def_property_readonly("times", &DecodingQuantities::getTimes)
         .def_property_readonly("sizes", &DecodingQuantities::getSizes)
-        .def_property_readonly("discretization", &DecodingQuantities::getDiscretization)
+        .def("discretization", &DecodingQuantities::getDiscretization)
         .def_property_readonly("expectedTimes", &DecodingQuantities::getExpectedTimes)
         .def_property_readonly("geneticDistances", &DecodingQuantities::getGeneticDistances)
         .def_property_readonly("physDistances", &DecodingQuantities::getPhysDistances)
@@ -70,11 +70,13 @@ PYBIND11_MODULE(preparedecoding_python_bindings, m) {
         .def_property_readonly("foldedAscertainedCSFS", &DecodingQuantities::getFoldedAscertainedCSFS)
         .def_property_readonly("classicEmission", &DecodingQuantities::getClassicEmission)
         .def_property_readonly("compressedEmission", &DecodingQuantities::getCompressedEmission)
-        .def("saveIntervals", &DecodingQuantities::saveIntervals, "Save DecodingQuantities intervals",
+        .def("save_intervals", &DecodingQuantities::saveIntervals, "Save DecodingQuantities intervals",
              "outputFileRoot"_a)
-        .def("saveDecodingQuantities", &DecodingQuantities::saveDecodingQuantities, "Save DecodingQuantities",
+        .def("save_decoding_quantities", &DecodingQuantities::saveDecodingQuantities, "Save DecodingQuantities",
              "outputFileRoot"_a)
-        .def("saveCsfs", &DecodingQuantities::saveCsfs, "Save CSFS",
+        .def("save_csfs", &DecodingQuantities::saveCsfs, "Save CSFS",
+             "outputFileRoot"_a)
+        .def("save_discretization", &DecodingQuantities::saveDiscretization, "Save discretization",
              "outputFileRoot"_a);
     py::class_<CSFS>(m, "CSFS")
       .def_static("load", &CSFS::load, "Construct CSFS from parameters",
@@ -92,18 +94,24 @@ PYBIND11_MODULE(preparedecoding_python_bindings, m) {
       .def_property_readonly("csfs", &CSFSEntry::getCSFSMatrix)
     ;
     m.def("prepareDecodingPrecalculatedCsfs", &prepareDecodingPrecalculatedCsfs,
-          "Prepare decoding quantities from precomputed CSFS", "CSFSFile"_a, "demographicFile"_a = "",
-          "discretizationFile"_a = "", "coalescentQuantiles"_a = -1, "mutationAgeIntervals"_a = -1, "fileRoot"_a = "",
-          "freqFile"_a = "", "mutRate"_a = 1.65e-8, "samples"_a = 300);
+          "Prepare decoding quantities from precomputed CSFS", "CSFSFile"_a, "demography"_a = "",
+          "discretization"_a = "", "fileRoot"_a = "", "freqFile"_a = "", "mutRate"_a = 1.65e-8, "samples"_a = 300);
     m.def("calculateCsfsAndPrepareDecoding", &calculateCsfsAndPrepareDecoding,
-          "Calculate CSFS and prepare decoding quantities","demographicFile"_a = "",
-          "discretizationFile"_a = "", "coalescentQuantiles"_a = -1, "mutationAgeIntervals"_a = -1, "fileRoot"_a = "",
-          "freqFile"_a = "", "mutRate"_a = 1.65e-8, "samples"_a = 300);
-    m.def("prepareDecoding", &prepareDecoding, "Prepare decoding quantities", "csfs"_a, "demographicFile"_a = "",
-          "discretizationFile"_a = "", "coalescentQuantiles"_a = -1, "mutationAgeIntervals"_a = -1, "fileRoot"_a = "",
-          "freqFile"_a = "", "mutRate"_a = 1.65e-8, "samples"_a = 300);
+          "Calculate CSFS and prepare decoding quantities", "demography"_a = "", "discretization"_a = "",
+          "fileRoot"_a = "", "freqFile"_a = "", "mutRate"_a = 1.65e-8, "samples"_a = 300);
 
     py::class_<Demography>(m, "Demography")
         .def(py::init<>())
         .def(py::init<std::string_view>());
+
+    py::class_<Discretization>(m, "Discretization")
+        .def(py::init<std::string_view>())
+        .def(py::init<std::vector<double>, int>())
+        .def(py::init<const std::vector<std::pair<double, int>>&, int>());
+
+    py::class_<Frequencies>(m, "Frequencies")
+        .def(py::init<std::string_view>())
+        .def(py::init<std::string_view, unsigned>());
+
+    m.def("save_demography", &demo::saveDemography, "Save a default demography to file", "output_dir"_a, "demo_code"_a);
 }
