@@ -13,7 +13,7 @@ disc_coarse = [[30.0, 14], [100.0, 15], 39]
 dq_coarse = calculate_csfs_and_prepare_decoding(
     demography='CEU',
     discretization=disc_coarse,
-    freq_file='UKBB',
+    frequencies='UKBB',
     samples=300,
 )
 
@@ -28,7 +28,7 @@ disc_fine = [[10.0, 40], [20.0, 79], 39]
 dq_fine = calculate_csfs_and_prepare_decoding(
     demography='CEU',
     discretization=disc_fine,
-    freq_file='UKBB',
+    frequencies='UKBB',
     samples=300,
 )
 

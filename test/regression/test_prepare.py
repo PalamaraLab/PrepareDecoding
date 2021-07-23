@@ -16,7 +16,7 @@ def from_existing_files():
     dq = calculate_csfs_and_prepare_decoding(
         demography=demo_file,
         discretization=disc_file,
-        freq_file=freq_file,
+        frequencies=freq_file,
         samples=50,
     )
 
@@ -32,7 +32,7 @@ def builtins_except_frequency():
     dq = calculate_csfs_and_prepare_decoding(
         demography='CEU',
         discretization=[[30, 15], [100, 15], 40],
-        freq_file=freq_file,
+        frequencies=freq_file,
         samples=100,
     )
 
@@ -48,7 +48,7 @@ def builtins_including_frequency():
     dq = calculate_csfs_and_prepare_decoding(
         demography='CEU',
         discretization=[[30, 15], [100, 15], 40],
-        freq_file='UKBB',
+        frequencies='UKBB',
         samples=100,
     )
 
