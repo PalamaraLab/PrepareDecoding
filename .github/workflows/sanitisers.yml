@@ -45,7 +45,7 @@ jobs:
           mv vcpkg_installed .. && rm -rf * && mv ../vcpkg_installed .
           cmake .. -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Debug -DENABLE_SANITISER_ADDRESS=ON
           cmake --build . --parallel 2 --target unit_tests
-          ./test/unit_tests
+          ./test/unit_tests ~"Test prepare decoding"
         working-directory: build_dir
 
       - name: leak sanitiser
@@ -69,5 +69,5 @@ jobs:
           mv vcpkg_installed .. && rm -rf * && mv ../vcpkg_installed .
           cmake .. -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Debug -DENABLE_SANITISER_THREAD=ON
           cmake --build . --parallel 2 --target unit_tests
-          ./test/unit_tests
+          ./test/unit_tests ~"Test prepare decoding"
         working-directory: build_dir
