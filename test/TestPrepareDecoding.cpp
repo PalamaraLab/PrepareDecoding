@@ -11,17 +11,17 @@ namespace asmc {
 
 TEST_CASE("Test prepare decoding", "[PrepareDecoding]") {
 
-  auto dq1 = calculateCsfsAndPrepareDecoding(
-      Demography("CEU"),
-      Discretization({std::make_pair(12.3, 50)}, 50),
-      PREPARE_DECODING_TEST_DIR "/regression/",
-      Frequencies("UKBB", 50), 1.65e-8, 50);
-
-  auto dq2 = calculateCsfsAndPrepareDecoding(
-      Demography("CEU"),
-      Discretization(std::vector<double>{}, 150),
-      PREPARE_DECODING_TEST_DIR "/regression/",
-      Frequencies("UKBB", 50), 1.65e-8, 50);
+//  auto dq1 = calculateCsfsAndPrepareDecoding(
+//      Demography("CEU"),
+//      Discretization({std::make_pair(12.3, 50)}, 50),
+//      PREPARE_DECODING_TEST_DIR "/regression/",
+//      Frequencies("UKBB", 50), 1.65e-8, 50);
+//
+//  auto dq2 = calculateCsfsAndPrepareDecoding(
+//      Demography("CEU"),
+//      Discretization(std::vector<double>{}, 150),
+//      PREPARE_DECODING_TEST_DIR "/regression/",
+//      Frequencies("UKBB", 50), 1.65e-8, 50);
 
 }
 
