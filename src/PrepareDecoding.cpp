@@ -179,6 +179,7 @@ std::vector<double> getDiscretizationInfo(const Discretization& disc, const std:
     double lastPoint = discs.back();
 
     std::vector<double> newTimes;
+    newTimes.reserve(times.size());
     std::vector<double> newSizes = sizes;
 
     for (double time : times) {
