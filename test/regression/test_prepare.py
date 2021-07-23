@@ -20,9 +20,9 @@ def from_existing_files():
         samples=50,
     )
 
-    dq.saveCsfs(str(files_dir / 'dq_py_original_files'))
-    dq.saveIntervals(str(files_dir / 'dq_py_original_files'))
-    dq.saveDecodingQuantities(str(files_dir / 'dq_py_original_files'))
+    dq.save_csfs(str(files_dir / 'dq_py_original_files'))
+    dq.save_intervals(str(files_dir / 'dq_py_original_files'))
+    dq.save_decoding_quantities(str(files_dir / 'dq_py_original_files'))
 
 
 def builtins_except_frequency():
@@ -36,9 +36,9 @@ def builtins_except_frequency():
         samples=100,
     )
 
-    dq.saveCsfs(str(files_dir / 'dq_py_builtin_except_freq'))
-    dq.saveIntervals(str(files_dir / 'dq_py_builtin_except_freq'))
-    dq.saveDecodingQuantities(str(files_dir / 'dq_py_builtin_except_freq'))
+    dq.save_csfs(str(files_dir / 'dq_py_builtin_except_freq'))
+    dq.save_intervals(str(files_dir / 'dq_py_builtin_except_freq'))
+    dq.save_decoding_quantities(str(files_dir / 'dq_py_builtin_except_freq'))
 
 
 def builtins_including_frequency():
@@ -52,9 +52,9 @@ def builtins_including_frequency():
         samples=100,
     )
 
-    dq.saveCsfs(str(files_dir / 'dq_py_builtin_inc_freq'))
-    dq.saveIntervals(str(files_dir / 'dq_py_builtin_inc_freq'))
-    dq.saveDecodingQuantities(str(files_dir / 'dq_py_builtin_inc_freq'))
+    dq.save_csfs(str(files_dir / 'dq_py_builtin_inc_freq'))
+    dq.save_intervals(str(files_dir / 'dq_py_builtin_inc_freq'))
+    dq.save_decoding_quantities(str(files_dir / 'dq_py_builtin_inc_freq'))
 
 
 if __name__ == '__main__':
