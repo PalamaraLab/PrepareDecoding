@@ -1,6 +1,5 @@
 from asmc.preparedecoding_python_bindings import DecodingQuantities
-from asmc.preparedecoding_python_bindings import prepareDecodingPrecalculatedCsfs
-from asmc.preparedecoding_python_bindings import calculateCsfsAndPrepareDecoding
+from asmc.preparedecoding_python_bindings import prepareDecoding
 from asmc.preparedecoding_python_bindings import Demography
 from asmc.preparedecoding_python_bindings import Discretization
 from asmc.preparedecoding_python_bindings import Frequencies
@@ -38,58 +37,35 @@ def _validate_discretization(discretization):
             sys.exit(1)
 
 
-def calculate_csfs_and_prepare_decoding(
+def prepare_decoding(
         demography: str,
         discretization: Union[list, str],
         frequencies: str,
+        csfs_file: str = "",
+        file_root: str = "",
         samples: int = DEFAULT_SAMPLES,
         mutation_rate: float = DEFAULT_MU,
+
 ) -> DecodingQuantities:
     """
-    Compute CSFS values and use those to create decoding quantities.
+    Calculate decoding quantities. If a csfs_file is specified, the precalculated CSFS will be used. If no csfs_file is
+    specified, CSFS will be calculated.
 
     :param demography: the demographic file or code (e.g. 'CEU')
     :param discretization: the discretization file or discretization quantile information
     :param frequencies: the frequencies file, or built-in (e.g. 'UKBB')
+    :param csfs_file: optional file containing precalculated CSFS (default, CSFS will be calculated at runtime)
+    :param file_root: optional file root containing data from which frequencies may be calculated
     :param samples: number of samples (default 300)
     :param mutation_rate: the mutation rate (default 1.65e-8)
     :return: a decoding quantities object
     """
-    disc = _validate_discretization(discretization)
-
-    return calculateCsfsAndPrepareDecoding(
-        demography=Demography(demography),
-        discretization=disc,
-        freqFile=Frequencies(frequencies, samples),
-        samples=samples,
-        mutRate=mutation_rate,
-    )
-
-
-def prepare_decoding_precalculated_csfs(
-        csfs_file: str,
-        demography: str,
-        discretization: Union[list, str],
-        frequencies: str,
-        samples: int = DEFAULT_SAMPLES,
-        mutation_rate: float = DEFAULT_MU,
-) -> DecodingQuantities:
-    """
-    Create decoding quantities from precomputed CSFS values.
-
-    :param csfs_file: file containing the precomputed CSFS values
-    :param demography: the demographic file
-    :param discretization: the discretization file
-    :param frequencies: the frequencies file, or built-in (e.g. 'UKBB')
-    :param samples: number of samples (default 300)
-    :param mutation_rate: the mutation rate (default 1.65e-8)
-    :return: a decoding quantities object
-    """
-    return prepareDecodingPrecalculatedCsfs(
-        CSFSFile=csfs_file,
+    return prepareDecoding(
         demography=Demography(demography),
         discretization=_validate_discretization(discretization),
-        freqFile=Frequencies(frequencies, samples),
+        frequencies=Frequencies(frequencies, samples),
+        csfs_file=csfs_file,
+        file_root=file_root,
         samples=samples,
-        mutRate=mutation_rate,
+        mut_rate=mutation_rate,
     )

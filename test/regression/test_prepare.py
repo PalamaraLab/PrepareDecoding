@@ -13,7 +13,7 @@ def from_existing_files():
     """
     Calculate CSFS and prepare decoding using existing files
     """
-    dq = calculate_csfs_and_prepare_decoding(
+    dq = prepare_decoding(
         demography=demo_file,
         discretization=disc_file,
         frequencies=freq_file,
@@ -29,7 +29,7 @@ def builtins_except_frequency():
     """
     Calculate CSFS and prepare decoding using builtins, except frequencies which still comes from file
     """
-    dq = calculate_csfs_and_prepare_decoding(
+    dq = prepare_decoding(
         demography='CEU',
         discretization=[[30, 15], [100, 15], 40],
         frequencies=freq_file,
@@ -45,7 +45,7 @@ def builtins_including_frequency():
     """
     Calculate CSFS and prepare decoding using builtins, including frequencies
     """
-    dq = calculate_csfs_and_prepare_decoding(
+    dq = prepare_decoding(
         demography='CEU',
         discretization=[[30, 15], [100, 15], 40],
         frequencies='UKBB',

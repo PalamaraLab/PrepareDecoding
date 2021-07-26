@@ -13,18 +13,20 @@
 //    You should have received a copy of the GNU General Public License
 //    along with ASMC.  If not, see <https://www.gnu.org/licenses/>.
 
-#include <pybind11/pybind11.h>
-#include <vector>
-#include <pybind11/stl_bind.h>
-#include <pybind11/stl.h>
-#include <pybind11/eigen.h>
+#include "Csfs.hpp"
 #include "CsfsEntry.hpp"
-#include "EigenTypes.hpp"
 #include "DecodingQuantities.hpp"
+#include "EigenTypes.hpp"
 #include "PrepareDecoding.hpp"
 #include "ThinParameterTypes.hpp"
 #include "Transition.hpp"
-#include "Csfs.hpp"
+
+#include <pybind11/eigen.h>
+#include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
+#include <pybind11/stl_bind.h>
+
+#include <vector>
 
 namespace py = pybind11;
 using namespace py::literals;
@@ -93,9 +95,6 @@ PYBIND11_MODULE(preparedecoding_python_bindings, m) {
       .def_property_readonly("csfsTo", &CSFSEntry::getTo)
       .def_property_readonly("csfs", &CSFSEntry::getCSFSMatrix)
     ;
-    m.def("prepareDecoding", &prepareDecoding, "Calculate decoding quantities", "demography"_a, "discretization"_a,
-          "frequencies"_a, "csfs_file"_a = "", "fileRoot"_a = "", "mutRate"_a = 1.65e-8, "samples"_a = 300);
-
     py::class_<Demography>(m, "Demography")
         .def(py::init<>())
         .def(py::init<std::string_view>());
@@ -108,6 +107,10 @@ PYBIND11_MODULE(preparedecoding_python_bindings, m) {
     py::class_<Frequencies>(m, "Frequencies")
         .def(py::init<std::string_view>())
         .def(py::init<std::string_view, unsigned>());
+
+    m.def("prepareDecoding", &prepareDecoding, "Calculate decoding quantities", "demography"_a, "discretization"_a,
+          "frequencies"_a, "csfs_file"_a = std::string_view{}, "file_root"_a = std::string_view{}, "mut_rate"_a = 1.65e-8,
+          "samples"_a = 300);
 
     m.def("save_demography", &demo::saveDemography, "Save a default demography to file", "output_dir"_a, "demo_code"_a);
 }
