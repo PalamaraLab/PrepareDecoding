@@ -83,12 +83,8 @@ int main(int argc, char* argv[]) {
 
   const double mutRate = result["mut"].as<double>();
 
-  DecodingQuantities dq =
-      CSFSFile.empty()
-          ? calculateCsfsAndPrepareDecoding(Demography(demographicFile), Discretization(discretizationFile), fileRoot,
-                                            Frequencies(freqFile, samples), mutRate, samples)
-          : prepareDecodingPrecalculatedCsfs(CSFSFile, Demography(demographicFile), Discretization(discretizationFile),
-                                             fileRoot, Frequencies(freqFile, samples), mutRate, samples);
+  DecodingQuantities dq = prepareDecoding(Demography(demographicFile), Discretization(discretizationFile),
+                                          Frequencies(freqFile, samples), CSFSFile, fileRoot, mutRate, samples);
 
   dq.saveDecodingQuantities(outputFileRoot);
   dq.saveIntervals(outputFileRoot);

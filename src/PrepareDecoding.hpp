@@ -3,7 +3,6 @@
 
 // Main PrepareDecoding functions
 
-
 #ifndef PREPAREDECODING_HPP
 #define PREPAREDECODING_HPP
 
@@ -11,17 +10,32 @@
 #include "ThinParameterTypes.hpp"
 
 namespace asmc {
-DecodingQuantities prepareDecoding(CSFS& csfs, const Demography& demo, const Discretization& disc,
-                                   std::string_view fileRoot, const Frequencies& freq, double mutRate,
-                                   unsigned int samples, std::vector<double> discValues);
+DecodingQuantities calculateDecodingQuantities(CSFS& csfs, const Demography& demo, const Discretization& disc,
+                                               std::string_view fileRoot, const Frequencies& freq, double mutRate,
+                                               unsigned int samples, std::vector<double> discValues);
 
-DecodingQuantities prepareDecodingPrecalculatedCsfs(std::string_view CSFSFile, const Demography& demo,
-                                                    const Discretization& disc, std::string_view fileRoot,
-                                                    const Frequencies& freq, double mutRate, unsigned int samples);
+DecodingQuantities calculateCsfsAndDecodingQuantities(const Demography& demo, const Discretization& disc,
+                                                      std::string_view fileRoot, const Frequencies& freq,
+                                                      double mutRate, unsigned int samples);
 
-DecodingQuantities calculateCsfsAndPrepareDecoding(const Demography& demo, const Discretization& disc,
-                                                   std::string_view fileRoot, const Frequencies& freq, double mutRate,
-                                                   unsigned int samples);
+/**
+ * Prepare decoding (calculate the decoding quantities).
+ *
+ * If a valid CSFS File is specified, the pre-calculated CSFS will be used.  Leaving the CSFSFile parameter as an empty
+ * string will cause the CSFS to be calculated.
+ *
+ * @param demo a demography object
+ * @param disc a discretization object
+ * @param freq a frequencies object
+ * @param CSFSFile a path to a CSFS file, or an empty string_view
+ * @param fileRoot the data file root, or an empty string
+ * @param mutRate the mutation rate
+ * @param samples the number of samples
+ * @return the decoding quantities calculated from the given parameters
+ */
+DecodingQuantities prepareDecoding(const Demography& demo, const Discretization& disc, const Frequencies& freq,
+                                   std::string_view CSFSFile, std::string_view fileRoot, double mutRate,
+                                   unsigned int samples);
 
 /**
  * Read demographic info from file, or use default EU demographic information
@@ -32,9 +46,9 @@ std::tuple<std::vector<double>, std::vector<double>> getDemographicInfo(const De
 
 /**
  * Read discretization info from file, or use coalescent quantiles or mutation age intervals
-  * @param disc
-  * @param times
-  * @param sizes
+ * @param disc
+ * @param times
+ * @param sizes
  * @return vector of discretizations, appended with inf
  */
 std::vector<double> getDiscretizationInfo(const Discretization& disc, const std::vector<double>& times,
@@ -42,4 +56,4 @@ std::vector<double> getDiscretizationInfo(const Discretization& disc, const std:
 
 } // namespace asmc
 
-#endif  // PREPAREDECODING_HPP
+#endif // PREPAREDECODING_HPP

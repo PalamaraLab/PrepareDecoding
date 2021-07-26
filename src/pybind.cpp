@@ -93,12 +93,8 @@ PYBIND11_MODULE(preparedecoding_python_bindings, m) {
       .def_property_readonly("csfsTo", &CSFSEntry::getTo)
       .def_property_readonly("csfs", &CSFSEntry::getCSFSMatrix)
     ;
-    m.def("prepareDecodingPrecalculatedCsfs", &prepareDecodingPrecalculatedCsfs,
-          "Prepare decoding quantities from precomputed CSFS", "CSFSFile"_a, "demography"_a = "",
-          "discretization"_a = "", "fileRoot"_a = "", "freqFile"_a = "", "mutRate"_a = 1.65e-8, "samples"_a = 300);
-    m.def("calculateCsfsAndPrepareDecoding", &calculateCsfsAndPrepareDecoding,
-          "Calculate CSFS and prepare decoding quantities", "demography"_a = "", "discretization"_a = "",
-          "fileRoot"_a = "", "freqFile"_a = "", "mutRate"_a = 1.65e-8, "samples"_a = 300);
+    m.def("prepareDecoding", &prepareDecoding, "Calculate decoding quantities", "demography"_a, "discretization"_a,
+          "frequencies"_a, "csfs_file"_a = "", "fileRoot"_a = "", "mutRate"_a = 1.65e-8, "samples"_a = 300);
 
     py::class_<Demography>(m, "Demography")
         .def(py::init<>())

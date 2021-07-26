@@ -22,13 +22,13 @@ namespace fs = std::filesystem;
 
 namespace asmc {
 
-DecodingQuantities prepareDecoding(CSFS& csfs, const Demography& demo, const Discretization& disc,
-                                   std::string_view fileRoot, const Frequencies& freq, double mutRate,
-                                   unsigned int samples, std::vector<double> discValues = {}) {
+DecodingQuantities calculateDecodingQuantities(CSFS& csfs, const Demography& demo, const Discretization& disc,
+                                               std::string_view fileRoot, const Frequencies& freq, double mutRate,
+                                               unsigned int samples, std::vector<double> discValues = {}) {
 
   auto [times, sizes] = getDemographicInfo(demo);
 
-  if(discValues.empty()) {
+  if (discValues.empty()) {
     discValues = getDiscretizationInfo(disc, times, sizes);
   }
 
@@ -71,9 +71,24 @@ DecodingQuantities prepareDecoding(CSFS& csfs, const Demography& demo, const Dis
   return DecodingQuantities(csfs, transition, mutRate);
 }
 
-DecodingQuantities calculateCsfsAndPrepareDecoding(const Demography& demo, const Discretization& disc,
-                                                   std::string_view fileRoot, const Frequencies& freq,
-                                                   const double mutRate, const unsigned int samples) {
+DecodingQuantities prepareDecoding(const Demography& demo, const Discretization& disc, const Frequencies& freq,
+                                   std::string_view CSFSFile, std::string_view fileRoot, double mutRate,
+                                   unsigned int samples) {
+  if (!CSFSFile.empty() & fs::exists(CSFSFile)) {
+    fmt::print("Precomputed CSFS will be loaded from file: {}\n", CSFSFile);
+    auto csfs = CSFS::loadFromFile(CSFSFile);
+    return calculateDecodingQuantities(csfs, demo, disc, fileRoot, freq, mutRate, samples);
+  } else if (CSFSFile.empty()) {
+    fmt::print("New CSFS will be calculated\n");
+    return calculateCsfsAndDecodingQuantities(demo, disc, fileRoot, freq, mutRate, samples);
+  } else {
+    throw std::runtime_error(fmt::format("Specified CSFS file ({}) is invalid\n", CSFSFile));
+  }
+}
+
+DecodingQuantities calculateCsfsAndDecodingQuantities(const Demography& demo, const Discretization& disc,
+                                                      std::string_view fileRoot, const Frequencies& freq,
+                                                      const double mutRate, const unsigned int samples) {
 
   // Get the array times and sizes, and remove the additional element added to the end of each array
   auto [arrayTime, arraySize] = getDemographicInfo(demo);
@@ -117,19 +132,7 @@ DecodingQuantities calculateCsfsAndPrepareDecoding(const Demography& demo, const
 
   auto csfs = CSFS::load(arrayTime, arraySize, mutRate, samples, froms, tos, csfses);
 
-  return prepareDecoding(csfs, demo, disc, fileRoot, freq, mutRate, samples, std::move(arrayDisc));
-}
-
-DecodingQuantities prepareDecodingPrecalculatedCsfs(std::string_view CSFSFile, const Demography& demo,
-                                                    const Discretization& disc, std::string_view fileRoot,
-                                                    const Frequencies& freq, double mutRate, unsigned int samples) {
-  if (!CSFSFile.empty() & fs::exists(CSFSFile)) {
-    fmt::print("Will load precomputed CSFS from {} ...\n", CSFSFile);
-    auto csfs = CSFS::loadFromFile(CSFSFile);
-    return prepareDecoding(csfs, demo, disc, fileRoot, freq, mutRate, samples);
-  } else {
-    throw std::runtime_error("Valid CSFS file needs to be specified\n");
-  }
+  return calculateDecodingQuantities(csfs, demo, disc, fileRoot, freq, mutRate, samples, std::move(arrayDisc));
 }
 
 std::tuple<std::vector<double>, std::vector<double>> getDemographicInfo(const Demography& demo) {
@@ -199,7 +202,8 @@ std::vector<double> getDiscretizationInfo(const Discretization& disc, const std:
     newSizes.erase(newSizes.begin(), newSizes.begin() + n);
     newTimes.front() = 0.0;
 
-    std::vector<double> newDiscs = Transition::getTimeExponentialQuantiles(1 + disc.getNumAdditionalPoints(), newTimes, newSizes);
+    std::vector<double> newDiscs =
+        Transition::getTimeExponentialQuantiles(1 + disc.getNumAdditionalPoints(), newTimes, newSizes);
 
     for (auto discNum = 1ul; discNum < newDiscs.size(); ++discNum) {
       discs.push_back(lastPoint + newDiscs.at(discNum));
