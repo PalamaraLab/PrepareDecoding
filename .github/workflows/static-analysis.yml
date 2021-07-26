@@ -33,14 +33,18 @@ jobs:
           key: ${{ runner.os }}-${{ env.CXX }}-${{ hashFiles('vcpkg.json', 'vcpkg/CHANGELOG.md') }}
 
       - name: install system packages
-        run: sudo apt install libgmp-dev libmpfr-dev
+        run: |
+          sudo apt -y update
+          sudo apt -y install libgmp-dev libmpfr-dev
 
       - name: make build directory
         run: mkdir build_dir
         if: steps.cache.outputs.cache-hit != 'true'
 
       - name: install analysers
-        run: sudo apt install cppcheck clang-tidy-10
+        run: |
+          sudo apt -y update
+          sudo apt -y install cppcheck clang-tidy-10
 
       - name: compile with cppcheck
         run: |

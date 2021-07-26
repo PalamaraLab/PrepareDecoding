@@ -34,7 +34,8 @@ jobs:
 
       - name: install system dependencies
         run: |
-          sudo apt install libgmp-dev libmpfr-dev
+          sudo apt -y update
+          sudo apt -y install libgmp-dev libmpfr-dev
 
       - name: make build directory
         run: mkdir build_dir
