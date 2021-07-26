@@ -18,6 +18,9 @@ You can now specify built-in frequencies information. Currently, the only suppor
   Please see the Jupyter Notebook for examples of the current API.
 - The strong types remain in the C++ API.
   Please see the file `TestPrepareDecoding.cpp` for examples of the C++ library API.
+- There is now a single top-level method `prepare_decoding` (Python) and `prepareDecoding` (C++).
+  If the CSFS file parameter is a valid file, CSFS will be loaded from file.
+  If the CSFS file parameter is an empty string, CSFS will be calculated at runtime.
   
 ### Other changes
 
