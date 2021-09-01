@@ -26,11 +26,14 @@ This Python module is currently available on Linux and macOS.
 We hope it will be available soon on Windows.
 
 Examples for using the Python module can be found in the following Jupyter notebook:
-- [creating decoding quantities](notebooks/CreatingDecodingQuantities.ipynb)
+- [creating decoding quantities](https://github.com/PalamaraLab/PrepareDecoding/blob/dc870d8a4077498e5c0b35f5a06faa6fdc006422/notebooks/CreatingDecodingQuantities.ipynb)
 
-Please note that you must install Jupyter in order to view the notebook, and then open it:
+Please note that to run the notebook you should first clone the repository and install Jupyter:
 
 ```bash
+git clone https://github.com/PalamaraLab/PrepareDecoding.git
+cd PrepareDecoding
+
 pip install jupyter
 jupyter-notebook notebooks/CreatingDecodingQuantities.ipynb
 ```

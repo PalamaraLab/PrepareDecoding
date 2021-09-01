@@ -147,6 +147,7 @@ where `{{{SANITISER}}}` is one of:
 
 - Bump the version number in [setup.py](setup.py), [CMakeLists.txt](CMakeLists.txt), and [vcpkg.json](vcpkg.json)
 - Update [RELEASE_NOTES.md](RELEASE_NOTES.md)
+- Update permalink to the notebook in [PyPI_README.md](PyPI_README.md)
 - Push changes and check that all [GitHub workflows](https://github.com/PalamaraLab/PrepareDecoding/actions) pass
 - Tag the commit in Git using syntax `vX.Y`
 - Make a release on GitHub, which should trigger a new build that will upload Python wheels to PyPI
