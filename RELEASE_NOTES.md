@@ -1,6 +1,6 @@
 # Release Notes
 
-## v2.2 (2021-??-??)
+## v2.2 (2021-09-01)
 
 You can now specify discretizations in the following manner:
 - as a file: `discretization='/path/to/discretization.disc'` (existing functionality)

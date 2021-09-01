@@ -1,6 +1,6 @@
 {
   "name": "asmc-prepare-decoding",
-  "version-string": "2.1",
+  "version-string": "2.2",
   "homepage": "https://github.com/PalamaraLab/PrepareDecoding/",
   "description": "Prepare decoding quantities for ASMC & FastSMC",
   "dependencies": [
