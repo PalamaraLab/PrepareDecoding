@@ -1,5 +1,10 @@
 # Release Notes
 
+## v2.2.1 (2021-09-01)
+
+Very minor fix to links in documentation.
+No change in functionality.
+
 ## v2.2 (2021-09-01)
 
 You can now specify discretizations in the following manner:

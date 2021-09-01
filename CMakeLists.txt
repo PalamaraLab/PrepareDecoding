@@ -7,7 +7,7 @@ include(cmake/AutodetectVcpkgToolchainFile.cmake)
 
 set (CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
-project(PrepareDecoding LANGUAGES CXX VERSION 2.2)
+project(PrepareDecoding LANGUAGES CXX VERSION 2.2.1)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
