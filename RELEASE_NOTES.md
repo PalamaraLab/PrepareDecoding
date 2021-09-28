@@ -1,5 +1,10 @@
 # Release Notes
 
+## v2.2.2 (2021-09-28)
+
+Improved documentation, now available [here](https://github.com/PalamaraLab/PrepareDecoding/tree/master/docs).
+No change in functionality.
+
 ## v2.2.1 (2021-09-01)
 
 Very minor fix to links in documentation.
