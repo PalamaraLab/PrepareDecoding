@@ -25,6 +25,8 @@ pip install asmc-preparedecoding
 This Python module is currently available on Linux and macOS.
 We hope it will be available soon on Windows.
 
+### Example notebook
+
 Examples for using the Python module can be found in the following Jupyter notebook:
 - [creating decoding quantities](https://github.com/PalamaraLab/PrepareDecoding/blob/dc870d8a4077498e5c0b35f5a06faa6fdc006422/notebooks/CreatingDecodingQuantities.ipynb)
 
@@ -37,6 +39,16 @@ cd PrepareDecoding
 pip install jupyter
 jupyter-notebook notebooks/CreatingDecodingQuantities.ipynb
 ```
+
+### API documentation
+
+A description of the API can be found here:
+- [api docs](https://github.com/PalamaraLab/PrepareDecoding/blob/master/docs/api.md)
+
+### File formats
+
+Descriptions of the file formats used can be found here:
+- [file formats](https://github.com/PalamaraLab/PrepareDecoding/blob/master/docs/file_formats.md)
 
 ## License
 
