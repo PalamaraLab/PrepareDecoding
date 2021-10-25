@@ -51,13 +51,17 @@ def prepare_decoding(
     Calculate decoding quantities. If a csfs_file is specified, the precalculated CSFS will be used. If no csfs_file is
     specified, CSFS will be calculated.
 
-    :param demography: the demographic file or code (e.g. 'CEU')
-    :param discretization: the discretization file or discretization quantile information
-    :param frequencies: the frequencies file, or built-in (e.g. 'UKBB')
-    :param csfs_file: optional file containing precalculated CSFS (default, CSFS will be calculated at runtime)
-    :param file_root: optional file root containing data from which frequencies may be calculated
-    :param samples: number of samples (default 300)
-    :param mutation_rate: the mutation rate (default 1.65e-8)
+    :param str demography: the demographic file or code (e.g. 'CEU'),
+        NOTE: Effective population size is specified as haploid.
+    :param discretization: a discretization file or discretization quantile information,
+        for example `[[30.0, 10], [100.0, 8], 25]` specifies a discretization with 
+        10 intervals of size 30 generations, followed by 8 intervals of size 100, 
+        followed by 25 additional quantiles from the coalescent distribution
+    :param str frequencies: the frequencies file, or built-in (e.g. 'UKBB')
+    :param str csfs_file: optional file containing precalculated CSFS (default, CSFS will be calculated at runtime)
+    :param str file_root: optional file root containing data from which frequencies may be calculated
+    :param int samples: number of haploid samples (default: 300)
+    :param float mutation_rate: the mutation rate per basepair per generation (default: 1.65e-8)
     :return: a decoding quantities object
     """
     return prepareDecoding(
