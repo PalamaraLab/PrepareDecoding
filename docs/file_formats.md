@@ -55,7 +55,7 @@ The intervals defined in this file are: `{0.0-30.0, 30.0-60.0, ..., 96263.0-1243
 ### frequencies (*.frq)
 
 A file containing SNP frequency data, in [Plink format](https://www.cog-genomics.org/plink/1.9/formats#frq).
-The file contains a header row, and data rows, one per variant, in the following form:
+These frequencies should reflect the allele frequency spectrum of the data you plan to analyze with ASMC. The file contains a header row, and data rows, one per variant, in the following form:
 
 ```
  CHR           SNP   A1   A2          MAF    NCHROBS
