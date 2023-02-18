@@ -14,10 +14,6 @@ jobs:
     name: Unit tests on macOS
     runs-on: macos-12
 
-    env:
-      CC: $(brew --prefix llvm@15)/bin/clang
-      CXX: $(brew --prefix llvm@15)/bin/clang++
-
     steps:
 
       - name: checkout repo & submodules
@@ -42,7 +38,7 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
 
       - name: cmake configure
-        run: cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON
+        run: cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON -DCMAKE_CXX_COMPILER=$(brew --prefix llvm@15)/bin/clang++ -DCMAKE_C_COMPILER=$(brew --prefix llvm@15)/bin/clang
         working-directory: build_dir
 
       - name: cmake build
