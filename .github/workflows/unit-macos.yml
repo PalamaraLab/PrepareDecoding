@@ -12,14 +12,9 @@ jobs:
 
   build-and-test:
     name: Unit tests on macOS
-    runs-on: macos-latest
+    runs-on: macos-12
 
     steps:
-
-      - name: set xcode version
-        uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: latest-stable
 
       - name: checkout repo & submodules
         uses: actions/checkout@v2
@@ -43,7 +38,7 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
 
       - name: cmake configure
-        run: cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON
+        run: cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON -DCMAKE_CXX_COMPILER=$(brew --prefix llvm@15)/bin/clang++ -DCMAKE_C_COMPILER=$(brew --prefix llvm@15)/bin/clang
         working-directory: build_dir
 
       - name: cmake build
