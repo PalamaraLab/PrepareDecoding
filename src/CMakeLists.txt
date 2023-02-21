@@ -92,7 +92,7 @@ if (BUILD_WITH_SMCPP_SUPPORT)
 
     # Need to use PkgConfig to import gmp and mpfr
     find_package(PkgConfig REQUIRED)
-    pkg_check_modules(gmp REQUIRED IMPORTED_TARGET gmp)
+    pkg_check_modules(gmpxx REQUIRED IMPORTED_TARGET gmpxx)
     pkg_check_modules(mpfr REQUIRED IMPORTED_TARGET mpfr)
 
     find_package(cereal CONFIG REQUIRED)
@@ -108,7 +108,7 @@ if (BUILD_WITH_SMCPP_SUPPORT)
             $<INSTALL_INTERFACE:3rd_party>
     )
 
-    target_link_libraries(smcpp_lib PRIVATE Eigen3::Eigen fmt::fmt PkgConfig::gmp PkgConfig::mpfr cereal OpenMP::OpenMP_CXX)
+    target_link_libraries(smcpp_lib PRIVATE Eigen3::Eigen fmt::fmt PkgConfig::gmpxx PkgConfig::mpfr cereal OpenMP::OpenMP_CXX)
     set_target_properties(smcpp_lib PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
     set_target_properties(smcpp_lib PROPERTIES CXX_CLANG_TIDY "")
     set_target_properties(smcpp_lib PROPERTIES CXX_CPPCHECK "")
