@@ -3,7 +3,11 @@
 
 #include "ThinParameterTypes.hpp"
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_test_macros.hpp>
+
+#include <catch2/matchers/catch_matchers_string.hpp>
+
+using Catch::Matchers::ContainsSubstring;
 
 namespace asmc {
 
@@ -27,8 +31,8 @@ TEST_CASE("Test demography type", "[ThinParameterTypes]") {
 
   // Invalid built in
   {
-    CHECK_THROWS_WITH(Demography("ZZZ"), Catch::Contains("Expected either a valid demography"));
-    CHECK_THROWS_WITH(Demography("ZZZ"), Catch::Contains("ZZZ"));
+    CHECK_THROWS_WITH(Demography("ZZZ"), ContainsSubstring("Expected either a valid demography"));
+    CHECK_THROWS_WITH(Demography("ZZZ"), ContainsSubstring("ZZZ"));
   }
 
   // Valid file
@@ -36,13 +40,13 @@ TEST_CASE("Test demography type", "[ThinParameterTypes]") {
     const Demography d(PREPARE_DECODING_TEST_DIR "/data/test.demo");
     CHECK(!d.isBuiltIn());
     CHECK(d.isFile());
-    CHECK(Catch::contains(d.getDemography(), "test.demo"));
+    CHECK_THAT(d.getDemography(), ContainsSubstring("test.demo"));
   }
 
   // Invalid file
   {
     CHECK_THROWS_WITH(Demography(PREPARE_DECODING_TEST_DIR "/data/test.doesNotExist"),
-                      Catch::Contains("test.doesNotExist"));
+                      ContainsSubstring("test.doesNotExist"));
   }
 }
 
@@ -58,7 +62,7 @@ TEST_CASE("Test discretization type", "[ThinParameterTypes]") {
   // Construct with vector of values not starting with zero
   {
     CHECK_THROWS_WITH(Discretization({1.0, 2.0, 3.0}, 12),
-                      Catch::Contains("Expected a monotonic increasing vector of discretization points"));
+                      ContainsSubstring("Expected a monotonic increasing vector of discretization points"));
   }
 
   // Construct with vector of pairs
@@ -71,20 +75,20 @@ TEST_CASE("Test discretization type", "[ThinParameterTypes]") {
   // Construct with vector of invalid pairs
   {
     CHECK_THROWS_WITH(Discretization({std::make_pair(-5.0, 3), std::make_pair(10.0, 5)}, 12),
-                      Catch::Contains("Expected pairs of form [val (double), num (int)]"));
+                      ContainsSubstring("Expected pairs of form [val (double), num (int)]"));
   }
 
   // Valid file
   {
     const Discretization d(PREPARE_DECODING_TEST_DIR "/data/test.disc");
     CHECK(d.isFile());
-    CHECK(Catch::contains(d.getDiscretizationFile(), "test.disc"));
+    CHECK_THAT(d.getDiscretizationFile(), ContainsSubstring("test.disc"));
   }
 
   // Invalid file
   {
     CHECK_THROWS_WITH(Discretization(PREPARE_DECODING_TEST_DIR "/data/test.doesNotExist"),
-                      Catch::Contains("test.doesNotExist"));
+                      ContainsSubstring("test.doesNotExist"));
   }
 }
 

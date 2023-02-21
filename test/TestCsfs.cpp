@@ -3,9 +3,7 @@
 
 #include "Csfs.hpp"
 
-#include <catch2/catch.hpp>
-
-#include <fstream>
+#include <catch2/catch_test_macros.hpp>
 
 namespace asmc {
 

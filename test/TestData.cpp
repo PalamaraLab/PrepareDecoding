@@ -4,13 +4,16 @@
 #include "Data.hpp"
 #include "ThinParameterTypes.hpp"
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_test_macros.hpp>
+#include <catch2/matchers/catch_matchers_string.hpp>
+
+using Catch::Matchers::ContainsSubstring;
 
 namespace asmc {
 
 TEST_CASE("Data explicit constructor, no hap file found", "[Data]") {
 
-  CHECK_THROWS_WITH(Data("some/path"), Catch::Contains("No haps file found at some/path"));
+  CHECK_THROWS_WITH(Data("some/path"), ContainsSubstring("No haps file found at some/path"));
 
 //  Data data("test/data/data");
 }

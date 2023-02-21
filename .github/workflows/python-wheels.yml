@@ -19,6 +19,7 @@ env:
   CIBW_BEFORE_ALL_LINUX: yum -y install gmp-devel mpfr-devel
   CIBW_BEFORE_BUILD: pip install --upgrade pip setuptools wheel ninja numpy cython
   CIBW_BEFORE_BUILD_WINDOWS: "vcpkg/bootstrap-vcpkg.bat & vcpkg/vcpkg install yasm-tool:x86-windows"
+  CIBW_ENVIRONMENT_MACOS: CXX="$(brew --prefix llvm@15)/bin/clang++"
   MACOSX_DEPLOYMENT_TARGET: 10.15
 
 jobs:

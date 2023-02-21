@@ -4,9 +4,12 @@
 #include "CsfsEntry.hpp"
 #include "EigenTypes.hpp"
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_test_macros.hpp>
+#include <catch2/matchers/catch_matchers_string.hpp>
 
 #include <fstream>
+
+using Catch::Matchers::ContainsSubstring;
 
 namespace asmc {
 
@@ -38,7 +41,7 @@ TEST_CASE("CSFSEntry constructor throws on array size mismatch", "[CSFSEntry]") 
   const mat_dt csfs = mat_dt::Random(3, samples - 1);
 
   CHECK_THROWS_WITH(CSFSEntry(timeVector, sizeVector, mu, from, to, samples, csfs),
-                    Catch::Contains("Time vector:\n"));
+                    ContainsSubstring("Time vector:\n"));
 }
 
 TEST_CASE("CSFSEntry constructor throws on wrong CSFS size", "[CSFSEntry]") {
@@ -53,10 +56,10 @@ TEST_CASE("CSFSEntry constructor throws on wrong CSFS size", "[CSFSEntry]") {
   const int samples = 7;
 
   CHECK_THROWS_WITH(CSFSEntry(timeVector, sizeVector, mu, from, to, samples, mat_dt::Random(2, samples - 1)),
-                    Catch::Contains("Time vector:\n"));
+                    ContainsSubstring("Time vector:\n"));
 
   CHECK_THROWS_WITH(CSFSEntry(timeVector, sizeVector, mu, from, to, samples, mat_dt::Random(3, samples - 2)),
-                    Catch::Contains("Time vector:\n"));
+                    ContainsSubstring("Time vector:\n"));
 }
 
 TEST_CASE("CSFSEntry constructor throws with from >= to", "[CSFSEntry]") {
@@ -72,7 +75,7 @@ TEST_CASE("CSFSEntry constructor throws with from >= to", "[CSFSEntry]") {
   const mat_dt csfs = mat_dt::Random(3, samples - 1);
 
   CHECK_THROWS_WITH(CSFSEntry(timeVector, sizeVector, mu, from, to, samples, csfs),
-                    Catch::Contains("Time vector:\n"));
+                    ContainsSubstring("Time vector:\n"));
 }
 
 TEST_CASE("CSFSEntry toString method", "[CSFSEntry]") {

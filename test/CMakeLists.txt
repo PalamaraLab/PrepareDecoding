@@ -1,12 +1,15 @@
 # This file is part of https://github.com/PalamaraLab/PrepareDecoding which is released under the GPL-3.0 license.
 # See accompanying LICENSE and COPYING for copyright notice and full details.
 
-find_package(Catch2 CONFIG REQUIRED)
-message(STATUS "Found Catch2 ${Catch2_VERSION}")
-
-add_library(catch_main STATIC catch_main.cpp)
-target_link_libraries(catch_main PUBLIC Catch2::Catch2)
-target_link_libraries(catch_main PRIVATE project_settings)
+Include(FetchContent)
+FetchContent_Declare(
+        Catch2
+        GIT_SHALLOW TRUE
+        GIT_REPOSITORY https://github.com/catchorg/Catch2.git
+        GIT_TAG 2ab20a0e008845e02bd06248e61ca6e5ad1aba33 # version 3.3.1
+)
+FetchContent_MakeAvailable(Catch2)
+message(STATUS "Obtained Catch2 ${Catch2_VERSION}")
 
 add_definitions(-DPREPARE_DECODING_TEST_DIR=\"${CMAKE_CURRENT_LIST_DIR}\")
 
@@ -23,8 +26,10 @@ set(
 )
 
 add_executable(unit_tests ${test_src})
-target_link_libraries(unit_tests PRIVATE prepare_decoding_lib project_warnings project_settings catch_main)
+target_link_libraries(unit_tests PRIVATE prepare_decoding_lib project_warnings project_settings Catch2::Catch2WithMain)
 
-# automatically discover tests related to the "tests"
+# automatically discover tests
+list(APPEND CMAKE_MODULE_PATH ${Catch2_SOURCE_DIR}/extras)
+include(CTest)
 include(Catch)
 catch_discover_tests(unit_tests)

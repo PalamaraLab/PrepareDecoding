@@ -3,7 +3,8 @@
 
 #include "DefaultDemographies.hpp"
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_test_macros.hpp>
+#include <catch2/matchers/catch_matchers_floating_point.hpp>
 
 #include <filesystem>
 #include <fstream>
@@ -11,6 +12,8 @@
 #include <vector>
 
 namespace fs = std::filesystem;
+
+using Catch::Matchers::WithinAbs;
 
 namespace asmc {
 
@@ -30,8 +33,8 @@ TEST_CASE("Default demographies can be written to file", "[DefaultDemographies]"
       std::getline(file, line);
       std::stringstream ss(line);
       ss >> time >> size;
-      CHECK(times.at(i) == Approx(time).epsilon(1e-12));
-      CHECK(sizes.at(i) == Approx(size).epsilon(1e-12));
+      CHECK_THAT(times.at(i), WithinAbs(time, 1e-12));
+      CHECK_THAT(sizes.at(i), WithinAbs(size, 1e-12));
     }
 
     std::getline(file, line);

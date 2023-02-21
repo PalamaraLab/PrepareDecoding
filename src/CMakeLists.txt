@@ -90,6 +90,9 @@ if (BUILD_WITH_SMCPP_SUPPORT)
         add_compile_definitions(MPFR_USE_DEPRECATED_FUNCTIONS)
     endif ()
 
+    find_package(PkgConfig)
+    pkg_check_modules(mpfr REQUIRED IMPORTED_TARGET mpfr)
+
     find_package(cereal CONFIG REQUIRED)
     message(STATUS "Found cereal ${cereal_VERSION}")
 
@@ -103,7 +106,7 @@ if (BUILD_WITH_SMCPP_SUPPORT)
             $<INSTALL_INTERFACE:3rd_party>
     )
 
-    target_link_libraries(smcpp_lib PRIVATE Eigen3::Eigen fmt::fmt GMP::gmp cereal OpenMP::OpenMP_CXX)
+    target_link_libraries(smcpp_lib PRIVATE Eigen3::Eigen fmt::fmt GMP::gmp cereal OpenMP::OpenMP_CXX PkgConfig::mpfr)
     set_target_properties(smcpp_lib PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
     set_target_properties(smcpp_lib PROPERTIES CXX_CLANG_TIDY "")
     set_target_properties(smcpp_lib PROPERTIES CXX_CPPCHECK "")

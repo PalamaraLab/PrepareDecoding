@@ -3,7 +3,8 @@
 
 #include "Utils.hpp"
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_test_macros.hpp>
+#include <catch2/matchers/catch_matchers_floating_point.hpp>
 
 #include <zlib.h>
 
@@ -11,14 +12,16 @@
 #include <string>
 #include <vector>
 
+using Catch::Matchers::WithinAbs;
+
 namespace asmc {
 
 TEST_CASE("Util: hypergeometric PMF specific values", "[Utils]") {
 
   Catch::StringMaker<double>::precision = 18;
 
-  CHECK(hypergeometricPmf(10'000, 4'270, 300, 87) == Approx(2.209102501827205049068452429E-7).epsilon(1e-9));
-  CHECK(hypergeometricPmf(10'000, 4'270, 300, 128) == Approx(0.047240111763330826329736938358).epsilon(1e-9));
+  CHECK_THAT(hypergeometricPmf(10'000, 4'270, 300, 87), WithinAbs(2.209102501827205049068452429E-7, 1e-9));
+  CHECK_THAT(hypergeometricPmf(10'000, 4'270, 300, 128), WithinAbs(0.047240111763330826329736938358, 1e-9));
 }
 
 TEST_CASE("Util: hypergeometric PMF sums to one", "[Utils]") {
@@ -34,7 +37,7 @@ TEST_CASE("Util: hypergeometric PMF sums to one", "[Utils]") {
     total_probability += hypergeometricPmf(populationSize, numberOfSuccesses, sampleSize, observedSuccesses);
   }
 
-  CHECK(total_probability == Approx(1.0).epsilon(1e-9));
+  CHECK_THAT(total_probability, WithinAbs(1.0, 1e-9));
 }
 
 std::vector<std::string> readLinesFromGzFile(const std::string& fileName) {
