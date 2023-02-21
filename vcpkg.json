@@ -11,5 +11,13 @@
     "gmp",
     "mpfr",
     "zlib"
+  ],
+  "builtin-baseline": "f14984af3738e69f197bf0e647a8dca12de92996",
+  "overrides": [
+    { "name": "cereal", "version": "1.3.2#1" },
+    { "name": "eigen3", "version": "3.3.9" },
+    { "name": "fmt", "version": "7.1.3#5" },
+    { "name": "gmp", "version": "6.2.1#14" },
+    { "name": "mpfr", "version": "4.1.1" }
   ]
 }

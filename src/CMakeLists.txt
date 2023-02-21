@@ -67,7 +67,8 @@ target_include_directories(
 set_target_properties(prepare_decoding_lib PROPERTIES PUBLIC_HEADER "${prepare_decoding_public_hdr}")
 
 
-target_link_libraries(prepare_decoding_lib PRIVATE Eigen3::Eigen fmt::fmt ZLIB::ZLIB)
+target_link_libraries(prepare_decoding_lib PUBLIC Eigen3::Eigen fmt::fmt)
+target_link_libraries(prepare_decoding_lib PRIVATE ZLIB::ZLIB)
 target_link_libraries(prepare_decoding_lib PRIVATE project_warnings project_settings)
 
 option(BUILD_WITH_SMCPP_SUPPORT "Enable compilation of smcpp support" ON)
@@ -108,7 +109,7 @@ if (BUILD_WITH_SMCPP_SUPPORT)
             $<INSTALL_INTERFACE:3rd_party>
     )
 
-    target_link_libraries(smcpp_lib PRIVATE Eigen3::Eigen fmt::fmt PkgConfig::gmpxx PkgConfig::mpfr cereal OpenMP::OpenMP_CXX)
+    target_link_libraries(smcpp_lib PRIVATE Eigen3::Eigen fmt::fmt PkgConfig::gmpxx PkgConfig::mpfr cereal::cereal OpenMP::OpenMP_CXX)
     set_target_properties(smcpp_lib PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
     set_target_properties(smcpp_lib PROPERTIES CXX_CLANG_TIDY "")
     set_target_properties(smcpp_lib PROPERTIES CXX_CPPCHECK "")
