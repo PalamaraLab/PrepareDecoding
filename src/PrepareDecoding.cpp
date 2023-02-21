@@ -74,7 +74,7 @@ DecodingQuantities calculateDecodingQuantities(CSFS& csfs, const Demography& dem
 DecodingQuantities prepareDecoding(const Demography& demo, const Discretization& disc, const Frequencies& freq,
                                    std::string_view CSFSFile, std::string_view fileRoot, double mutRate,
                                    unsigned int samples) {
-  if (!CSFSFile.empty() & fs::exists(CSFSFile)) {
+  if (!CSFSFile.empty() && fs::exists(CSFSFile)) {
     fmt::print("Precomputed CSFS will be loaded from file: {}\n", CSFSFile);
     auto csfs = CSFS::loadFromFile(CSFSFile);
     return calculateDecodingQuantities(csfs, demo, disc, fileRoot, freq, mutRate, samples);
