@@ -31,7 +31,7 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('vcpkg.json', 'vcpkg/CHANGELOG.md') }}
 
       - name: install system packages
-        run: brew install gmp mpfr libomp pkg-config
+        run: brew install libomp pkg-config automake autoconf autoconf-archive libtool
 
       - name: make build directory
         run: mkdir build_dir

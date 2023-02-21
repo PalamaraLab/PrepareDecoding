@@ -90,7 +90,9 @@ if (BUILD_WITH_SMCPP_SUPPORT)
         add_compile_definitions(MPFR_USE_DEPRECATED_FUNCTIONS)
     endif ()
 
-    find_package(PkgConfig)
+    # Need to use PkgConfig to import gmp and mpfr
+    find_package(PkgConfig REQUIRED)
+    pkg_check_modules(gmp REQUIRED IMPORTED_TARGET gmp)
     pkg_check_modules(mpfr REQUIRED IMPORTED_TARGET mpfr)
 
     find_package(cereal CONFIG REQUIRED)
@@ -106,7 +108,7 @@ if (BUILD_WITH_SMCPP_SUPPORT)
             $<INSTALL_INTERFACE:3rd_party>
     )
 
-    target_link_libraries(smcpp_lib PRIVATE Eigen3::Eigen fmt::fmt GMP::gmp cereal OpenMP::OpenMP_CXX PkgConfig::mpfr)
+    target_link_libraries(smcpp_lib PRIVATE Eigen3::Eigen fmt::fmt PkgConfig::gmp PkgConfig::mpfr cereal OpenMP::OpenMP_CXX)
     set_target_properties(smcpp_lib PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
     set_target_properties(smcpp_lib PROPERTIES CXX_CLANG_TIDY "")
     set_target_properties(smcpp_lib PROPERTIES CXX_CPPCHECK "")

@@ -36,11 +36,6 @@ jobs:
           python-version: 3.8
           architecture: x64
 
-      - name: install system dependencies
-        run: |
-          sudo apt -y update
-          sudo apt -y install libgmp-dev libmpfr-dev
-
       - name: install python dependencies
         run: |
           python -m pip install --upgrade pip setuptools wheel
