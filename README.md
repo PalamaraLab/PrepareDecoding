@@ -6,7 +6,6 @@
 [![Static analysis checks](https://github.com/PalamaraLab/PrepareDecoding/workflows/Static%20analysis%20checks/badge.svg)](https://github.com/PalamaraLab/PrepareDecoding/actions)
 [![Sanitiser checks](https://github.com/PalamaraLab/PrepareDecoding/workflows/Sanitiser%20checks/badge.svg)](https://github.com/PalamaraLab/PrepareDecoding/actions)
 [![codecov](https://codecov.io/gh/PalamaraLab/PrepareDecoding/branch/master/graph/badge.svg)](https://codecov.io/gh/PalamaraLab/PrepareDecoding)
-[![BCH compliance](https://bettercodehub.com/edge/badge/PalamaraLab/PrepareDecoding?branch=master)](https://bettercodehub.com/results/PalamaraLab/PrepareDecoding)
 
 # Prepare Decoding
 
@@ -45,23 +44,23 @@ cd PrepareDecoding
 ```
 
 The recommended way to install dependencies is via the [vcpkg](https://github.com/microsoft/vcpkg) submodule.
-If you have checked out this submodule, most dependencies will be automatically installed when you run the CMake configuration step (below).
+If you have checked out this submodule, the dependencies will be automatically installed when you run the CMake configuration step (below).
 
-Several additional dependencies should be obtained from your package manager:
+Several additional system dependencies should be obtained from your package manager prior to the CMake configuration step:
 
 - Ubuntu/Debian:
     ```bash
-    sudo apt install libgmp-dev libmpfr-dev
+    sudo apt install cmake
     ```
 
 - CentOS/Fedora:
     ```bash
-    sudo yum install gmp-devel mpfr-devel
+    sudo yum install cmake
     ```
 
 - macOS:
     ```bash
-    brew install gmp mpfr libomp
+    brew install libomp pkg-config automake autoconf autoconf-archive libtool cmake
     ```
 
 ### Configuring and compiling the project
@@ -149,7 +148,7 @@ where `{{{SANITISER}}}` is one of:
 - Update [RELEASE_NOTES.md](RELEASE_NOTES.md)
 - Update permalink to the notebook in [PyPI_README.md](PyPI_README.md)
 - Push changes and check that all [GitHub workflows](https://github.com/PalamaraLab/PrepareDecoding/actions) pass
-- Tag the commit in Git using syntax `vX.Y`
+- Tag the commit in Git using syntax `vX.Y.Z`
 - Make a release on GitHub, which should trigger a new build that will upload Python wheels to PyPI
 
 

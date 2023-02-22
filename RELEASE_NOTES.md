@@ -1,5 +1,10 @@
 # Release Notes
 
+## v2.2.3 (2023-02-22)
+
+Infrastructure updates and building wheels for newer Python versions.
+No change in functionality.
+
 ## v2.2.2 (2021-09-28)
 
 Improved documentation, now available [here](https://github.com/PalamaraLab/PrepareDecoding/tree/master/docs).

@@ -28,7 +28,7 @@ We hope it will be available soon on Windows.
 ### Example notebook
 
 Examples for using the Python module can be found in the following Jupyter notebook:
-- [creating decoding quantities](https://github.com/PalamaraLab/PrepareDecoding/blob/dc870d8a4077498e5c0b35f5a06faa6fdc006422/notebooks/CreatingDecodingQuantities.ipynb)
+- [creating decoding quantities](https://github.com/PalamaraLab/PrepareDecoding/blob/4a206d577a8cd431ab6dd59bbccc4035ab8b1069/notebooks/CreatingDecodingQuantities.ipynb)
 
 Please note that to run the notebook you should first clone the repository and install Jupyter:
 

@@ -67,6 +67,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: wheels
+          path: wheels
 
       - uses: pypa/gh-action-pypi-publish@v1.6.4
         with:
