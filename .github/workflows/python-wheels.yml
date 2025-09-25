@@ -54,7 +54,6 @@ jobs:
       CIBW_ENVIRONMENT: ${{ matrix.extra-env }}
     #      MACOSX_DEPLOYMENT_TARGET: ${{ matrix.mdt }}
 
-
     steps:
 
       - name: checkout repo & submodules
@@ -63,37 +62,30 @@ jobs:
           submodules: true
           fetch-depth: 0
 
-      - name: Set up Python
-        uses: actions/setup-python@v3
-
-      - name: Install cibuildwheel
-        run: python -m pip install cibuildwheel==2.12.0
-
       - name: Build wheels
-        run: python -m cibuildwheel --output-dir wheelhouse
+        uses: pypa/cibuildwheel@v3.2.0
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
-          name: wheels
+          name: wheels-cloud-${{ matrix.os }}
           path: ./wheelhouse/*.whl
           retention-days: 1
 
   upload_all:
     name: Upload to PyPI
-    needs: build_wheels
+    needs: [build_wheels_cloud]
     runs-on: ubuntu-latest
-    if: github.event_name == 'release' && github.event.action == 'published'
+    if: ${{ github.event_name == 'release' && github.event.action == 'published' }}
 
     steps:
-      - uses: actions/setup-python@v3
-
-      - name: Download wheels
-        uses: actions/download-artifact@v3
+      - name: Download wheels from cloud runners
+        uses: actions/download-artifact@v4
         with:
-          name: wheels
+          pattern: wheels-cloud-*
+          merge-multiple: true
           path: wheels
 
-      - uses: pypa/gh-action-pypi-publish@v1.6.4
+      - uses: pypa/gh-action-pypi-publish@v1.13.0
         with:
           user: __token__
           password: ${{ secrets.PYPI_TOKEN }}
