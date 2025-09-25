@@ -11,31 +11,54 @@ on:
     types:
       - published
 
-env:
-  CIBW_BUILD: cp38-* cp39-* cp310-* cp311-*
-  CIBW_SKIP: cp3*-musllinux_*
-  CIBW_ARCHS_MACOS: x86_64
-  CIBW_ARCHS_LINUX: auto64
-  CIBW_MANYLINUX_X86_64_IMAGE: manylinux2014
-  CIBW_BEFORE_ALL_LINUX: "yum -y groupinstall 'Development Tools' && yum -y install git"
-  CIBW_BEFORE_ALL_MACOS: brew install libomp pkg-config automake autoconf autoconf-archive libtool
-  CIBW_BEFORE_BUILD: pip install --upgrade pip setuptools wheel ninja numpy cython
-  CIBW_ENVIRONMENT_MACOS: CXX="$(brew --prefix llvm@15)/bin/clang++"
-  MACOSX_DEPLOYMENT_TARGET: 10.15
-
 jobs:
-  build_wheels:
+  build_wheels_cloud:
     name: Build wheels on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-22.04, macos-12]
+        include:
+          - os: ubuntu-24.04
+            arch: x86_64
+            py-vers: cp39-* cp310-* cp311-* cp312-* cp313-*
+            before-all: ""
+            extra-env: ""
+            mdt: ""
+          - os: ubuntu-24.04-arm
+            arch: aarch64
+            py-vers: cp39-* cp310-* cp311-* cp312-* cp313-*
+            before-all: dnf -y install boost-devel zlib
+            extra-env: ""
+            mdt: ""
+          - os: macos-15-intel
+            arch: x86_64
+            py-vers: cp39-* cp310-* cp311-* cp312-* cp313-*
+            before-all: brew install libomp pkg-config automake autoconf autoconf-archive libtool
+            extra-env: CC=clang CXX=clang++
+            mdt: ""
+          - os: macos-15
+            arch: arm64
+            py-vers: cp39-* cp310-* cp311-* cp312-* cp313-*
+            before-all: brew install libomp pkg-config automake autoconf autoconf-archive libtool
+            extra-env: CC=clang CXX=clang++
+            mdt: ""
+
+    env:
+      CIBW_BUILD: ${{ matrix.py-vers }}
+      CIBW_SKIP: cp3*-musllinux_*
+      CIBW_ARCHS: ${{ matrix.arch }}
+      CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_28
+      CIBW_BEFORE_ALL: ${{ matrix.before-all }}
+      CIBW_BEFORE_BUILD: pip install --upgrade pip setuptools wheel ninja numpy cython
+      CIBW_ENVIRONMENT: ${{ matrix.extra-env }}
+    #      MACOSX_DEPLOYMENT_TARGET: ${{ matrix.mdt }}
+
 
     steps:
 
       - name: checkout repo & submodules
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
         with:
           submodules: true
           fetch-depth: 0
