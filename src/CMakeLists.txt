@@ -117,8 +117,25 @@ if (BUILD_WITH_SMCPP_SUPPORT)
 endif ()
 
 
-if (PYTHON_BINDINGS)
+if (PREPARE_DECODING_PYTHON_BINDINGS)
+    option(PREPARE_DECODING_BUILDING_FROM_PYPROJECT "Are we building from pyproject.toml (pip install)?" OFF)
+
+    if(PREPARE_DECODING_BUILDING_FROM_PYPROJECT)
+        message(STATUS "Using pybind11 from pyproject.toml build environment")
+        find_package(pybind11 REQUIRED)
+    else()
+        message(STATUS "Using FetchContent to get pybind11")
+        include(FetchContent)
+        FetchContent_Declare(
+                pybind11
+                GIT_REPOSITORY https://github.com/pybind/pybind11.git
+                GIT_TAG a2e59f0e7065404b44dfe92a28aca47ba1378dc4 # Version 2.13.6
+        )
+        FetchContent_MakeAvailable(pybind11)
+    endif()
+
     set_target_properties(prepare_decoding_lib PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
     pybind11_add_module(preparedecoding_python_bindings pybind.cpp)
     target_link_libraries(preparedecoding_python_bindings PRIVATE Eigen3::Eigen fmt::fmt prepare_decoding_lib project_settings)
+    install(TARGETS preparedecoding_python_bindings LIBRARY DESTINATION asmc/preparedecoding)
 endif ()
