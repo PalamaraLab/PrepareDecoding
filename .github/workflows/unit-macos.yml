@@ -13,6 +13,9 @@ jobs:
   build-and-test:
     name: Unit tests on macOS
     runs-on: macos-15
+    env:
+      CC: clang
+      CXX: clang++
 
     steps:
 
