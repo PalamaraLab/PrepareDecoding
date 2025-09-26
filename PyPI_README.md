@@ -35,7 +35,7 @@ pip install asmc-preparedecoding
 ### Example notebook
 
 Examples for using the Python package can be found in the following Jupyter notebook:
-- [creating decoding quantities](https://github.com/PalamaraLab/PrepareDecoding/blob/4a206d577a8cd431ab6dd59bbccc4035ab8b1069/notebooks/CreatingDecodingQuantities.ipynb)
+- [creating decoding quantities](https://github.com/PalamaraLab/PrepareDecoding/blob/main/notebooks/CreatingDecodingQuantities.ipynb)
 
 Please note that to run the notebook you should first clone the repository and install Jupyter:
 
