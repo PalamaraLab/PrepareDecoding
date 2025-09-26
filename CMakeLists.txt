@@ -7,7 +7,7 @@ include(cmake/AutodetectVcpkgToolchainFile.cmake)
 
 set (CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
-project(PrepareDecoding LANGUAGES CXX VERSION 2.2.3)
+project(PrepareDecoding LANGUAGES CXX VERSION 2.2.4)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -32,14 +32,6 @@ include(cmake/StaticAnalysers.cmake)
 
 option(BUILD_SHARED_LIBS "Enable compilation of shared libraries" OFF)
 option(ENABLE_TESTING "Enable Test Builds" ON)
-
-option(PYTHON_BINDINGS "Whether to build the python bindings" OFF)
-if (EXISTS ${CMAKE_SOURCE_DIR}/pybind11/LICENSE)
-    set(PYTHON_BINDINGS ON)
-endif()
-if (PYTHON_BINDINGS)
-    add_subdirectory(pybind11)
-endif ()
 
 add_subdirectory(src)
 add_subdirectory(exe)

@@ -1,9 +1,9 @@
-from asmc.preparedecoding_python_bindings import DecodingQuantities
-from asmc.preparedecoding_python_bindings import prepareDecoding
-from asmc.preparedecoding_python_bindings import Demography
-from asmc.preparedecoding_python_bindings import Discretization
-from asmc.preparedecoding_python_bindings import Frequencies
-from asmc.preparedecoding_python_bindings import save_demography
+from .preparedecoding_python_bindings import DecodingQuantities
+from .preparedecoding_python_bindings import prepareDecoding
+from .preparedecoding_python_bindings import Demography
+from .preparedecoding_python_bindings import Discretization
+from .preparedecoding_python_bindings import Frequencies
+from .preparedecoding_python_bindings import save_demography
 
 from typing import Iterable, Union
 import numbers

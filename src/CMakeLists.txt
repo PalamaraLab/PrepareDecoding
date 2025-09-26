@@ -99,8 +99,6 @@ if (BUILD_WITH_SMCPP_SUPPORT)
     find_package(cereal CONFIG REQUIRED)
     message(STATUS "Found cereal ${cereal_VERSION}")
 
-    find_package(OpenMP REQUIRED)
-
     add_library(smcpp_lib 3rd_party/smcpp.cpp 3rd_party/smcpp.hpp 3rd_party/mpreal.h)
 
     target_include_directories(
@@ -109,7 +107,7 @@ if (BUILD_WITH_SMCPP_SUPPORT)
             $<INSTALL_INTERFACE:3rd_party>
     )
 
-    target_link_libraries(smcpp_lib PRIVATE Eigen3::Eigen fmt::fmt PkgConfig::gmpxx PkgConfig::mpfr cereal::cereal OpenMP::OpenMP_CXX)
+    target_link_libraries(smcpp_lib PRIVATE Eigen3::Eigen fmt::fmt PkgConfig::gmpxx PkgConfig::mpfr cereal::cereal)
     set_target_properties(smcpp_lib PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
     set_target_properties(smcpp_lib PROPERTIES CXX_CLANG_TIDY "")
     set_target_properties(smcpp_lib PROPERTIES CXX_CPPCHECK "")
@@ -117,8 +115,25 @@ if (BUILD_WITH_SMCPP_SUPPORT)
 endif ()
 
 
-if (PYTHON_BINDINGS)
+if (PREPARE_DECODING_PYTHON_BINDINGS)
+    option(PREPARE_DECODING_BUILDING_FROM_PYPROJECT "Are we building from pyproject.toml (pip install)?" OFF)
+
+    if(PREPARE_DECODING_BUILDING_FROM_PYPROJECT)
+        message(STATUS "Using pybind11 from pyproject.toml build environment")
+        find_package(pybind11 REQUIRED)
+    else()
+        message(STATUS "Using FetchContent to get pybind11")
+        include(FetchContent)
+        FetchContent_Declare(
+                pybind11
+                GIT_REPOSITORY https://github.com/pybind/pybind11.git
+                GIT_TAG f5fbe867d2d26e4a0a9177a51f6e568868ad3dc8 # Version 3.0.1
+        )
+        FetchContent_MakeAvailable(pybind11)
+    endif()
+
     set_target_properties(prepare_decoding_lib PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
     pybind11_add_module(preparedecoding_python_bindings pybind.cpp)
     target_link_libraries(preparedecoding_python_bindings PRIVATE Eigen3::Eigen fmt::fmt prepare_decoding_lib project_settings)
+    install(TARGETS preparedecoding_python_bindings LIBRARY DESTINATION asmc/preparedecoding)
 endif ()

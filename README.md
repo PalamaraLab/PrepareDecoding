@@ -1,4 +1,3 @@
-[![Unit tests: Windows](https://github.com/PalamaraLab/PrepareDecoding/workflows/Unit%20tests:%20Windows/badge.svg)](https://github.com/PalamaraLab/PrepareDecoding/actions)
 [![Unit tests: Ubuntu](https://github.com/PalamaraLab/PrepareDecoding/workflows/Unit%20tests:%20Ubuntu/badge.svg)](https://github.com/PalamaraLab/PrepareDecoding/actions)
 [![Unit tests: macOS](https://github.com/PalamaraLab/PrepareDecoding/workflows/Unit%20tests:%20macOS/badge.svg)](https://github.com/PalamaraLab/PrepareDecoding/actions)
 [![Regression test](https://github.com/PalamaraLab/PrepareDecoding/workflows/Regression%20test/badge.svg)](https://github.com/PalamaraLab/PrepareDecoding/actions)
@@ -13,18 +12,17 @@ Tool to compute decoding quantities.
 
 ## Quickstart
 
-### Install the Python module from PyPI
+### Install the Python package from PyPI
 
-Most functionality is available through a Python module which can be installed with:
+Most functionality is available through a Python package which can be installed with:
 
 ```bash
 pip install asmc-preparedecoding
 ```
 
-This Python module is currently available on Linux and macOS.
-We hope it will be available soon on Windows.
+This Python package is currently available on Linux and macOS, x86_64 and arm64.
 
-Examples for using the Python module can be found in the following Jupyter notebook:
+Examples for using the Python package can be found in the following Jupyter notebook:
 - [creating decoding quantities](notebooks/CreatingDecodingQuantities.ipynb)
 
 Please note that you must install Jupyter in order to view the notebook, and then open it:
@@ -36,7 +34,7 @@ jupyter-notebook notebooks/CreatingDecodingQuantities.ipynb
 
 ### Compiling the C++ library and executable
 
-Get the source, together with the [vcpkg](https://github.com/microsoft/vcpkg) and [pybind11](https://github.com/pybind/pybind11) submodules:
+Get the source, together with the [vcpkg](https://github.com/microsoft/vcpkg) submodule:
 
 ```bash
 git clone --recurse-submodules https://github.com/PalamaraLab/PrepareDecoding.git
@@ -144,9 +142,9 @@ where `{{{SANITISER}}}` is one of:
 
 ## For developers: making a release
 
-- Bump the version number in [setup.py](setup.py), [CMakeLists.txt](CMakeLists.txt), and [vcpkg.json](vcpkg.json)
+- Bump the version number in [pyproject.toml](pyproject.toml), [CMakeLists.txt](CMakeLists.txt), and [vcpkg.json](vcpkg.json)
 - Update [RELEASE_NOTES.md](RELEASE_NOTES.md)
-- Update permalink to the notebook in [PyPI_README.md](PyPI_README.md)
+- Ensure supported python versions are up-to-date in [pyproject.toml](pyproject.toml)
 - Push changes and check that all [GitHub workflows](https://github.com/PalamaraLab/PrepareDecoding/actions) pass
 - Tag the commit in Git using syntax `vX.Y.Z`
 - Make a release on GitHub, which should trigger a new build that will upload Python wheels to PyPI

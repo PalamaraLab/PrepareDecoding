@@ -1,5 +1,11 @@
 # Release Notes
 
+## v2.2.4 (2023-09-26)
+
+- wheels now available for ARM64 (Linux and macOS)
+- wheels now available for Python 3.9-3.14 (inclusive)
+- no change in functionality
+
 ## v2.2.3 (2023-02-22)
 
 Infrastructure updates and building wheels for newer Python versions.

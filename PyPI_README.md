@@ -1,4 +1,3 @@
-[![Unit tests: Windows](https://github.com/PalamaraLab/PrepareDecoding/workflows/Unit%20tests:%20Windows/badge.svg)](https://github.com/PalamaraLab/PrepareDecoding/actions)
 [![Unit tests: Ubuntu](https://github.com/PalamaraLab/PrepareDecoding/workflows/Unit%20tests:%20Ubuntu/badge.svg)](https://github.com/PalamaraLab/PrepareDecoding/actions)
 [![Unit tests: macOS](https://github.com/PalamaraLab/PrepareDecoding/workflows/Unit%20tests:%20macOS/badge.svg)](https://github.com/PalamaraLab/PrepareDecoding/actions)
 [![Regression test](https://github.com/PalamaraLab/PrepareDecoding/workflows/Regression%20test/badge.svg)](https://github.com/PalamaraLab/PrepareDecoding/actions)
@@ -6,29 +5,35 @@
 [![Static analysis checks](https://github.com/PalamaraLab/PrepareDecoding/workflows/Static%20analysis%20checks/badge.svg)](https://github.com/PalamaraLab/PrepareDecoding/actions)
 [![Sanitiser checks](https://github.com/PalamaraLab/PrepareDecoding/workflows/Sanitiser%20checks/badge.svg)](https://github.com/PalamaraLab/PrepareDecoding/actions)
 [![codecov](https://codecov.io/gh/PalamaraLab/PrepareDecoding/branch/master/graph/badge.svg)](https://codecov.io/gh/PalamaraLab/PrepareDecoding)
-[![BCH compliance](https://bettercodehub.com/edge/badge/PalamaraLab/PrepareDecoding?branch=master)](https://bettercodehub.com/results/PalamaraLab/PrepareDecoding)
 
 # ASMC Prepare Decoding
 
 Tool to compute decoding quantities.
 
+This is a Python-wrapped C++ project with prebuilt CPython wheels targeting manylinux_2_28 on Linux and macOS 11.0+.
+
+| Platform \ CPython          | ≤3.8 | 3.9 | 3.10 | 3.11 | 3.12 | 3.13 | 3.14 |
+|-----------------------------| ---- | --- | ---- | ---- | ---- | ---- | ---- |
+| Linux x86_64                | ❌    | ✅   | ✅    | ✅    | ✅    | ✅    | ✅    |
+| Linux aarch64               | ❌    | ✅   | ✅    | ✅    | ✅    | ✅    | ✅    |
+| macOS Intel (x86_64)        | ❌    | ✅   | ✅    | ✅    | ✅    | ✅    | ✅    |
+| macOS Apple Silicon (arm64) | ❌    | ✅   | ✅    | ✅    | ✅    | ✅    | ✅    |
+
+
 ## Quickstart
 
-### Install the Python module from PyPI
+### Install the Python package from PyPI
 
-Most functionality is available through a Python module which can be installed with:
+Most functionality is available through a Python package which can be installed with:
 
 ```bash
 pip install asmc-preparedecoding
 ```
 
-This Python module is currently available on Linux and macOS.
-We hope it will be available soon on Windows.
-
 ### Example notebook
 
-Examples for using the Python module can be found in the following Jupyter notebook:
-- [creating decoding quantities](https://github.com/PalamaraLab/PrepareDecoding/blob/4a206d577a8cd431ab6dd59bbccc4035ab8b1069/notebooks/CreatingDecodingQuantities.ipynb)
+Examples for using the Python package can be found in the following Jupyter notebook:
+- [creating decoding quantities](https://github.com/PalamaraLab/PrepareDecoding/blob/main/notebooks/CreatingDecodingQuantities.ipynb)
 
 Please note that to run the notebook you should first clone the repository and install Jupyter:
 
