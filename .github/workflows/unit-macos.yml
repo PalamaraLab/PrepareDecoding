@@ -32,7 +32,7 @@ jobs:
         run: mkdir build_dir
 
       - name: cmake configure
-        run: cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON -DCMAKE_CXX_COMPILER=clang++
+        run: cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_PREFIX_PATH=$(brew --prefix libomp)
         working-directory: build_dir
 
       - name: cmake build
