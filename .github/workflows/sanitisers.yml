@@ -24,6 +24,10 @@ jobs:
           submodules: true
           fetch-depth: 0
 
+      - name: install tools
+        run: |
+          sudo apt -y install libomp-dev
+
       - name: make build directory
         run: mkdir build_dir
 
