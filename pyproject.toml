@@ -8,7 +8,7 @@ build-backend = "scikit_build_core.build"
 [project]
 dynamic = ["readme"]
 name = "asmc-preparedecoding"
-version = "2.2.3"
+version = "2.2.4"
 description = "Prepare decoding quantities for ASMC & FastSMC"
 authors = [
     { name = "PalamaraLab (https://palamaralab.github.io/)" }

@@ -24,20 +24,17 @@ This is a Python-wrapped C++ project with prebuilt CPython wheels targeting many
 
 ## Quickstart
 
-### Install the Python module from PyPI
+### Install the Python package from PyPI
 
-Most functionality is available through a Python module which can be installed with:
+Most functionality is available through a Python package which can be installed with:
 
 ```bash
 pip install asmc-preparedecoding
 ```
 
-This Python module is currently available on Linux and macOS.
-We hope it will be available soon on Windows.
-
 ### Example notebook
 
-Examples for using the Python module can be found in the following Jupyter notebook:
+Examples for using the Python package can be found in the following Jupyter notebook:
 - [creating decoding quantities](https://github.com/PalamaraLab/PrepareDecoding/blob/4a206d577a8cd431ab6dd59bbccc4035ab8b1069/notebooks/CreatingDecodingQuantities.ipynb)
 
 Please note that to run the notebook you should first clone the repository and install Jupyter:
