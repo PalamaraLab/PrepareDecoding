@@ -22,25 +22,25 @@ jobs:
           - os: ubuntu-24.04
             arch: x86_64
             py-vers: cp39-* cp310-* cp311-* cp312-* cp313-*
-            before-all: ""
+            before-all: dnf -y install ninja-build pkgconf openssl-devel zlib-devel bzip2-devel xz-devel
             extra-env: VCPKG_BUILD_TYPE=release
             mdt: ""
           - os: ubuntu-24.04-arm
             arch: aarch64
             py-vers: cp39-* cp310-* cp311-* cp312-* cp313-*
-            before-all: dnf -y install boost-devel zlib
+            before-all: dnf -y install ninja-build pkgconf openssl-devel zlib-devel bzip2-devel xz-devel
             extra-env: VCPKG_BUILD_TYPE=release
             mdt: ""
           - os: macos-15-intel
             arch: x86_64
             py-vers: cp39-* cp310-* cp311-* cp312-* cp313-*
-            before-all: brew install libomp pkg-config automake autoconf autoconf-archive libtool
+            before-all: brew install libomp pkg-config automake autoconf autoconf-archive libtool ninja openssl zlib bzip2 xz
             extra-env: CC=clang CXX=clang++ VCPKG_BUILD_TYPE=release
             mdt: ""
           - os: macos-15
             arch: arm64
             py-vers: cp39-* cp310-* cp311-* cp312-* cp313-*
-            before-all: brew install libomp pkg-config automake autoconf autoconf-archive libtool
+            before-all: brew install libomp pkg-config automake autoconf autoconf-archive libtool ninja openssl zlib bzip2 xz
             extra-env: CC=clang CXX=clang++ VCPKG_BUILD_TYPE=release
             mdt: ""
 

@@ -23,7 +23,7 @@ jobs:
           fetch-depth: 0
 
       - name: install system packages
-        run: brew install libomp pkg-config automake autoconf autoconf-archive libtool
+        run: brew install libomp pkg-config automake autoconf autoconf-archive libtool ninja openssl zlib bzip2 xz
 
       - name: make build directory
         run: mkdir build_dir
