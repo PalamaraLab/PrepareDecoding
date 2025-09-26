@@ -27,10 +27,6 @@ jobs:
       - name: make build directory
         run: mkdir build_dir
 
-      - name: install tools
-        run: |
-          sudo apt -y install libomp-dev
-
       - name: install analysers
         run: |
           sudo apt -y install cppcheck

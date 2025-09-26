@@ -12,6 +12,16 @@
 
 Tool to compute decoding quantities.
 
+This is a Python-wrapped C++ project with prebuilt CPython wheels targeting manylinux_2_28 on Linux and macOS 11.0+.
+
+| Platform \ CPython          | ≤3.8 | 3.9 | 3.10 | 3.11 | 3.12 | 3.13 | 3.14 |
+|-----------------------------| ---- | --- | ---- | ---- | ---- | ---- | ---- |
+| Linux x86_64                | ❌    | ✅   | ✅    | ✅    | ✅    | ✅    | ✅    |
+| Linux aarch64               | ❌    | ✅   | ✅    | ✅    | ✅    | ✅    | ✅    |
+| macOS Intel (x86_64)        | ❌    | ✅   | ✅    | ✅    | ✅    | ✅    | ✅    |
+| macOS Apple Silicon (arm64) | ❌    | ✅   | ✅    | ✅    | ✅    | ✅    | ✅    |
+
+
 ## Quickstart
 
 ### Install the Python module from PyPI

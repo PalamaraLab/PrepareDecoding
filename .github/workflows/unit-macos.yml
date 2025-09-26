@@ -26,13 +26,13 @@ jobs:
           fetch-depth: 0
 
       - name: install system packages
-        run: brew install libomp pkg-config automake autoconf autoconf-archive libtool ninja openssl zlib bzip2 xz
+        run: brew install pkg-config automake autoconf autoconf-archive libtool ninja openssl zlib bzip2 xz
 
       - name: make build directory
         run: mkdir build_dir
 
       - name: cmake configure
-        run: cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_PREFIX_PATH=$(brew --prefix libomp)
+        run: cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON -DCMAKE_CXX_COMPILER=clang++
         working-directory: build_dir
 
       - name: cmake build

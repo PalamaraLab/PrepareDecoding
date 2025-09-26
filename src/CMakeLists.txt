@@ -99,8 +99,6 @@ if (BUILD_WITH_SMCPP_SUPPORT)
     find_package(cereal CONFIG REQUIRED)
     message(STATUS "Found cereal ${cereal_VERSION}")
 
-    find_package(OpenMP REQUIRED)
-
     add_library(smcpp_lib 3rd_party/smcpp.cpp 3rd_party/smcpp.hpp 3rd_party/mpreal.h)
 
     target_include_directories(
@@ -109,7 +107,7 @@ if (BUILD_WITH_SMCPP_SUPPORT)
             $<INSTALL_INTERFACE:3rd_party>
     )
 
-    target_link_libraries(smcpp_lib PRIVATE Eigen3::Eigen fmt::fmt PkgConfig::gmpxx PkgConfig::mpfr cereal::cereal OpenMP::OpenMP_CXX)
+    target_link_libraries(smcpp_lib PRIVATE Eigen3::Eigen fmt::fmt PkgConfig::gmpxx PkgConfig::mpfr cereal::cereal)
     set_target_properties(smcpp_lib PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
     set_target_properties(smcpp_lib PROPERTIES CXX_CLANG_TIDY "")
     set_target_properties(smcpp_lib PROPERTIES CXX_CPPCHECK "")

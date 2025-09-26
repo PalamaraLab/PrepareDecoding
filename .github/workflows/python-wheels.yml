@@ -34,14 +34,14 @@ jobs:
           - os: macos-15-intel
             arch: x86_64
             py-vers: cp39-* cp310-* cp311-* cp312-* cp313-* cp314-*
-            before-all: brew install libomp pkg-config automake autoconf autoconf-archive libtool ninja openssl zlib bzip2 xz
-            extra-env: CC=clang CXX=clang++ CMAKE_PREFIX_PATH="$(brew --prefix libomp)"
+            before-all: brew install pkg-config automake autoconf autoconf-archive libtool ninja openssl zlib bzip2 xz
+            extra-env: CC=clang CXX=clang++
             mdt: 11
           - os: macos-15
             arch: arm64
             py-vers: cp39-* cp310-* cp311-* cp312-* cp313-* cp314-*
-            before-all: brew install libomp pkg-config automake autoconf autoconf-archive libtool ninja openssl zlib bzip2 xz
-            extra-env: CC=clang CXX=clang++ CMAKE_PREFIX_PATH="$(brew --prefix libomp)"
+            before-all: brew install pkg-config automake autoconf autoconf-archive libtool ninja openssl zlib bzip2 xz
+            extra-env: CC=clang CXX=clang++
             mdt: 11
 
     env:
