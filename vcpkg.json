@@ -16,7 +16,7 @@
   "overrides": [
     { "name": "cereal", "version": "1.3.2#1" },
     { "name": "eigen3", "version": "3.3.9#1" },
-    { "name": "fmt", "version": "12.0.0" },
+    { "name": "fmt", "version": "7.1.3#5" },
     { "name": "gmp", "version": "6.3.0#2" },
     { "name": "mpfr", "version": "4.2.2" }
   ]
