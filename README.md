@@ -4,7 +4,7 @@
 
 [![Static analysis checks](https://github.com/PalamaraLab/PrepareDecoding/workflows/Static%20analysis%20checks/badge.svg)](https://github.com/PalamaraLab/PrepareDecoding/actions)
 [![Sanitiser checks](https://github.com/PalamaraLab/PrepareDecoding/workflows/Sanitiser%20checks/badge.svg)](https://github.com/PalamaraLab/PrepareDecoding/actions)
-[![codecov](https://codecov.io/gh/PalamaraLab/PrepareDecoding/branch/master/graph/badge.svg)](https://codecov.io/gh/PalamaraLab/PrepareDecoding)
+[![codecov](https://codecov.io/gh/PalamaraLab/PrepareDecoding/branch/main/graph/badge.svg)](https://codecov.io/gh/PalamaraLab/PrepareDecoding)
 
 # Prepare Decoding
 

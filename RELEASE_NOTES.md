@@ -13,7 +13,7 @@ No change in functionality.
 
 ## v2.2.2 (2021-09-28)
 
-Improved documentation, now available [here](https://github.com/PalamaraLab/PrepareDecoding/tree/master/docs).
+Improved documentation, now available [here](https://github.com/PalamaraLab/PrepareDecoding/tree/main/docs).
 No change in functionality.
 
 ## v2.2.1 (2021-09-01)
@@ -94,4 +94,4 @@ Minor fixes.
 
 ## v1.0 (2021-03-18)
 
-First public release of ASMC Prepare Decoding, with functionality as described and used in [these notebooks](https://github.com/PalamaraLab/PrepareDecoding/tree/master/notebooks).
+First public release of ASMC Prepare Decoding, with functionality as described and used in [these notebooks](https://github.com/PalamaraLab/PrepareDecoding/tree/main/notebooks).

@@ -4,7 +4,7 @@
 
 [![Static analysis checks](https://github.com/PalamaraLab/PrepareDecoding/workflows/Static%20analysis%20checks/badge.svg)](https://github.com/PalamaraLab/PrepareDecoding/actions)
 [![Sanitiser checks](https://github.com/PalamaraLab/PrepareDecoding/workflows/Sanitiser%20checks/badge.svg)](https://github.com/PalamaraLab/PrepareDecoding/actions)
-[![codecov](https://codecov.io/gh/PalamaraLab/PrepareDecoding/branch/master/graph/badge.svg)](https://codecov.io/gh/PalamaraLab/PrepareDecoding)
+[![codecov](https://codecov.io/gh/PalamaraLab/PrepareDecoding/branch/main/graph/badge.svg)](https://codecov.io/gh/PalamaraLab/PrepareDecoding)
 
 # ASMC Prepare Decoding
 
@@ -48,12 +48,12 @@ jupyter-notebook notebooks/CreatingDecodingQuantities.ipynb
 ### API documentation
 
 A description of the API can be found here:
-- [api docs](https://github.com/PalamaraLab/PrepareDecoding/blob/master/docs/api.md)
+- [api docs](https://github.com/PalamaraLab/PrepareDecoding/blob/main/docs/api.md)
 
 ### File formats
 
 Descriptions of the file formats used can be found here:
-- [file formats](https://github.com/PalamaraLab/PrepareDecoding/blob/master/docs/file_formats.md)
+- [file formats](https://github.com/PalamaraLab/PrepareDecoding/blob/main/docs/file_formats.md)
 
 ## License
 
