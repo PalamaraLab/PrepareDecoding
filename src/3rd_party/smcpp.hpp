@@ -29,4 +29,16 @@ void smcpp_init_cache();
 Matrix<double> raw_sfs(const std::vector<double>& a, const std::vector<double>& s, int n, double t1, double t2,
                        bool below_only = false);
 
+/**
+ * Compute raw SFS for all intervals at once, using double (no autodiff overhead).
+ *
+ * @param a normalised population sizes from the demographic history
+ * @param s discrete derivative of the times
+ * @param n number of samples
+ * @param hidden_states vector of interval boundaries [t0, t1, t2, ..., tM] giving M intervals
+ * @return vector of M raw SFS matrices
+ */
+std::vector<Matrix<double>> raw_sfs_batch(const std::vector<double>& a, const std::vector<double>& s, int n,
+                                          const std::vector<double>& hidden_states);
+
 #endif // PREPAREDECODING_SMCPP_HPP

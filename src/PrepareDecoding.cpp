@@ -116,18 +116,24 @@ DecodingQuantities calculateCsfsAndDecodingQuantities(const Demography& demo, co
   std::vector<double> tos;
   std::vector<Matrix<double>> csfses;
 
-  // Must initialise smcpp cache once
-  smcpp_init_cache();
   for (auto i = 0ul; i < arrayDisc.size() - 1; ++i) {
+    froms.push_back(arrayDisc[i]);
+    tos.push_back(arrayDisc[i + 1]);
+  }
 
-    auto t0 = arrayDisc[i];
-    auto t1 = arrayDisc[i + 1];
+  // Build hidden state boundaries for batched CSFS computation.
+  // Uses double (not autodiff) and computes all intervals in one call.
+  smcpp_init_cache();
+  std::vector<double> hiddenStates;
+  hiddenStates.reserve(arrayDisc.size());
+  for (const auto& d : arrayDisc)
+    hiddenStates.push_back(d / (2. * N0));
 
-    froms.push_back(t0);
-    tos.push_back(t1);
-
-    csfses.emplace_back(raw_sfs(aVec, sVec, static_cast<int>(samples - 2u), t0 / (2. * N0), t1 / (2. * N0)) * theta);
-    csfses.back()(0, 0) = 1.0 - csfses.back().sum();
+  auto batchSfs = raw_sfs_batch(aVec, sVec, static_cast<int>(samples - 2u), hiddenStates);
+  for (auto& sfs : batchSfs) {
+    sfs *= theta;
+    sfs(0, 0) = 1.0 - sfs.sum();
+    csfses.push_back(std::move(sfs));
   }
 
   auto csfs = CSFS::load(arrayTime, arraySize, mutRate, samples, froms, tos, csfses);

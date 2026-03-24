@@ -28,29 +28,21 @@ class Transition {
     std::vector<double> mExpectedTimes;
     TransitionType mType;
     unsigned int mStates;
-    // coalescent arrays that will be computed once and depend on the demography
     std::vector<double> mProbNotCoalesceBetweenExpectedTimes;
     std::vector<double> mProbNotCoalesceBetweenTimeIntervals;
     std::vector<double> mProbCoalesceBetweenExpectedTimesAndUpperLimit;
     vec_dt mColumnRatios;
 
     static mat_dt identity(TransitionType type);
-    static std::tuple<vec_dt, vec_dt, vec_dt, vec_dt> getLinearTimeDecodingQuantitiesGivenTransition(mat_dt T);
-
-    mat_dt transitionMatrix(double r);
     static mat_dt getExponentiatedTransitionMatrix(double N, double r, double time, TransitionType type);
-    double getTransitionFromStoInterval(double r, double timeS, double fromTime, double toTime, TransitionType type);
-    std::vector<double> expectedIntervalTimesPiecewise();
-    double getCumulativeTransitionProbability(double r, double timeS, double timeT, TransitionType type);
-
-    double expectedTimeFromStoT(double timeS, double timeT);
-    double coalesceFromStoT(double timeS, double timeT);
-    double notCoalesceFromStoT(double timeS, double timeT);
-    double getSizeInPiecewiseAtTimeT(double timeT);
-    mat_dt computeTransitionPiecewiseUpToTimeT(double r, double time, TransitionType type);
     unsigned int findIntervalForTime(double t);
     mat_dt computeTransitionPiecewiseFromTimeSToTimeT(double r, double timeS, double timeT, TransitionType type);
-    double cumulativeCoalesceFromStoTsmart(double timeS, double timeT);
+
+    std::vector<double> expectedIntervalTimesPiecewise();
+    double expectedTimeFromStoT(double timeS, double timeT);
+    double notCoalesceFromStoT(double timeS, double timeT);
+    double getSizeInPiecewiseAtTimeT(double timeT);
+
     std::pair<mat_dt, mat_dt> getOmegas(double r, TransitionType type);
     void computeCoalescentVectors();
 

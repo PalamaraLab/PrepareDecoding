@@ -1333,6 +1333,9 @@ std::vector<Matrix<T> > OnePopConditionedSFS<T>::compute(const PiecewiseConstant
   return csfs;
 }
 
+// Explicit instantiation for double (used by raw_sfs_batch to avoid autodiff overhead)
+template class OnePopConditionedSFS<double>;
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1373,4 +1376,14 @@ Matrix<double> raw_sfs(const std::vector<double>& a, const std::vector<double>& 
   ParameterVector pv = make_params(a, s);
   Matrix<adouble> sfs = sfs_cython(n, pv, t1, t2, below_only);
   return sfs.unaryExpr([](adouble x){return x.value();});
+}
+
+// Added for PrepareDecoding: batched CSFS using double instead of adouble.
+// The original raw_sfs uses autodiff (adouble) then discards derivatives.
+// This version avoids that overhead and batches all intervals in one call.
+std::vector<Matrix<double>> raw_sfs_batch(const std::vector<double>& a, const std::vector<double>& s, const int n, const std::vector<double>& hidden_states) {
+  ParameterVector pv = make_params(a, s);
+  OnePopConditionedSFS<double> csfs(n);
+  PiecewiseConstantRateFunction<double> eta(pv, hidden_states);
+  return csfs.compute(eta);
 }
